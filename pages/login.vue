@@ -53,7 +53,16 @@
 		proxy
 	} = getCurrentInstance()
 
-	const sysBaseConfig = reactive(store.getters.sysBaseConfig)
+	let sysBaseConfig = ref({})
+	
+	// 确保获取准确的配置信息（防止因网络延迟导致的配置信息不同步）
+	store.dispatch('GetSysBaseConfig').then(configData=>{
+		sysBaseConfig.value =  configData
+		if (sysBaseConfig.value.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN) {
+			loginCaptcha()
+		}
+	})
+	
 	const validCodeBase64 = ref("")
 	const loginForm = reactive({
 		account: 'superAdmin',
@@ -69,18 +78,13 @@
 			loginForm.validCodeReqNo = res.data.validCodeReqNo
 		})
 	}
-
-	if (sysBaseConfig.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN) {
-		loginCaptcha()
-	}
-
 	// 登录方法
 	const handleLogin = async () => {
 		if (loginForm.account === "") {
 			proxy.$modal.msgError("请输入您的账号")
 		} else if (loginForm.password === "") {
 			proxy.$modal.msgError("请输入您的密码")
-		} else if (loginForm.validCode === "" && sysBaseConfig.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN === 'true') {
+		} else if (loginForm.validCode === "" && sysBaseConfig.value.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN === 'true') {
 			proxy.$modal.msgError("请输入验证码")
 		} else {
 			pwdLogin()

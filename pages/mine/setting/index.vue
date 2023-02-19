@@ -47,12 +47,14 @@
 	}
 	const handleLogout = () => {
 		modal.confirm('确定注销并退出系统吗？').then(() => {
+			// 退出
 			store.dispatch('LogOut').then(() => {
-				store.dispatch("GetSysBaseConfig")
+				// 跳转登录页面
 				uni.reLaunch({
 					url:'/pages/login'
 				})
 			})
+			
 		})
 	}
 </script>
