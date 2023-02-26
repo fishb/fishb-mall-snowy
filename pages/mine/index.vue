@@ -201,6 +201,11 @@
 				align-items: center;
 				justify-content: center;
 				padding: 15px 0;
+				.text {
+					text-align: center;
+					font-size: 26rpx;
+					margin-top: 15rpx;
+				}
 			}
 		}
 
