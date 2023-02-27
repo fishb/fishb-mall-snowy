@@ -44,7 +44,15 @@
                 ]
             },
             /* ios打包配置 */
-            "ios" : {},
+            "ios" : {
+				 "shortcuts" : [
+                    {
+                        "type" : "sweep",
+                        "title" : "扫一扫",
+                        "subtitle" : ""
+                    }
+                ]
+			},
             /* SDK配置 */
             "sdkConfigs" : {}
         }

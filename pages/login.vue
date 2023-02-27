@@ -49,6 +49,7 @@
 	} from '@/utils/auth'
 	import store from '@/store'
 	import smCrypto from '@/utils/smCrypto'
+	import onFeedTap from '@/utils/feedTap.js'
 	const {
 		proxy
 	} = getCurrentInstance()
@@ -103,9 +104,11 @@
 				proxy.$tab.reLaunch('/pages/home/index')
 				proxy.$modal.closeLoading()
 			}).catch(err => {
+				onFeedTap()
 				console.error(err)
 			})
 		}).catch(err => {
+			onFeedTap()
 			console.error(err)
 		})
 

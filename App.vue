@@ -16,7 +16,18 @@
 			checkPermission(location.pathname)
 			//#endif
 		},
-		onShow: function() {},
+		onShow: function() {
+			// #ifdef APP-PLUS
+			if(plus.runtime.launcher=='shortcut'){
+				var cmd = JSON.parse(plus.runtime.arguments);  
+				var type=cmd&&cmd.type;
+				  if(type&&type=="sweep"){
+				    // 执行要操作的逻辑
+				}
+				plus.runtime.arguments=null;
+			}
+			//#endif
+		},
 		onHide: function() {}
 	}
 </script>
