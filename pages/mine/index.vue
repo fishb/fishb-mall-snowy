@@ -2,26 +2,24 @@
 	<view class="mine-container" :style="{height: `${windowHeight}px`}">
 		<!-- 顶部个人信息 -->
 		<view class="header-section">
-			<view class="flex padding justify-between">
-				<view class="flex align-center">
-					<view class="cu-avatar xl round bg-white" v-if="!avatar">
-						<view class="iconfont icon-people text-gray icon"></view>
-					</view>
-					<image v-if="avatar" @click="handleToAvatar" :src="avatar" class="cu-avatar xl round"
-						mode="widthFix"></image>
-					<view v-if="!name" @click="handleToLogin" class="login-tip">
-						点击登录
-					</view>
-					<view class="user-info" @click="handleToInfo" v-if="name">
-						<view class="u_title">
-							{{name}}
-						</view>
+			<view class="avatar-section">
+				<view class="icon" v-if="!avatar">
+					<uni-icons type="person" size="30" color="#808080"></uni-icons>
+				</view>
+				<image class="avatar" v-if="avatar" @click="handleToAvatar" :src="avatar"
+					mode="widthFix"></image>
+				<view v-if="!name" @click="handleToLogin" class="login-tip">
+					点击登录
+				</view>
+				<view class="user-info" @click="handleToInfo" v-if="name">
+					<view class="title">
+						{{name}}
 					</view>
 				</view>
-				<view class="flex align-center" @click="handleToInfo">
-					<text>个人信息</text>
-					<view class="iconfont icon-right"></view>
-				</view>
+			</view>
+			<view class="avatar-title" @click="handleToInfo">
+				<text>个人信息</text>				
+				<uni-icons type="forward" size="20" color="#ffffff"></uni-icons>
 			</view>
 		</view>
 
@@ -95,7 +93,7 @@
 	import {
 		computed
 	} from "vue"
-	import modal from '../../plugins/modal';
+	import modal from '@/plugins/modal';
 	const name = store.getters.userInfo.name
 	const version = store.getters.sysBaseConfig.SNOWY_SYS_VERSION
 
@@ -152,46 +150,59 @@
 	page {
 		background-color: #f5f6f7;
 	}
-
 	.mine-container {
 		width: 100%;
 		height: 100%;
-
 		.header-section {
 			margin: 15upx;
-			border-radius: 5px;
-			padding: 15px;
+			border-radius: 5upx;
+			padding: 60upx 30upx;
 			background-color: $uni-color-primary;
 			color: white;
-
-			.login-tip {
-				font-size: 18px;
-				margin-left: 10px;
-			}
-
-			.cu-avatar {
-				border: 2px solid #eaeaea;
-
+			display: flex;
+			justify-content: space-between;
+			.avatar-section {
+				display: flex;
+				align-items: center;
 				.icon {
-					font-size: 40px;
+					width: 120upx;
+					height: 120upx;
+					border-radius: 5000upx;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					background-color: #ffffff;
+				}
+				.avatar {
+					width: 128upx;
+					height: 128upx;
+					border-radius: 5000upx;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					background-color: #ffffff;
+										
+					border: 4upx solid #eaeaea;
+				}
+				.user-info {
+					font-size: 18upx;
+					margin-left: 15upx;
+					.title {
+						font-size: 40upx;
+						line-height: 40upx;
+					}
 				}
 			}
-
-			.user-info {
-				margin-left: 15px;
-
-				.u_title {
-					font-size: 18px;
-					line-height: 30px;
-				}
+			.avatar-title {
+				display: flex;
+				align-items: center;
 			}
 		}
-
 		.content-section {
 			background-color: #ffffff;
 			position: relative;
 			margin: 15upx;
-			top: 0px;
+			top: 0;
 			.grid-item-box {
 				flex: 1;
 				/* #ifndef APP-NVUE */
@@ -201,34 +212,11 @@
 				align-items: center;
 				justify-content: center;
 				padding: 15px 0;
+
 				.text {
 					text-align: center;
 					font-size: 26rpx;
 					margin-top: 15rpx;
-				}
-			}
-		}
-
-		.content-section1 {
-			position: relative;
-			top: 0px;
-
-			.mine-actions {
-				margin: 10px;
-				padding: 20px 0px;
-				border-radius: 8px;
-				background-color: white;
-
-				.action-item {
-					.icon {
-						font-size: 28px;
-					}
-
-					.text {
-						display: block;
-						font-size: 13px;
-						margin: 8px 0px;
-					}
 				}
 			}
 		}
