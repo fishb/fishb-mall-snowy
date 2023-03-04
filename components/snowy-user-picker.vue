@@ -1,126 +1,85 @@
 <template>
-	<view class="snowy-org-picker">
-		<view class="snowy-data-tree-input" @click="handleInput">
-			<view :class="{ 'input-value-border': props.border }"
-				style="font-size: 14px; line-height: 20px; padding: 10px 10px; height: 40px;">
+	<view class="snowy-user-picker">
+		<view class="input" @click="handleInput">
+			<view class="input-value" :class="{ 'input-value-border': props.border }">
 				<!-- 单选 -->
 				<view v-if="!isMultiple && curSelUserId && curSelUserId !== ''">
 					{{ curSelUser.name }}
 				</view>
 				<!-- 多选 -->
-				<view v-else-if="!!isMultiple && curSelUserId && curSelUserId.length > 0"
-					v-for="(item, key, index) in curSelUser" :key="index"
-					style="display:inline-block; margin: 0px 5px 0px 0px">
+				<view class="multiple" v-else-if="!!isMultiple && curSelUserId && curSelUserId.length > 0"
+					v-for="(item, key, index) in curSelUser" :key="index">
 					{{ item.name }}
 				</view>
-				<view v-else style="color: grey;">
+				<view class="placeholder" v-else>
 					{{ placeholder }}
 				</view>
 			</view>
 		</view>
-		<uni-popup ref="popupRef" type="bottom" background-color="#fff" @maskClick="cancel">
-			<view style="display: flex; justify-content: space-between; margin: 15px 15px; font-size: 30upx;">
-				<view style="color:#8799a3" @click="cancel">
+		<uni-popup class="pop" ref="popupRef" type="bottom" background-color="#fff" @maskClick="cancel">
+			<view class="action">
+				<view class="cal" @click="cancel">
 					取消
 				</view>
-				<view style="color:#1cbbb4" @click="confirm">
+				<view class="conf" @click="confirm">
 					确定
 				</view>
 			</view>
 
 			<!-- 面包屑 -->
-			<view class="padding-sm" style="white-space: nowrap; overflow-x: scroll; background-color: white;">
-				<text v-for="(item, index) in allClickSelOrg" class="text-center"
-					:class="index === (allClickSelOrg.length-1) ? 'text-grey' : 'text-cyan'"
-					style="display: inline-block; margin-left: 5px;" @click="clickOrgCru(item, index)">
+			<view class="crumb">
+				<text v-for="(item, index) in allClickSelOrg" @click="clickOrgCru(item, index)"
+					:class="index === (allClickSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
 					{{ item.name + (index === (allClickSelOrg.length-1) ? '' : ' | ') }}
 				</text>
 			</view>
 			<!-- 已选择 -->
-			<view v-show="!!curSelUserId && (!isMultiple? true : curSelUserId.length > 0)"
-				:style="{maxHeight:!isMultiple?'5vh':'10vh', overflowY: 'scroll'}">
+			<view class="choiced" v-show="!!curSelUserId && (!isMultiple? true : curSelUserId.length > 0)"
+				:style="{maxHeight:!isMultiple?'5vh':'20vh', overflowY: 'scroll'}">
 				<!-- 单选已选择 -->
-				<view v-if="!isMultiple" style="margin: 5px 15px; display:inline-block;">
-					<view @click="delUser(curSelUser)"
-						style="display:inline-block; vertical-align:top; color: #1cbbb4;">
+				<view class="single" v-if="!isMultiple">
+					<view class="name" @click="delUser(curSelUser)">
 						{{ curSelUser.name }}
 					</view>
-					<uni-icons type="trash-filled" @click="delUser(curSelUser)" color="#1cbbb4" size="20"></uni-icons>
+					<uni-icons type="trash-filled" @click="delUser(curSelUser)" color="#e43d33" size="20"></uni-icons>
 				</view>
 				<!-- 多选已选择 -->
-				<view v-if="!!isMultiple" v-for="(item, index) in curSelUser"
-					style="margin: 5px 0 5px 15px; display:inline-block;">
-					<view @click="delUser(item)" style="display:inline-block; vertical-align:top; color: #1cbbb4;">
+				<view class="multiple" v-if="!!isMultiple" v-for="(item, index) in curSelUser">
+					<view class="name" @click="delUser(item)">
 						{{ item.name }}
 					</view>
-					<uni-icons type="trash-filled" @click="delUser(item)" color="#1cbbb4" size="20"></uni-icons>
+					<uni-icons type="trash-filled" @click="delUser(item)" color="#e43d33" size="20"></uni-icons>
 				</view>
 			</view>
 			<!-- 部门和人员 -->
-			<view style="width:100vw; height:70vh; overflow-y: scroll">
+			<view class="orgAndUser">
 				<!-- 部门 -->
-				<view>
-					<uni-list style="background-color: #ededed;">
-						<view style="margin-top: 5px;">
-							<uni-list-item v-for="(item, index) in curClickSelOrg" :key="index">
-								<!-- 选择icon -->
-								<!-- <template v-slot:header>
-									<view class="slot-box">
-										<uni-icons
-											v-show="!isMultiple ? item.id != curSelUserId: curSelUserId.indexOf(item.id) == -1"
-											type="circle" :size="25" @click="selOrg(item, index)"></uni-icons>
-										<uni-icons
-											v-show="!isMultiple ? item.id == curSelUserId: curSelUserId.indexOf(item.id) != -1"
-											type="checkbox-filled" :size="25" color="#1cbbb4"
-											@click="delOrg(item, index)">
-										</uni-icons>
-									</view>
-								</template> -->
-								<!-- 名称 -->
-								<template v-slot:body>
-									<!-- color: #1cbbb4; -->
-									<text style="flex: 1;font-size: 15px; "
-										@click="clickOrg(item, index)">{{item.name}}</text>
-								</template>
-								<!-- 右侧icon -->
-								<template v-slot:footer>
-									<uni-icons v-if="item.children? true : false" type="right"
-										@click="clickOrg(item, index)"></uni-icons>
-								</template>
-							</uni-list-item>
-						</view>
-					</uni-list>
-				</view>
+				<uni-list class="org">
+					<uni-list-item v-for="(item, index) in curClickSelOrg" :key="index">
+						<!-- 名称 -->
+						<template v-slot:body>
+							<text class="name" @click="clickOrg(item, index)">{{item.name}}</text>
+						</template>
+						<!-- 右侧icon -->
+						<template v-slot:footer>
+							<uni-icons v-if="item.children? true : false" type="right" @click="clickOrg(item, index)">
+							</uni-icons>
+						</template>
+					</uni-list-item>
+				</uni-list>
 				<!-- 人员 -->
-				<view style="margin-top: 15px;">
-					<uni-list :border="false">
-						<uni-list-chat v-for="(item, index) in userData" :key="index" :title="item.name"
-							:avatar="item.avatar" :note="item.orgName + ' | '+ item.positionName +' | '+item.genderName"
-							:time="item.entryDate" :clickable="true" @click="clickUser(item, index)">
-
-							<view class="chat-custom-right">
-								<view class="slot-box">
-									<!-- @click="selUser(item, index)" -->
-									<uni-icons
-										v-show="!isMultiple ? item.id != curSelUserId: curSelUserId.indexOf(item.id) == -1"
-										type="circle" :size="25"></uni-icons>
-									<!-- @click="delUser(item, index)" -->
-									<uni-icons
-										v-show="!isMultiple ? item.id == curSelUserId: curSelUserId.indexOf(item.id) != -1"
-										type="checkbox-filled" :size="25" color="#1cbbb4">
-									</uni-icons>
-								</view>
-								<!-- <text class="chat-custom-text">刚刚</text>
-							<uni-icons type="star-filled" color="#999" size="18"></uni-icons> -->
-							</view>
-						</uni-list-chat>
-					</uni-list>
-				</view>
-
+				<uni-list :border="false">
+					<uni-list-chat v-for="(item, index) in userData" :key="index" :title="item.name"
+						:avatar="item.avatar" :note="item.orgName + ' | '+ item.positionName +' | '+item.genderName"
+						:time="item.entryDate" :clickable="true" @click="clickUser(item, index)">
+						<uni-icons v-show="!isMultiple ? item.id != curSelUserId: curSelUserId.indexOf(item.id) == -1"
+							type="circle" :size="25"></uni-icons>
+						<uni-icons v-show="!isMultiple ? item.id == curSelUserId: curSelUserId.indexOf(item.id) != -1"
+							type="checkbox-filled" :size="25" color="#2979ff">
+						</uni-icons>
+					</uni-list-chat>
+				</uni-list>
 			</view>
-
-
-
 		</uni-popup>
 	</view>
 </template>
@@ -359,8 +318,91 @@
 </script>
 
 <style lang="scss">
-	.input-value-border {
-		border: 1px solid #e5e5e5;
-		border-radius: 5px;
+	.snowy-user-picker {
+		.input {
+			.input-value {
+				font-size: 25upx;
+				line-height: 30upx;
+				padding: 20upx;
+				min-height: 30upx;
+
+				.multiple {
+					display: inline-block;
+					margin: 0px 10upx 0px 0px
+				}
+
+				.placeholder {
+					color: $uni-secondary-color;
+				}
+			}
+
+			.input-value-border {
+				border: 1px solid $uni-border-2;
+				border-radius: 5upx;
+			}
+		}
+
+		.pop {
+			.action {
+				display: flex;
+				justify-content: space-between;
+				margin: 30upx;
+				font-size: 30upx;
+
+				.cal {
+					color: $uni-secondary-color
+				}
+
+				.conf {
+					color: $uni-primary
+				}
+			}
+
+			.crumb {
+				margin: 30upx;
+				border-radius: 5upx;
+				white-space: nowrap;
+				overflow-x: scroll;
+				background-color: white;
+			}
+
+			.choiced {
+				.single {
+					margin: 5px 30upx;
+					display: inline-block;
+
+					.name {
+						display: inline-block;
+						vertical-align: top;
+						color: $uni-main-color;
+					}
+				}
+
+				.multiple {
+					margin: 10upx 0 10upx 30upx;
+					display: inline-block;
+
+					.name {
+						display: inline-block;
+						vertical-align: top;
+						color: $uni-main-color;
+					}
+				}
+			}
+
+			.orgAndUser {
+				width: 100vw;
+				height: 70vh;
+				overflow-y: scroll;
+
+				.org {
+					.name {
+						flex: 1;
+						font-size: 30upx;
+						margin: 2upx 0;
+					}
+				}
+			}
+		}
 	}
 </style>

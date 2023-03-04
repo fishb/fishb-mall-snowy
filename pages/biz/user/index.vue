@@ -2,30 +2,23 @@
 	<!-- 搜索 -->
 	<uni-search-bar v-model:value="searchFormState.searchKey" @confirm="searchConfirm"></uni-search-bar>
 	<!-- 自定义面包屑 -->
-	<view class="padding-sm" style="white-space: nowrap; overflow-x: scroll; background-color: white;">
-		<text v-for="(item, index) in allSelOrg" class="text-center"
-			:class="index === (allSelOrg.length-1) ? 'text-grey' : 'text-cyan'"
-			style="display: inline-block; margin-left: 5px;" @click="clickOrgCru(item, index)">
+	<view class="crumb">
+		<text v-for="(item, index) in allSelOrg" class="text-center" @click="clickOrgCru(item, index)"
+			:class="index === (allSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
 			{{ item.name + (index === (allSelOrg.length-1) ? '' : ' | ') }}
 		</text>
 	</view>
 
-	<uni-list style="background-color: #ededed;">
+	<uni-list class="user-list">
 		<!-- 机构 -->
-		<view style="margin-top: 5px;">
-			<uni-list-item v-for="(item, index) in curSelOrg" :key="index" :title="item.name" :showArrow="true"
-				:clickable="true" @click="clickOrg(item, index)"></uni-list-item>
-		</view>
+		<uni-list-item v-for="(item, index) in curSelOrg" :key="index" :title="item.name" :showArrow="true"
+			:clickable="true" @click="clickOrg(item, index)"></uni-list-item>
 
 		<!-- 人员 -->
-		<view style="margin-top: 5px;">
-			<uni-list :border="false">
-				<uni-list-chat v-for="(item, index) in userData" :key="index" :title="item.name" :avatar="item.avatar"
-					:note="item.orgName + ' | '+ item.positionName +' | '+item.genderName" :time="item.entryDate"
-					:clickable="true" @click="moreClick(item)">
-				</uni-list-chat>
-			</uni-list>
-		</view>
+		<uni-list-chat v-for="(item, index) in userData" :key="index" :title="item.name" :avatar="item.avatar"
+			:note="item.orgName + ' | '+ item.positionName +' | '+item.genderName" :time="item.entryDate"
+			:clickable="true" @click="moreClick(item)">
+		</uni-list-chat>
 	</uni-list>
 	<uni-load-more status="noMore" />
 
@@ -159,3 +152,24 @@
 		loadData()
 	})
 </script>
+<style lang="scss">
+	.crumb {
+		margin: 15upx;
+		border-radius: 5upx;
+		white-space: nowrap;
+		overflow-x: scroll;
+		background-color: white;
+		padding: 20upx;
+
+		.crumb-text {
+			display: inline-block;
+			margin-left: 5px;
+			text-align: center;
+		}
+	}
+
+	.user-list {
+		margin: 15upx;
+		border-radius: 5upx;
+	}
+</style>

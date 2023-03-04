@@ -1,5 +1,5 @@
 <template>
-	<button type="primary" @click="add" :plain="true">增加任职</button>
+	<button class="uni-btn" type="primary" @click="add" :plain="true">增加任职</button>
 	<view v-for="(item, index) in dataList" style="margin: 30px 0;">
 		<uni-forms :key="index" :ref="`formRef${ index }`" :model="item" label-position="left" validate-trigger="submit"
 			labelWidth="50px">
@@ -18,8 +18,7 @@
 				</snowy-user-picker>
 			</uni-forms-item>
 		</uni-forms>
-		<button type="warn" style="margin-bottom: 10px;" @click="del(index)" :plain="true">删除任职</button>
-
+		<button class="uni-btn" type="warn" @click="del(index)" :plain="true">删除任职</button>
 	</view>
 </template>
 

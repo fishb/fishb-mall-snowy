@@ -129,7 +129,7 @@
 			</view>
 		</uni-forms>
 
-		<button type="primary" @click="submit">提交</button>
+		<button class="uni-btn" type="primary" @click="submit">提交</button>
 	</view>
 </template>
 
@@ -260,9 +260,11 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.container {
-		padding: 15px;
-		background-color: #fff;
+		margin: 15upx;
+		border-radius: 5upx;
+		padding: 25upx;
+		background-color: $uni-white;
 	}
 </style>
