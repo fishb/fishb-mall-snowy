@@ -6,8 +6,7 @@
 				<view class="icon" v-if="!avatar">
 					<uni-icons type="person" size="30" color="#808080"></uni-icons>
 				</view>
-				<image class="avatar" v-if="avatar" @click="handleToAvatar" :src="avatar"
-					mode="widthFix"></image>
+				<image class="avatar" v-if="avatar" @click="handleToAvatar" :src="avatar" mode="widthFix"></image>
 				<view v-if="!name" @click="handleToLogin" class="login-tip">
 					点击登录
 				</view>
@@ -18,18 +17,18 @@
 				</view>
 			</view>
 			<view class="avatar-title" @click="handleToInfo">
-				<text>个人信息</text>				
+				<text>个人信息</text>
 				<uni-icons type="forward" size="20" color="#ffffff"></uni-icons>
 			</view>
 		</view>
 
 		<view class="content-section">
 			<uni-grid :column="4" :showBorder="false">
-				<uni-grid-item @click="handleBuilding">
+				<uni-grid-item @click="handleQQ">
 					<view class="grid-item-box">
-						<snowy-icon style="background-color:#2979ff;" type="flag-filled" size="30" color="#FFFFFF">
+						<snowy-icon style="background-color:#2979ff;" type="staff-filled" size="30" color="#FFFFFF">
 						</snowy-icon>
-						<text class="text">建设中</text>
+						<text class="text">QQ群</text>
 					</view>
 				</uni-grid-item>
 				<uni-grid-item @click="handleBuilding">
@@ -56,33 +55,24 @@
 			</uni-grid>
 		</view>
 
-
-		<view class="menu-list">
-			<view class="list-cell list-cell-arrow" @click="handleToEditInfo">
-				<view class="menu-item-box">
-					<view class="iconfont icon-user menu-icon"></view>
-					<view>编辑资料</view>
-				</view>
-			</view>
-			<view class="list-cell list-cell-arrow" @click="handleHelp">
-				<view class="menu-item-box">
-					<view class="iconfont icon-help menu-icon"></view>
-					<view>常见问题</view>
-				</view>
-			</view>
-			<view class="list-cell list-cell-arrow" @click="handleAbout">
-				<view class="menu-item-box">
-					<view class="iconfont icon-aixin menu-icon"></view>
-					<view>关于我们</view>
-				</view>
-			</view>
-			<view class="list-cell list-cell-arrow" @click="handleToSetting">
-				<view class="menu-item-box">
-					<view class="iconfont icon-setting menu-icon"></view>
-					<view>应用设置</view>
-				</view>
-			</view>
-		</view>
+		<uni-list style="margin: 15upx; padding: 10upx;">
+			<uni-list-item :show-extra-icon="true" showArrow title="编辑资料" @click="handleToEditInfo" clickable
+				:extra-icon="{
+					color: '#2979ff',
+					size: '20',
+					type: 'person'
+				}" />
+			<uni-list-item :show-extra-icon="true" showArrow title="修改密码" @click="handleToPwd" clickable
+				:extra-icon="{
+						color: '#2979ff',
+						size: '20',
+						type: 'locked'
+					}" />
+		</uni-list>
+		
+		<view>
+			<button class="uni-btn" type="primary" @click="handleLogout">退出登录</button>
+		</view>		
 	</view>
 </template>
 
@@ -113,9 +103,9 @@
 			url: '/pages/mine/info/edit'
 		})
 	}
-	const handleToSetting = () => {
+	const handleToPwd = () => {
 		uni.navigateTo({
-			url: '/pages/mine/setting/index'
+			url:'/pages/mine/pwd/index'
 		})
 	}
 	const handleToAvatar = () => {
@@ -128,81 +118,90 @@
 			url: '/pages/login'
 		})
 	}
-	const handleHelp = () => {
+	const handleQQ = () =>{
 		uni.showToast({
-			title: '模块建设中'
+			title: '732230670'
 		})
 	}
-	const handleAbout = () => {
-		uni.showToast({
-			title: '模块建设中'
-		})
-	}
-
 	const handleBuilding = () => {
 		uni.showToast({
 			title: '模块建设中'
 		})
 	}
+	const handleLogout = () => {
+		modal.confirm('确定注销并退出系统吗？').then(() => {
+			// 退出
+			store.dispatch('LogOut').then(() => {
+				// 跳转登录页面
+				uni.reLaunch({
+					url:'/pages/login'
+				})
+			})
+			
+		})
+	}
 </script>
 
 <style lang="scss">
-	page {
-		background-color: #f5f6f7;
+	@mixin circular {
+		width: 120upx;
+		height: 120upx;
+		border-radius: 5000upx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: #ffffff;
 	}
+
 	.mine-container {
 		width: 100%;
 		height: 100%;
+
 		.header-section {
 			margin: 15upx;
 			border-radius: 5upx;
 			padding: 60upx 30upx;
-			background-color: $uni-color-primary;
+			background-color: $uni-primary;
 			color: white;
 			display: flex;
 			justify-content: space-between;
+
 			.avatar-section {
 				display: flex;
 				align-items: center;
+
 				.icon {
-					width: 120upx;
-					height: 120upx;
-					border-radius: 5000upx;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					background-color: #ffffff;
+					@include circular;
 				}
+
 				.avatar {
-					width: 128upx;
-					height: 128upx;
-					border-radius: 5000upx;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					background-color: #ffffff;
-										
+					@include circular;
 					border: 4upx solid #eaeaea;
 				}
+
 				.user-info {
 					font-size: 18upx;
 					margin-left: 15upx;
+
 					.title {
 						font-size: 40upx;
 						line-height: 40upx;
 					}
 				}
 			}
+
 			.avatar-title {
 				display: flex;
 				align-items: center;
 			}
 		}
+
 		.content-section {
 			background-color: #ffffff;
 			position: relative;
 			margin: 15upx;
 			top: 0;
+
 			.grid-item-box {
 				flex: 1;
 				/* #ifndef APP-NVUE */

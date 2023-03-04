@@ -124,16 +124,6 @@
 				"navigationStyle": "custom"
 				//#endif
 			}
-		},
-		{
-			"path": "pages/mine/setting/index",
-			"style": {
-				"navigationBarTitleText": "应用设置",
-				"enablePullDownRefresh": false,
-				//#ifdef H5
-				"navigationStyle": "custom"
-				//#endif
-			}
 		}
 	],
 	"tabBar": {
