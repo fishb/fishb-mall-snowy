@@ -183,7 +183,7 @@
 				margin-top: 40px;
 				height: 45px;
 				border-radius: 1000upx;
-				background-color: $uni-color-primary;
+				background-color: $uni-primary;
 				color: #ffffff;
 			}
 		}
