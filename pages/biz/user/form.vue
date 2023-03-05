@@ -1,9 +1,9 @@
 <template>
 	<view class="container">
-		<uni-forms ref="formRef" :model="formData" label-position="left" :rules="rules" validate-trigger="blur"
-			labelWidth="75px">
+		<uni-forms ref="formRef" :model="formData" label-position="top" :rules="rules" validate-trigger="blur"
+			labelWidth="100px">
 			<uni-segmented-control style="margin-bottom: 20px;" :current="curView" :values="['基础信息', '更多信息']"
-				styleType="text" activeColor="#007aff" @clickItem="(e) => {
+				styleType="button" activeColor="#007aff" @clickItem="(e) => {
 					if (curView != e.currentIndex) {
 						curView = e.currentIndex
 					}

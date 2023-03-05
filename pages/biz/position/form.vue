@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<uni-forms ref="formRef" :model="formData" label-position="left" labelWidth="75px">
+		<uni-forms ref="formRef" :model="formData" label-position="top" labelWidth="75px">
 			<uni-forms-item label="所属机构" name="orgId" required :rules="[{ required: true, errorMessage: '请选择所属机构' }]">
 				<!-- :isTopLevel="true" -->
 				<snowy-org-picker v-model="formData.orgId" placeholder="请选择所属机构">

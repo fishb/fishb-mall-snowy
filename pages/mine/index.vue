@@ -69,10 +69,10 @@
 						type: 'locked'
 					}" />
 		</uni-list>
-		
-		<view>
+
+		<view style="margin: 50upx 5upx;">
 			<button class="uni-btn" type="primary" @click="handleLogout">退出登录</button>
-		</view>		
+		</view>
 	</view>
 </template>
 
@@ -137,7 +137,7 @@
 					url:'/pages/login'
 				})
 			})
-			
+
 		})
 	}
 </script>
