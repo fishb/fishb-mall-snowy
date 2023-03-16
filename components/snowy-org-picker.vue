@@ -28,7 +28,7 @@
 
 			<!-- 面包屑 -->
 			<view class="crumb">
-				<text v-for="(item, index) in allClickSelOrg" @click="clickOrgCru(item, index)"
+				<text v-for="(item, index) in allClickSelOrg" :key="index" @click="clickOrgCru(item, index)"
 					:class="index === (allClickSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
 					{{ item.name + (index === (allClickSelOrg.length-1) ? '' : ' | ') }}
 				</text>

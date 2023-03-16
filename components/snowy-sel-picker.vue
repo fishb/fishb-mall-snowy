@@ -36,7 +36,7 @@
 					<uni-icons type="trash-filled" @click="delData(curSelData)" color="#e43d33" size="20"></uni-icons>
 				</view>
 				<!-- 多选已选择 -->
-				<view class="multiple" v-if="!!isMultiple" v-for="(item, index) in curSelData">
+				<view class="multiple" v-if="!!isMultiple" v-for="(item, index) in curSelData" :key="index">
 					<view class="name" @click="delData(item)">
 						{{ item[map.label] }}
 					</view>

@@ -1,6 +1,6 @@
 <template>
 	<button class="uni-btn" type="primary" @click="add" :plain="true">增加任职</button>
-	<view v-for="(item, index) in dataList" style="margin: 30px 0;">
+	<view v-for="(item, index) in dataList" :key="index" style="margin: 30px 0;">
 		<uni-forms :key="index" :ref="`formRef${ index }`" :model="item" label-position="left" validate-trigger="submit"
 			labelWidth="50px">
 			<uni-forms-item label="机构" name="orgId" required :rules="[{ required: true, errorMessage: '请选择机构' }]">

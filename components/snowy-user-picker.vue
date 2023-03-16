@@ -28,7 +28,7 @@
 
 			<!-- 面包屑 -->
 			<view class="crumb">
-				<text v-for="(item, index) in allClickSelOrg" @click="clickOrgCru(item, index)"
+				<text v-for="(item, index) in allClickSelOrg" :key="index" @click="clickOrgCru(item, index)"
 					:class="index === (allClickSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
 					{{ item.name + (index === (allClickSelOrg.length-1) ? '' : ' | ') }}
 				</text>
@@ -44,7 +44,7 @@
 					<uni-icons type="trash-filled" @click="delUser(curSelUser)" color="#e43d33" size="20"></uni-icons>
 				</view>
 				<!-- 多选已选择 -->
-				<view class="multiple" v-if="!!isMultiple" v-for="(item, index) in curSelUser">
+				<view class="multiple" v-if="!!isMultiple" v-for="(item, index) in curSelUser" :key="index">
 					<view class="name" @click="delUser(item)">
 						{{ item.name }}
 					</view>
