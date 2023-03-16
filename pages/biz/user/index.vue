@@ -3,7 +3,7 @@
 	<uni-search-bar v-model:value="searchFormState.searchKey" @confirm="searchConfirm"></uni-search-bar>
 	<!-- 自定义面包屑 -->
 	<view class="crumb">
-		<text v-for="(item, index) in allSelOrg" class="text-center" @click="clickOrgCru(item, index)"
+		<text v-for="(item, index) in allSelOrg" :key="index" class="text-center" @click="clickOrgCru(item, index)"
 			:class="index === (allSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
 			{{ item.name + (index === (allSelOrg.length-1) ? '' : ' | ') }}
 		</text>

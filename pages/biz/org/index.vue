@@ -1,6 +1,6 @@
 <template>
 	<view class="crumb">
-		<text class="crumb-text" v-for="(item, index) in allSelOrg" @click="clickOrgCru(item, index)"
+		<text class="crumb-text" v-for="(item, index) in allSelOrg" :key="index" @click="clickOrgCru(item, index)"
 			:class="index === (allSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
 			{{ item.name + (index === (allSelOrg.length-1) ? '' : ' | ') }}
 		</text>
