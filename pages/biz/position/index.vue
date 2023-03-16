@@ -16,10 +16,14 @@
 			<uni-list-item v-for="(item, index) in positionData" :key="index" :title="item.name" :clickable="true"
 				@click="morePopupRef.open(item)">
 				<template v-slot:header>
-					<view>
-						<snowy-icon v-if="item.category == 'HIGH'" style="background-color: #f3a73f;" type="vip-filled" size="20" color="#FFFFFF"></snowy-icon>
-						<snowy-icon v-else-if="item.category == 'MIDDLE'" style="background-color: #2979ff;" type="auth-filled" size="20" color="#FFFFFF"></snowy-icon>
-						<snowy-icon v-else style="background-color: #18bc37;" type="staff-filled" size="20" color="#FFFFFF"></snowy-icon>
+					<view v-if="item.category == 'HIGH'" style="background-color: #f3a73f; width: 42px; height: 42px;">
+						<snowy-icon type="vip-filled" size="20" color="#FFFFFF"></snowy-icon>
+					</view>
+					<view v-else-if="item.category == 'MIDDLE'" style="background-color: #2979ff; width: 42px; height: 42px;">
+						<snowy-icon type="auth-filled" size="20" color="#FFFFFF"></snowy-icon>
+					</view>
+					<view v-else style="background-color: #18bc37; width: 42px; height: 42px;">
+						<snowy-icon type="staff-filled" size="20" color="#FFFFFF"></snowy-icon>
 					</view>
 				</template>
 				<template v-slot:body>
