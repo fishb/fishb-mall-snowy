@@ -40,7 +40,6 @@
 			</view>
 		</uni-list>
 	</view>
-	<uni-load-more status="noMore" />
 	<!-- 新增悬浮按钮 -->
 	<uni-fab v-if="hasPerm('mobileBizPositionAdd')" :pattern="{
 			color: '#7A7E83',
@@ -123,7 +122,7 @@
 		curSelOrg.value = item.children
 		allSelOrg.value.splice(index + 1, allSelOrg.value.length - (index + 1))
 
-		searchFormState.orgId = (item.id === '0' ? null : item.id)
+		searchFormState.orgId = (item.id === '0' ? '' : item.id)
 		// uni.startPullDownRefresh()
 		loadData(true)
 	}
