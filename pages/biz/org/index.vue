@@ -5,19 +5,22 @@
 			{{ item.name + (index === (allSelOrg.length-1) ? '' : ' | ') }}
 		</text>
 	</view>
-	<uni-list class="org-list">
-		<uni-list-item v-for="(item, index) in curSelOrg" :key="index">
-			<!-- 名称 -->
-			<template v-slot:body>
-				<text class="org-list-name" @click="morePopupRef.open(item)">{{item.name}}</text>
-			</template>
-			<!-- 右侧icon -->
-			<template v-slot:footer>
-				<uni-icons v-if="item.children? true : false" type="right" @click="clickOrg(item, index)">
-				</uni-icons>
-			</template>
-		</uni-list-item>
-	</uni-list>
+	<view class="org-list">
+		<uni-list>
+			<uni-list-item v-for="(item, index) in curSelOrg" :key="index">
+				<!-- 名称 -->
+				<template v-slot:body>
+					<text class="org-list-name" @click="morePopupRef.open(item)">{{item.name}}</text>
+				</template>
+				<!-- 右侧icon -->
+				<template v-slot:footer>
+					<uni-icons v-if="item.children? true : false" type="right" @click="clickOrg(item, index)">
+					</uni-icons>
+				</template>
+			</uni-list-item>
+		</uni-list>
+	</view>
+
 
 	<!-- 新增悬浮按钮 -->
 	<uni-fab v-if="hasPerm('mobileBizOrgAdd')" :pattern="{

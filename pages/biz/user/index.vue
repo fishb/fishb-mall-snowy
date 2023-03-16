@@ -9,17 +9,19 @@
 		</text>
 	</view>
 
-	<uni-list class="user-list">
-		<!-- 机构 -->
-		<uni-list-item v-for="(item, index) in curSelOrg" :key="index" :title="item.name" :showArrow="true"
-			:clickable="true" @click="clickOrg(item, index)"></uni-list-item>
+	<view class="user-list">
+		<uni-list>
+			<!-- 机构 -->
+			<uni-list-item v-for="(item, index) in curSelOrg" :key="index" :title="item.name" :showArrow="true"
+				:clickable="true" @click="clickOrg(item, index)"></uni-list-item>
+			<!-- 人员 -->
+			<uni-list-chat v-for="(item, index) in userData" :key="index" :title="item.name" :avatar="item.avatar"
+				:note="item.orgName + ' | '+ item.positionName +' | '+item.genderName" :time="item.entryDate"
+				:clickable="true" @click="moreClick(item)">
+			</uni-list-chat>
+		</uni-list>
+	</view>
 
-		<!-- 人员 -->
-		<uni-list-chat v-for="(item, index) in userData" :key="index" :title="item.name" :avatar="item.avatar"
-			:note="item.orgName + ' | '+ item.positionName +' | '+item.genderName" :time="item.entryDate"
-			:clickable="true" @click="moreClick(item)">
-		</uni-list-chat>
-	</uni-list>
 	<uni-load-more status="noMore" />
 
 	<!-- 新增悬浮按钮 -->
