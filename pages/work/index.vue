@@ -4,7 +4,7 @@
 		<swiper :current="swiperDotIndex" :autoplay="true" :interval="3000" :duration="1000" @change="changeSwiper">
 			<swiper-item v-for="(item, index) in data" :key="index">
 				<view  @click="clickBannerItem(item)" style="padding: 15upx;">
-					<image style="width:720upx; border-radius: 5upx;" :src="item.image" mode="widthFix" :draggable="false" />
+					<image style="width:100%; border-radius: 5upx;" :src="item.image" mode="widthFix" :draggable="false" />
 				</view>
 			</swiper-item>
 		</swiper>
