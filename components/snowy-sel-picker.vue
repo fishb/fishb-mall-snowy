@@ -1,78 +1,73 @@
 <template>
-	<view @click="handleInput">
-		<view :class="{ 'input-value-border': props.border }"
-			style="font-size: 14px; line-height: 20px; padding: 10px 10px; height: 40px;">
-			<!-- 单选 -->
-			<view v-if="!isMultiple && curSelDataKey && curSelDataKey !== ''">
-				{{ curSelData[map.label] }}
-			</view>
-			<!-- 多选 -->
-			<view v-else-if="!!isMultiple && curSelDataKey && curSelDataKey.length > 0"
-				v-for="(item, key, index) in curSelData" :key="index"
-				style="display:inline-block; margin: 0px 5px 0px 0px">
-				{{ item[map.label] }}
-			</view>
-			<view v-else style="color: grey;">
-				{{ placeholder }}
-			</view>
-		</view>
-	</view>
-	<uni-popup ref="popupRef" type="bottom" background-color="#fff" @maskClick="cancel">
-		<view style="display: flex; justify-content: space-between; margin: 15px 15px; font-size: 30upx;">
-			<view style="color:#8799a3" @click="cancel">
-				取消
-			</view>
-			<view style="color:#1cbbb4" @click="confirm">
-				确定
-			</view>
-		</view>
-		<!-- 已选择 -->
-		<view v-show="!!curSelDataKey && (!isMultiple? true : curSelDataKey.length > 0)"
-			:style="{maxHeight:!isMultiple?'5vh':'10vh', overflowY: 'scroll'}">
-			<!-- 单选已选择 -->
-			<view v-if="!isMultiple" style="margin: 5px 15px; display:inline-block;">
-				<view @click="delData(curSelData)" style="display:inline-block; vertical-align:top; color: #1cbbb4;">
+	<view class="snowy-sel-picker">
+		<view class="input" @click="handleInput">
+			<view class="input-value" :class="{ 'input-value-border': props.border }">
+				<!-- 单选 -->
+				<view v-if="!isMultiple && curSelDataKey && curSelDataKey !== ''">
 					{{ curSelData[map.label] }}
 				</view>
-				<uni-icons type="trash-filled" @click="delData(curSelData)" color="#1cbbb4" size="20"></uni-icons>
-			</view>
-			<!-- 多选已选择 -->
-			<view v-if="!!isMultiple" v-for="(item, index) in curSelData"
-				style="margin: 5px 0 5px 15px; display:inline-block;">
-				<view @click="delData(item)" style="display:inline-block; vertical-align:top; color: #1cbbb4;">
+				<!-- 多选 -->
+				<view class="multiple" v-else-if="!!isMultiple && curSelDataKey && curSelDataKey.length > 0"
+					v-for="(item, key, index) in curSelData" :key="index">
 					{{ item[map.label] }}
 				</view>
-				<uni-icons type="trash-filled" @click="delData(item)" color="#1cbbb4" size="20"></uni-icons>
+				<view class="placeholder" v-else>
+					{{ placeholder }}
+				</view>
 			</view>
 		</view>
-		<!-- 面板数据 -->
-		<view style="width:100vw; height:40vh; overflow-y: scroll">
-			<uni-list style="background-color: #ededed;">
-				<view style="margin-top: 5px;">
+		<uni-popup class="pop" ref="popupRef" type="bottom" background-color="#fff" @maskClick="cancel">
+			<view class="action">
+				<view class="cal" @click="cancel">
+					取消
+				</view>
+				<view class="conf" @click="confirm">
+					确定
+				</view>
+			</view>
+			<!-- 已选择 -->
+			<view class="choiced" v-show="!!curSelDataKey && (!isMultiple? true : curSelDataKey.length > 0)"
+				:style="{maxHeight:!isMultiple?'5vh':'20vh', overflowY: 'scroll'}">
+				<!-- 单选已选择 -->
+				<view class="single" v-if="!isMultiple">
+					<view class="name" @click="delData(curSelData)">
+						{{ curSelData[map.label] }}
+					</view>
+					<uni-icons type="trash-filled" @click="delData(curSelData)" color="#e43d33" size="20"></uni-icons>
+				</view>
+				<!-- 多选已选择 -->
+				<view class="multiple" v-if="!!isMultiple" v-for="(item, index) in curSelData" :key="index">
+					<view class="name" @click="delData(item)">
+						{{ item[map.label] }}
+					</view>
+					<uni-icons type="trash-filled" @click="delData(item)" color="#e43d33" size="20"></uni-icons>
+				</view>
+			</view>
+			<!-- 面板数据 -->
+			<view class="data">
+				<uni-list>
 					<uni-list-item v-for="(item, index) in rangeData" :key="index">
 						<!-- 选择icon -->
 						<template v-slot:header>
-							<view class="slot-box">
+							<view>
 								<uni-icons
 									v-show="!isMultiple ? item[map.key] != curSelDataKey: curSelDataKey.indexOf(item[map.key]) == -1"
 									type="circle" :size="25" @click="selData(item, index)"></uni-icons>
 								<uni-icons
 									v-show="!isMultiple ? item[map.key] == curSelDataKey: curSelDataKey.indexOf(item[map.key]) != -1"
-									type="checkbox-filled" :size="25" color="#1cbbb4" @click="delData(item, index)">
+									type="checkbox-filled" :size="25" color="#2979ff" @click="delData(item, index)">
 								</uni-icons>
 							</view>
 						</template>
 						<!-- 名称 -->
 						<template v-slot:body>
-							<!-- color: #1cbbb4; -->
-							<text style="flex: 1;font-size: 15px; margin:2px 10px;"
-								@click="selOrDelData(item, index)">{{item[map.label]}}</text>
+							<text class="name" @click="selOrDelData(item, index)">{{item[map.label]}}</text>
 						</template>
 					</uni-list-item>
-				</view>
-			</uni-list>
-		</view>
-	</uni-popup>
+				</uni-list>
+			</view>
+		</uni-popup>
+	</view>
 </template>
 
 <script setup>
@@ -287,8 +282,81 @@
 </script>
 
 <style lang="scss">
-	.input-value-border {
-		border: 1px solid #e5e5e5;
-		border-radius: 5px;
+	.snowy-sel-picker {
+		.input {
+			.input-value {
+				font-size: 25upx;
+				line-height: 30upx;
+				padding: 20upx;
+				min-height: 30upx;
+
+				.multiple {
+					display: inline-block;
+					margin: 0px 10upx 0px 0px
+				}
+
+				.placeholder {
+					color: $uni-secondary-color;
+				}
+			}
+
+			.input-value-border {
+				border: 1px solid $uni-border-2;
+				border-radius: 5upx;
+			}
+		}
+
+		.pop {
+			.action {
+				display: flex;
+				justify-content: space-between;
+				margin: 30upx;
+				font-size: 30upx;
+
+				.cal {
+					color: $uni-secondary-color
+				}
+
+				.conf {
+					color: $uni-primary
+				}
+			}
+
+			.choiced {
+				.single {
+					margin: 5px 30upx;
+					display: inline-block;
+
+					.name {
+						display: inline-block;
+						vertical-align: top;
+						color: $uni-main-color;
+					}
+				}
+
+				.multiple {
+					margin: 10upx 0 10upx 30upx;
+					display: inline-block;
+
+					.name {
+						display: inline-block;
+						vertical-align: top;
+						color: $uni-main-color;
+					}
+				}
+			}
+
+			.data {
+				width: 100vw;
+				height: 40vh;
+				overflow-y: scroll;
+
+				.name {
+					flex: 1;
+					font-size: 30upx;
+					margin: 2upx 20upx;
+				}
+			}
+		}
 	}
 </style>

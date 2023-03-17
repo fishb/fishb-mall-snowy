@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<uni-forms ref="formRef" :model="formData" label-position="left" labelWidth="75px">
+		<uni-forms ref="formRef" :model="formData" label-position="top" labelWidth="75px">
 			<uni-forms-item label="上级机构" name="parentId" required :rules="[{ required: true, errorMessage: '请选择上级机构' }]">
 				<snowy-org-picker v-model="formData.parentId" :isTopLevel="true" placeholder="请选择上级机构">
 				</snowy-org-picker>
@@ -16,15 +16,12 @@
 			<uni-forms-item label="排序" name="sortCode" required :rules="[{ required: true, errorMessage: '请选择排序' }]">
 				<uni-number-box v-model="formData.sortCode" background="#2979FF" color="#fff" :step="1" :max="100"></uni-number-box>
 			</uni-forms-item>
-			
 			<uni-forms-item label="指定主管" name="directorId" >
 				<snowy-user-picker v-model="formData.directorId" placeholder="请选择主管">
 				</snowy-user-picker>
 			</uni-forms-item>
-			
-			
 		</uni-forms>
-		<button type="primary" @click="submit">提交</button>
+		<button class="btn-sub" type="primary" @click="submit">提交</button>
 	</view>
 </template>
 
@@ -46,7 +43,7 @@
 		onPullDownRefresh,
 		onReachBottom
 	} from "@dcloudio/uni-app"
-	
+
 	const formRef = ref()
 	let formData = ref({
 		sortCode: 99
@@ -63,7 +60,7 @@
 			formData.value = res.data
 		})
 	})
-	
+
 	const submit = () => {
 		formRef.value.validate().then(res => {
 			uni.showLoading()
@@ -82,9 +79,14 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.container {
-		padding: 15px;
-		background-color: #fff;
+		margin: 15upx;
+		border-radius: 5upx;
+		padding: 25upx;
+		background-color: $uni-white;
+		.btn-sub {
+			background-color: $uni-primary;
+		}
 	}
 </style>

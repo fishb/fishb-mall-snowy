@@ -1,10 +1,11 @@
 // global
 @import "./global.scss";
-// color-ui
-@import "@/static/scss/colorui.css";
 
-// iconfont
-@import "@/static/icon/font/iconfont.css";
+// color-ui (如果想使用colorui，可自行开启注释)
+// @import "@/static/scss/colorui.css";
+
+// https://uniapp.dcloud.net.cn/component/uniui/uni-sass.html
+@import '@/uni_modules/uni-scss/index.scss';
 
 // snowy icon
 @import '@/static/icon/snowy/filled/iconfont.css';

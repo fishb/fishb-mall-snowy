@@ -1,20 +1,17 @@
 <template>
-	<view class="work-container">
-		<!-- 轮播图 -->
-		<uni-swiper-dot class="uni-swiper-dot-box" :info="data" :current="current" field="content">
-			<swiper class="swiper-box" :current="swiperDotIndex" :autoplay="true" :interval="3000" :duration="1000"
-				@change="changeSwiper">
-				<swiper-item v-for="(item, index) in data" :key="index">
-					<view class="swiper-item" @click="clickBannerItem(item)">
-						<image class="swiper-item-img" :src="item.image" mode="aspectFill" :draggable="false" />
-					</view>
-				</swiper-item>
-			</swiper>
-		</uni-swiper-dot>
-	</view>
+	<!-- 轮播图 -->
+	<uni-swiper-dot :info="data" :current="current" field="content">
+		<swiper :current="swiperDotIndex" :autoplay="true" :interval="3000" :duration="1000" @change="changeSwiper">
+			<swiper-item v-for="(item, index) in data" :key="index">
+				<view  @click="clickBannerItem(item)" style="padding: 15upx;">
+					<image style="width:100%; border-radius: 5upx;" :src="item.image" mode="widthFix" :draggable="false" />
+				</view>
+			</swiper-item>
+		</swiper>
+	</uni-swiper-dot>
 
 	<!-- 宫格组件 -->
-	<view v-for="(userMenu, i) in userMobileMenus" :index="i" :key="userMenu.id">
+	<view v-for="(userMenu, i) in userMobileMenus" :index="i" :key="userMenu.id" style="background-color: #ffffff; margin: 15upx;">
 		<uni-section :title="userMenu.name">
 			<template v-slot:decoration>
 				<view style="margin-right: 5px;">
@@ -35,7 +32,7 @@
 		<view class="grid-body">
 			<uni-grid :column="4" :showBorder="false">
 				<uni-grid-item v-for="(item, j) in handleData(userMenu.id, userMenu.children)" :index="j"
-					:key="handleKey(item,j)" @click="gridItemClick(userMenu.id, item, j)">
+					:key="handleKey(item,j)" @tap="gridItemClick(userMenu.id, item, j)">
 					<view class="grid-item-box">
 						<snowy-icon :style="{backgroundColor: item.color}" custom-prefix="snowy" :type="item.icon" size="30" color="#FFFFFF"></snowy-icon>
 						<text class="text">{{item.title}}</text>
@@ -128,23 +125,6 @@
 	}
 </script>
 <style lang="scss">
-	/* #ifndef APP-NVUE */
-	page {
-		display: flex;
-		flex-direction: column;
-		box-sizing: border-box;
-		background-color: #fff;
-		min-height: 100%;
-		height: auto;
-	}
-
-	view {
-		font-size: 14px;
-		line-height: inherit;
-	}
-
-	/* #endif */
-
 	.text {
 		text-align: center;
 		font-size: 26rpx;
@@ -160,49 +140,5 @@
 		align-items: center;
 		justify-content: center;
 		padding: 15px 0;
-	}
-
-	.uni-margin-wrap {
-		width: 690rpx;
-		width: 100%;
-		;
-	}
-
-	.swiper {
-		height: 300rpx;
-	}
-
-	.swiper-box {
-		height: 150px;
-	}
-
-	.swiper-item {
-		padding: 8px;
-		/* #ifndef APP-NVUE */
-		display: flex;
-		/* #endif */
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		color: #fff;
-		height: 300rpx;
-		line-height: 300rpx;
-	}
-  .swiper-item-img {
-    border-radius: 5px;
-  }
-
-	@media screen and (min-width: 500px) {
-		.uni-swiper-dot-box {
-			width: 400px;
-			/* #ifndef APP-NVUE */
-			margin: 0 auto;
-			/* #endif */
-			margin-top: 8px;
-		}
-
-		.image {
-			width: 100%;
-		}
 	}
 </style>

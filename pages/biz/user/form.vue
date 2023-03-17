@@ -1,9 +1,9 @@
 <template>
 	<view class="container">
-		<uni-forms ref="formRef" :model="formData" label-position="left" :rules="rules" validate-trigger="blur"
-			labelWidth="75px">
+		<uni-forms ref="formRef" :model="formData" label-position="top" :rules="rules" validate-trigger="blur"
+			labelWidth="100px">
 			<uni-segmented-control style="margin-bottom: 20px;" :current="curView" :values="['基础信息', '更多信息']"
-				styleType="text" activeColor="#007aff" @clickItem="(e) => {
+				styleType="button" activeColor="#007aff" @clickItem="(e) => {
 					if (curView != e.currentIndex) {
 						curView = e.currentIndex
 					}
@@ -129,7 +129,7 @@
 			</view>
 		</uni-forms>
 
-		<button type="primary" @click="submit">提交</button>
+		<button class="btn-sub" type="primary" @click="submit">提交</button>
 	</view>
 </template>
 
@@ -260,9 +260,14 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.container {
-		padding: 15px;
-		background-color: #fff;
+		margin: 15upx;
+		border-radius: 5upx;
+		padding: 25upx;
+		background-color: $uni-white;
+		.btn-sub {
+			background-color: $uni-primary;
+		}
 	}
 </style>

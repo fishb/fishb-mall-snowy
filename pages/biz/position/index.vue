@@ -1,43 +1,45 @@
 <template>
-	<view class="padding-sm" style="white-space: nowrap; overflow-x: scroll; background-color: white;">
-		<text v-for="(item, index) in allSelOrg" class="text-center"
-			:class="index === (allSelOrg.length-1) ? 'text-grey' : 'text-cyan'"
-			style="display: inline-block; margin-left: 5px;" @click="clickOrgCru(item, index)">
+	<view class="crumb">
+		<text class="crumb-text" v-for="(item, index) in allSelOrg" :key="index"
+			:class="index === (allSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'"
+			@click="clickOrgCru(item, index)">
 			{{ item.name + (index === (allSelOrg.length-1) ? '' : ' | ') }}
 		</text>
 	</view>
-	<uni-list style="background-color: #ededed;">
-		<view style="margin-top: 5px;">
-			<uni-list-item v-for="(item, index) in curSelOrg" :key="index" :title="item.name"
-				:showArrow="item.children? true : false" :clickable="true" @click="clickOrg(item, index)">
-			</uni-list-item>
-		</view>
-		<view style="margin-top: 5px;">
-			<uni-list-item v-for="(item, index) in positionData" :key="index" :title="item.name" :clickable="true"
-				@click="morePopupRef.open(item)">
-				<template v-slot:header>
-					<view class="slot-box" style="display: flex; align-items: flex-start">
-						<snowy-icon v-if="item.category == 'HIGH'" style="background-color: #f3a73f;" type="vip-filled" size="20" color="#FFFFFF"></snowy-icon>
-						<snowy-icon v-else-if="item.category == 'MIDDLE'" style="background-color: #007AFF;" type="auth-filled" size="20" color="#FFFFFF"></snowy-icon>
-						<snowy-icon v-else style="background-color: #1cbbb4;" type="staff-filled" size="20" color="#FFFFFF"></snowy-icon>
-					</view>
-				</template>
-				<template v-slot:body>
-					<!-- color: #1cbbb4;  text-align:center; {{$utils.findKey({aa: 11, bb: 22, cc: 33}, item => item === 22)}}-->
-					<view style="display: flex; flex-direction: column; flex: 1; overflow: hidden; padding: 2px 0;">
-						<text style="flex: 1;font-size: 14px; margin: 0 10px; ">{{item.name}}</text>
-						<text
-							style="flex: 1;font-size: 12px; margin: 5px 10px; color:#999;">{{ $tool.dictTypeData('POSITION_CATEGORY', item.category)}}</text>
-					</view>
-				</template>
-				<template v-slot:footer>
+	<view class="biz-list">
+		<uni-list>
+			<view>
+				<uni-list-item v-for="(item, index) in curSelOrg" :key="index" :title="item.name"
+					:showArrow="item.children? true : false" :clickable="true" @click="clickOrg(item, index)">
+				</uni-list-item>
+			</view>
+			<view>
+				<uni-list-item v-for="(item, index) in positionData" :key="index" :title="item.name" :clickable="true"
+					@click="morePopupRef.open(item)">
+					<template v-slot:header>
+						<view v-if="item.category == 'HIGH'" style="background-color: #f3a73f; width: 42px; height: 42px;">
+							<snowy-icon type="vip-filled" size="20" color="#FFFFFF"></snowy-icon>
+						</view>
+						<view v-else-if="item.category == 'MIDDLE'" style="background-color: #2979ff; width: 42px; height: 42px;">
+							<snowy-icon type="auth-filled" size="20" color="#FFFFFF"></snowy-icon>
+						</view>
+						<view v-else style="background-color: #18bc37; width: 42px; height: 42px;">
+							<snowy-icon type="staff-filled" size="20" color="#FFFFFF"></snowy-icon>
+						</view>
+					</template>
+					<template v-slot:body>
+						<view class="biz-list-body">
+							<text class="biz-list-body-name">{{item.name}}</text>
+							<text class="biz-list-body-category">{{ $tool.dictTypeData('POSITION_CATEGORY', item.category)}}</text>
+						</view>
+					</template>
+					<template v-slot:footer>
 
-				</template>
-			</uni-list-item>
-		</view>
-	</uni-list>
-	<uni-load-more status="noMore" />
-
+					</template>
+				</uni-list-item>
+			</view>
+		</uni-list>
+	</view>
 	<!-- 新增悬浮按钮 -->
 	<uni-fab v-if="hasPerm('mobileBizPositionAdd')" :pattern="{
 			color: '#7A7E83',
@@ -120,7 +122,7 @@
 		curSelOrg.value = item.children
 		allSelOrg.value.splice(index + 1, allSelOrg.value.length - (index + 1))
 
-		searchFormState.orgId = (item.id === '0' ? null : item.id)
+		searchFormState.orgId = (item.id === '0' ? '' : item.id)
 		// uni.startPullDownRefresh()
 		loadData(true)
 	}
@@ -158,3 +160,41 @@
 		})
 	}
 </script>
+
+<style lang="scss">
+	.crumb {
+		margin: 15upx;
+		border-radius: 5upx;
+		white-space: nowrap;
+		overflow-x: scroll;
+		background-color: white;
+		padding: 20upx;
+		.crumb-text {
+			display: inline-block;
+			margin-left: 5px;
+			text-align: center;
+		}
+	}
+	.biz-list {
+		margin: 15upx;
+		border-radius: 5upx;
+		.biz-list-body {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			overflow: hidden;
+			padding: 2px 0;
+			.biz-list-body-name {
+				flex: 1;
+				font-size: 14px;
+				margin: 0 10px;
+			}
+			.biz-list-body-category {
+				flex: 1;
+				font-size: 12px;
+				margin: 5px 10px;
+				color:#999;
+			}
+		}
+	}
+</style>

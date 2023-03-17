@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<uni-forms ref="formRef" :model="formData" label-position="left" labelWidth="75px">
+		<uni-forms ref="formRef" :model="formData" label-position="top" labelWidth="75px">
 			<uni-forms-item label="所属机构" name="orgId" required :rules="[{ required: true, errorMessage: '请选择所属机构' }]">
 				<!-- :isTopLevel="true" -->
 				<snowy-org-picker v-model="formData.orgId" placeholder="请选择所属机构">
@@ -18,7 +18,7 @@
 				<uni-number-box v-model="formData.sortCode" background="#2979FF" color="#fff" :step="1" :max="100"></uni-number-box>
 			</uni-forms-item>
 		</uni-forms>
-		<button type="primary" @click="submit">提交</button>
+		<button class="btn-sub" type="primary" @click="submit">提交</button>
 	</view>
 </template>
 
@@ -40,7 +40,7 @@
 		onPullDownRefresh,
 		onReachBottom
 	} from "@dcloudio/uni-app"
-	
+
 	const formRef = ref()
 	let formData = ref({
 		sortCode: 99
@@ -57,7 +57,7 @@
 			formData.value = res.data
 		})
 	})
-	
+
 	const submit = () => {
 		formRef.value.validate().then(res => {
 			uni.showLoading()
@@ -76,9 +76,14 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.container {
-		padding: 15px;
-		background-color: #fff;
+		margin: 15upx;
+		border-radius: 5upx;
+		padding: 25upx;
+		background-color: $uni-white;
+		.btn-sub {
+			background-color: $uni-primary;
+		}
 	}
 </style>

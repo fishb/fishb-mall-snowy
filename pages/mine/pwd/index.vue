@@ -1,6 +1,6 @@
 <template>
-	<view class="pwd-retrieve-container">
-		<uni-forms ref="form" :value="user" labelWidth="80px">
+	<view class="pwd-container">
+		<uni-forms ref="form" :value="user" label-position="top" labelWidth="80px">
 			<uni-forms-item name="oldPassword" label="旧密码">
 				<uni-easyinput type="password" v-model="user.oldPassword" placeholder="请输入旧密码" />
 			</uni-forms-item>
@@ -10,7 +10,7 @@
 			<uni-forms-item name="confirmPassword" label="确认密码">
 				<uni-easyinput type="password" v-model="user.confirmPassword" placeholder="请确认新密码" />
 			</uni-forms-item>
-			<button type="primary" @click="submit">提交</button>
+			<button class="btn-sub" type="primary" @click="submit">提交</button>
 		</uni-forms>
 	</view>
 </template>
@@ -78,13 +78,14 @@
 	}
 </script>
 
-<style lang="scss" scoped>
-	page {
-		background-color: #ffffff;
-	}
-
-	.pwd-retrieve-container {
-		padding-top: 36rpx;
-		padding: 15px;
+<style lang="scss">
+	.pwd-container {
+		margin: 15upx;
+		border-radius: 5upx;
+		padding: 25upx;
+		background-color: $uni-white;
+		.btn-sub {
+			background-color: $uni-primary;
+		}
 	}
 </style>

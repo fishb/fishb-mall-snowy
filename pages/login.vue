@@ -1,27 +1,27 @@
 <template>
-	<view class="normal-login-container">
-		<view class="logo-content align-center justify-center flex">
+	<view class="login-container">
+		<view class="logo-content">
 			<image style="width: 100rpx;height: 100rpx;" :alt="sysBaseConfig.SNOWY_SYS_NAME"
 				:src="sysBaseConfig.SNOWY_SYS_LOGO" mode="widthFix">
 			</image>
 			<text class="title">{{sysBaseConfig.SNOWY_SYS_NAME}} {{sysBaseConfig.SNOWY_SYS_VERSION}}</text>
 		</view>
 		<view class="login-form-content">
-			<view class="input-item flex align-center">
-				<view class="iconfont icon-user icon"></view>
+			<view class="input-item">
+				<uni-icons class="icon" type="person" size="20" color="#999"></uni-icons>
 				<input v-model="loginForm.account" class="input" type="text" placeholder="请输入账号" maxlength="30" />
 			</view>
-			<view class="input-item flex align-center">
-				<view class="iconfont icon-password icon"></view>
+			<view class="input-item">
+				<uni-icons class="icon" type="locked" size="20" color="#999"></uni-icons>
 				<input v-model="loginForm.password" type="password" class="input" placeholder="请输入密码" maxlength="20" />
 			</view>
-			<view class="input-item flex align-center" v-if="sysBaseConfig.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN === 'true'">
-				<view class="iconfont icon-code icon"></view>
+			<view class="input-item" v-if="sysBaseConfig.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN === 'true'">
+				<uni-icons class="icon" type="map" size="20" color="#999"></uni-icons>
 				<input v-model="loginForm.validCode" type="text" class="input" placeholder="请输入验证码" maxlength="4" />
 				<image :src="validCodeBase64" @click="loginCaptcha" class="login-code-img"></image>
 			</view>
-			<view class="action-btn">
-				<button @click="handleLogin" class="login-btn cu-btn block bg-blue lg round">登录</button>
+			<view>
+				<button @click="handleLogin" class="login-btn" type="primary">登录</button>
 			</view>
 		</view>
 	</view>
@@ -49,20 +49,21 @@
 	} from '@/utils/auth'
 	import store from '@/store'
 	import smCrypto from '@/utils/smCrypto'
+	import onFeedTap from '@/utils/feedTap.js'
 	const {
 		proxy
 	} = getCurrentInstance()
 
 	let sysBaseConfig = ref({})
-	
+
 	// 确保获取准确的配置信息（防止因网络延迟导致的配置信息不同步）
-	store.dispatch('GetSysBaseConfig').then(configData=>{
-		sysBaseConfig.value =  configData
+	store.dispatch('GetSysBaseConfig').then(configData => {
+		sysBaseConfig.value = configData
 		if (sysBaseConfig.value.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN) {
 			loginCaptcha()
 		}
 	})
-	
+
 	const validCodeBase64 = ref("")
 	const loginForm = reactive({
 		account: 'superAdmin',
@@ -103,9 +104,11 @@
 				proxy.$tab.reLaunch('/pages/home/index')
 				proxy.$modal.closeLoading()
 			}).catch(err => {
+				onFeedTap()
 				console.error(err)
 			})
 		}).catch(err => {
+			onFeedTap()
 			console.error(err)
 		})
 
@@ -117,7 +120,7 @@
 		background-color: #ffffff;
 	}
 
-	.normal-login-container {
+	.login-container {
 		width: 100%;
 
 		.logo-content {
@@ -125,13 +128,18 @@
 			font-size: 21px;
 			text-align: center;
 			padding-top: 15%;
+			align-items: center;
+			justify-content: center;
+			display: flex;
 
 			image {
 				border-radius: 4px;
+				width: 100upx;
+				height: 100upx;
 			}
 
 			.title {
-				margin-left: 10px;
+				margin-left: 15upx;
 			}
 		}
 
@@ -146,6 +154,8 @@
 				background-color: #f5f6f7;
 				height: 45px;
 				border-radius: 20px;
+				display: flex;
+				align-items: center;
 
 				.icon {
 					font-size: 38rpx;
@@ -161,21 +171,21 @@
 					padding-left: 15px;
 				}
 
+				.login-code-img {
+					border: 1px solid var(--border-color-split);
+					cursor: pointer;
+					width: 70%;
+					height: 45px
+				}
 			}
 
 			.login-btn {
 				margin-top: 40px;
 				height: 45px;
+				background-color: $uni-primary;
+				border-radius: 1000upx;
+				color: #ffffff;
 			}
-
-			.xieyi {
-				color: #333;
-				margin-top: 20px;
-			}
-		}
-
-		.easyinput {
-			width: 100%;
 		}
 	}
 

@@ -1,24 +1,16 @@
 <template>
-	<view class="padding-sm" style="white-space: nowrap; overflow-x: scroll; background-color: white;">
-		<text v-for="(item, index) in allSelOrg" class="text-center"
-			:class="index === (allSelOrg.length-1) ? 'text-grey' : 'text-cyan'"
-			style="display: inline-block; margin-left: 5px;" @click="clickOrgCru(item, index)">
+	<view class="crumb">
+		<text class="crumb-text" v-for="(item, index) in allSelOrg" :key="index" @click="clickOrgCru(item, index)"
+			:class="index === (allSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
 			{{ item.name + (index === (allSelOrg.length-1) ? '' : ' | ') }}
 		</text>
 	</view>
-	<uni-list style="background-color: #ededed;">
-		<view style="margin-top: 5px;">
+	<view class="org-list">
+		<uni-list>
 			<uni-list-item v-for="(item, index) in curSelOrg" :key="index">
-				<!-- :title="item.name"
-				:showArrow="item.children? true : false"
-				:clickable="item.children? true : false"
-				@click="clickOrg(item, index)" -->
-
 				<!-- 名称 -->
 				<template v-slot:body>
-					<!-- color: #1cbbb4; @click="clickOrg(item, index)"-->
-					<text style="flex: 1;font-size: 14px; margin-right: 10px;"
-						@click="morePopupRef.open(item)">{{item.name}}</text>
+					<text class="org-list-name" @click="morePopupRef.open(item)">{{item.name}}</text>
 				</template>
 				<!-- 右侧icon -->
 				<template v-slot:footer>
@@ -26,8 +18,9 @@
 					</uni-icons>
 				</template>
 			</uni-list-item>
-		</view>
-	</uni-list>
+		</uni-list>
+	</view>
+
 
 	<!-- 新增悬浮按钮 -->
 	<uni-fab v-if="hasPerm('mobileBizOrgAdd')" :pattern="{
@@ -107,3 +100,28 @@
 		})
 	}
 </script>
+<style lang="scss">
+	.crumb {
+		margin: 15upx;
+		border-radius: 5upx;
+		white-space: nowrap;
+		overflow-x: scroll;
+		background-color: white;
+		padding: 20upx;
+
+		.crumb-text {
+			display: inline-block;
+			margin-left: 5px;
+			text-align: center;
+		}
+	}
+
+	.org-list {
+		margin: 15upx;
+		border-radius: 5upx;
+
+		.org-list-name {
+			flex: 1;
+		}
+	}
+</style>
