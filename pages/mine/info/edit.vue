@@ -21,7 +21,7 @@
 				<uni-easyinput v-model="formData.email" placeholder="请输入邮箱"></uni-easyinput>
 			</uni-forms-item>
 		</uni-forms>
-		<button type="primary" @click="submit">提交</button>
+		<button class="btn-sub" type="primary" @click="submit">提交</button>
 	</view>
 </template>
 
@@ -73,37 +73,14 @@
 	}
 </script>
 
-<style lang="scss" scoped>
-	page {
-		background-color: #ffffff;
-	}
-
+<style lang="scss">
 	.edit-container {
-		padding: 15px;
-		background-color: #fff;
-	}
-
-	.segmented-control {
-		margin-bottom: 15px;
-	}
-
-	.button-group {
-		margin-top: 15px;
-		display: flex;
-		justify-content: space-around;
-	}
-
-	.form-item {
-		display: flex;
-		align-items: center;
-		flex: 1;
-	}
-
-	.button {
-		display: flex;
-		align-items: center;
-		height: 35px;
-		line-height: 35px;
-		margin-left: 10px;
+		margin: 15upx;
+		border-radius: 5upx;
+		padding: 25upx;
+		background-color: $uni-white;
+		.btn-sub {
+			background-color: $uni-primary;
+		}
 	}
 </style>
