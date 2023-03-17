@@ -18,7 +18,7 @@
 				<uni-number-box v-model="formData.sortCode" background="#2979FF" color="#fff" :step="1" :max="100"></uni-number-box>
 			</uni-forms-item>
 		</uni-forms>
-		<button class="uni-btn" type="primary" @click="submit">提交</button>
+		<button class="btn-sub" type="primary" @click="submit">提交</button>
 	</view>
 </template>
 
@@ -82,5 +82,8 @@
 		border-radius: 5upx;
 		padding: 25upx;
 		background-color: $uni-white;
+		.btn-sub {
+			background-color: $uni-primary;
+		}
 	}
 </style>
