@@ -21,7 +21,7 @@
 				<image :src="validCodeBase64" @click="loginCaptcha" class="login-code-img"></image>
 			</view>
 			<view>
-				<button @click="handleLogin" class="uni-btn login-btn" type="primary">登录</button>
+				<button @click="handleLogin" class="login-btn" type="primary">登录</button>
 			</view>
 		</view>
 	</view>
@@ -182,8 +182,8 @@
 			.login-btn {
 				margin-top: 40px;
 				height: 45px;
-				border-radius: 1000upx;
 				background-color: $uni-primary;
+				border-radius: 1000upx;
 				color: #ffffff;
 			}
 		}

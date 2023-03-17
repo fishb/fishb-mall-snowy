@@ -6,7 +6,7 @@
 				<view class="icon" v-if="!avatar">
 					<uni-icons type="person" size="30" color="#808080"></uni-icons>
 				</view>
-				<image class="avatar" v-if="avatar" @click="handleToAvatar" :src="avatar" mode="widthFix"></image>
+				<image class="avatar" v-if="avatar" @click="handleToAvatar" :src="avatar" mode="aspectFit"></image>
 				<view v-if="!name" @click="handleToLogin" class="login-tip">
 					点击登录
 				</view>
@@ -55,24 +55,23 @@
 			</uni-grid>
 		</view>
 
-		<uni-list style="margin: 15upx; padding: 10upx;">
-			<uni-list-item :show-extra-icon="true" showArrow title="编辑资料" @click="handleToEditInfo" clickable
-				:extra-icon="{
-					color: '#2979ff',
-					size: '20',
-					type: 'person'
-				}" />
-			<uni-list-item :show-extra-icon="true" showArrow title="修改密码" @click="handleToPwd" clickable
-				:extra-icon="{
+		<view class="content-list">
+			<uni-list>
+				<uni-list-item :show-extra-icon="true" showArrow title="编辑资料" @click="handleToEditInfo" clickable
+					:extra-icon="{
 						color: '#2979ff',
 						size: '20',
-						type: 'locked'
+						type: 'person'
 					}" />
-		</uni-list>
-
-		<view style="margin: 50upx 5upx;">
-			<button class="uni-btn" type="primary" @click="handleLogout">退出登录</button>
+				<uni-list-item :show-extra-icon="true" showArrow title="修改密码" @click="handleToPwd" clickable
+					:extra-icon="{
+							color: '#2979ff',
+							size: '20',
+							type: 'locked'
+						}" />
+			</uni-list>
 		</view>
+		<button type="primary" class="btn-logout" @click="handleLogout">退出登录</button>
 	</view>
 </template>
 
@@ -146,7 +145,7 @@
 	@mixin circular {
 		width: 120upx;
 		height: 120upx;
-		border-radius: 5000upx;
+		border-radius: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -218,6 +217,13 @@
 					margin-top: 15rpx;
 				}
 			}
+		}
+		.content-list {
+			margin: 15upx;
+		}
+		.btn-logout {
+			margin: 50upx 15upx;
+			background-color: $uni-primary;
 		}
 	}
 </style>
