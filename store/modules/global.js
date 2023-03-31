@@ -161,16 +161,18 @@ export default {
 			return new Promise((resolve, reject) => {
 				let sysBaseConfig = config.SYS_BASE_CONFIG
 				// getApp().globalData.config = config
-				commit('SET_sysBaseConfig', sysBaseConfig)
+				// commit('SET_sysBaseConfig', sysBaseConfig)
 				configSysBaseList().then((res) => {
 					if (res.data) {
 						res.data.forEach((item) => {
 							sysBaseConfig[item.configKey] = item.configValue
 						})
-						// 缓存配置
-						commit('SET_sysBaseConfig', sysBaseConfig)
-						resolve(sysBaseConfig)
+					}else {
+						sysBaseConfig = config.SYS_BASE_CONFIG
 					}
+					// 缓存配置
+					commit('SET_sysBaseConfig', sysBaseConfig)
+					resolve(sysBaseConfig)
 				})
 			}).catch(error => {
 				reject(error)
