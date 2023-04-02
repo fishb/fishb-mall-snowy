@@ -9,7 +9,7 @@
 
 </script>
 
-<style lang="less">
+<style lang="scss">
 	.container-icon {
 		width: 42px;
 		height: 42px;
