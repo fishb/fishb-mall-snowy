@@ -24,28 +24,28 @@
 
 		<view class="content-section">
 			<uni-grid :column="4" :showBorder="false">
-				<uni-grid-item @click="handleQQ">
+				<uni-grid-item @tap="handleQQ">
 					<view class="grid-item-box">
 						<snowy-icon style="background-color:#2979ff;" type="staff-filled" size="30" color="#FFFFFF">
 						</snowy-icon>
 						<text class="text">QQ群</text>
 					</view>
 				</uni-grid-item>
-				<uni-grid-item @click="handleBuilding">
+				<uni-grid-item @tap="handleBuilding">
 					<view class="grid-item-box">
 						<snowy-icon style="background-color:#fa3534;" type="flag-filled" size="30" color="#FFFFFF">
 						</snowy-icon>
 						<text class="text">建设中</text>
 					</view>
 				</uni-grid-item>
-				<uni-grid-item @click="handleBuilding">
+				<uni-grid-item @tap="handleBuilding">
 					<view class="grid-item-box">
 						<snowy-icon style="background-color:#ff9900;" type="flag-filled" size="30" color="#FFFFFF">
 						</snowy-icon>
 						<text class="text">建设中</text>
 					</view>
 				</uni-grid-item>
-				<uni-grid-item @click="handleBuilding">
+				<uni-grid-item @tap="handleBuilding">
 					<view class="grid-item-box">
 						<snowy-icon style="background-color:#19be6b;" type="flag-filled" size="30" color="#FFFFFF">
 						</snowy-icon>
