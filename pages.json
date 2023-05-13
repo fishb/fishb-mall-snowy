@@ -13,6 +13,12 @@
 			}
 		},
 		{
+			"path": "pages/common/webview/index",
+			"style": {
+				"navigationBarTitleText": "浏览网页"
+			}
+		},
+		{
 			"path": "pages/home/index",
 			"style": {
 				"navigationBarTitleText": "小诺移动端框架",
@@ -52,6 +58,7 @@
 			"path": "pages/biz/position/index",
 			"style": {
 				"navigationBarTitleText": "职位管理",
+				"enablePullDownRefresh": true,
 				//#ifdef H5
 				"navigationStyle": "custom"
 				//#endif
