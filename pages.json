@@ -52,6 +52,7 @@
 			"path": "pages/biz/position/index",
 			"style": {
 				"navigationBarTitleText": "职位管理",
+				"enablePullDownRefresh": true,
 				//#ifdef H5
 				"navigationStyle": "custom"
 				//#endif
