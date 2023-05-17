@@ -74,8 +74,8 @@ export default {
 			state.dictTypeTreeData = {}
 			storage.remove(constant.dictTypeTreeData)
 			// 配置信息
-			state.sysBaseConfig = {}
-			storage.remove(constant.sysBaseConfig)
+			// state.sysBaseConfig = {}
+			// storage.remove(constant.sysBaseConfig)
 
 			// storage.clean()
 		},
