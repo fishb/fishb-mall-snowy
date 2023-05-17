@@ -1,7 +1,7 @@
 <template>
 	<view class="snowy-sel-picker">
-		<view class="input" @click="handleInput">
-			<view class="input-value" :class="{ 'input-value-border': props.border }">
+		<view class="input" @click="handleInput" :class="{ 'input-disabled': props.disabled }">
+			<view class="input-value" :class="{ 'input-value-border': props.border, 'input-value-disabled': props.disabled }">
 				<!-- 单选 -->
 				<view v-if="!isMultiple && curSelDataKey && curSelDataKey !== ''">
 					{{ curSelData[map.label] }}
@@ -111,6 +111,11 @@
 		rangeData: {
 			type: Array,
 			default: [],
+			required: false
+		},
+		disabled: {
+			type: Boolean,
+			default: false,
 			required: false
 		}
 	})
@@ -283,6 +288,13 @@
 
 <style lang="scss">
 	.snowy-sel-picker {
+		.input-disabled {
+			pointer-events: none;
+			background-color: rgb(247, 246, 246);
+			.input-value-disabled {
+				color: rgb(192, 192, 192);
+			}
+		}
 		.input {
 			.input-value {
 				font-size: 25upx;
