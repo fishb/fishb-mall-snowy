@@ -11,11 +11,12 @@
 
 <style lang="scss">
 	.container-icon {
-		width: 42px;
-		height: 42px;
-		border-radius: 5px;
+		width: 80upx;
+		height: 80upx;
+		border-radius: 25upx;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		box-shadow: 1upx 4upx 5upx rgba(72, 22, 174, 0.3);
 	}
 </style>
