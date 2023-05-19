@@ -34,7 +34,7 @@ export default {
 		// 用户信息
 		userInfo: storage.get(constant.userInfo),
 		// 系统配置
-		sysBaseConfig: storage.get(constant.sysBaseConfig),
+		sysBaseConfig: storage.get(constant.sysBaseConfig) || config.SYS_BASE_CONFIG,
 		// 字典数据
 		dictTypeTreeData: storage.get(constant.dictTypeTreeData),
 	},
@@ -159,20 +159,17 @@ export default {
 			state
 		}) {
 			return new Promise((resolve, reject) => {
-				let sysBaseConfig = config.SYS_BASE_CONFIG
+				let sysBaseConfig = {}
 				// getApp().globalData.config = config
-				// commit('SET_sysBaseConfig', sysBaseConfig)
 				configSysBaseList().then((res) => {
 					if (res.data) {
 						res.data.forEach((item) => {
 							sysBaseConfig[item.configKey] = item.configValue
 						})
-					}else {
-						sysBaseConfig = config.SYS_BASE_CONFIG
+						// 缓存配置
+						commit('SET_sysBaseConfig', sysBaseConfig)
+						resolve(sysBaseConfig)
 					}
-					// 缓存配置
-					commit('SET_sysBaseConfig', sysBaseConfig)
-					resolve(sysBaseConfig)
 				})
 			}).catch(error => {
 				reject(error)
