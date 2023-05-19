@@ -168,8 +168,8 @@ export default {
 						})
 						// 缓存配置
 						commit('SET_sysBaseConfig', sysBaseConfig)
-						resolve(sysBaseConfig)
 					}
+					resolve(sysBaseConfig)
 				})
 			}).catch(error => {
 				reject(error)
