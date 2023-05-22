@@ -1,5 +1,3 @@
-# Snowy-Mobile
-
 ## 产品介绍
 Snowy谐音“小诺”，恰应小诺团队名称；意思为”下雪的、纯洁的“，寓意框架追求简洁至上，大道至简。
 
@@ -13,7 +11,7 @@ Snowy谐音“小诺”，恰应小诺团队名称；意思为”下雪的、纯
 | :-------: | :--------------------------: | :------------------------------------------------------: |
 | Snowy |            前后端分离            |   https://gitee.com/xiaonuobase/snowy   |
 | Snowy-Cloud  |           微服务前后分离          |   https://gitee.com/xiaonuobase/snowy-cloud    |
-| Snowy-Solon | 前后端分离（Solon性能版） | https://gitee.com/xiaonuoadmin/snowy-solon |
+| Snowy-Solon | 前后端分离（Solon版） | https://gitee.com/xiaonuoadmin/snowy-solon |
 
 ## 软件架构
 1、项目主体架构使用的是vue3和vite 
