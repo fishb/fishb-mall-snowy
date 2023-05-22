@@ -139,7 +139,7 @@
 
 	// 展示
 	onShow(() => {
-		uni.$on('formBack', (data) => {
+		uni.$once('formBack', (data) => {
 			loadData(true)
 		})
 	})
