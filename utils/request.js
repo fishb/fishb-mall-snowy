@@ -28,7 +28,7 @@ const request = config => {
 	// 适配URL路径
 	config.url = prefixUrl(config.url)
 	// 是否需要设置 token
-	const isToken = (config.headers || {}).isToken === false
+	const isToken = (config.extConf || {}).isToken === false
 	config.header = config.header || {}
 	if (getToken() && !isToken) {
 		config.header[TOKEN_NAME] = TOKEN_PREFIX + getToken()
@@ -47,7 +47,7 @@ const request = config => {
 		uni.request({
 			method: config.method || 'get',
 			timeout: config.timeout || TIMEOUT,
-			url: config.baseUrl || BASE_URL + config.url,
+			url: (config.baseUrl || BASE_URL) + config.url,
 			data: config.data,
 			header: config.header,
 			dataType: 'json'
@@ -55,7 +55,7 @@ const request = config => {
 			const code = response.data.code || 200
 			const msg = response.data.msg || errorCodeMap[code] || errorCodeMap['default']
 			if (reloadCodes.includes(code)) {
-				showConfirm('登录状态已过期，您可以清除缓存，重新进行登录?').then(res => {
+				showConfirm(msg || '登录状态已过期，您可以清除缓存，重新进行登录?').then(res => {
 					if (res.confirm) {
 						store.commit('CLEAR_cache')
 						uni.reLaunch({
