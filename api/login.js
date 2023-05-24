@@ -5,7 +5,7 @@ import cryptoJs from 'sm-crypto'
 export function login(data) {
 	return request({
 		url: '/auth/b/doLogin',
-		headers: {
+		extConf: {
 			isToken: false
 		},
 		method: 'post',
@@ -33,7 +33,7 @@ export function logout() {
 export function getPicCaptcha() {
 	return request({
 		url: '/auth/b/getPicCaptcha',
-		headers: {
+		extConf: {
 			isToken: false
 		},
 		method: 'get',
