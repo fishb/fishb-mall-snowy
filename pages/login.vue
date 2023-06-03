@@ -59,15 +59,6 @@
 			url: '/pages/config/index'
 		})
 	}
-	// let sysBaseConfig = ref({})
-	// // 确保获取准确的配置信息（防止因网络延迟导致的配置信息不同步）
-	// store.dispatch('GetSysBaseConfig').then(configData => {
-	// 	sysBaseConfig.value = configData
-	// 	if (sysBaseConfig.value.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN) {
-	// 		loginCaptcha()
-	// 	}
-	// })
-	
 	const sysBaseConfig = computed(() => {
 		return store.getters.sysBaseConfig
 	})
