@@ -36,6 +36,15 @@
 			}
 		},
 		{
+			"path": "pages/dev/file/index",
+			"style": {
+				"navigationBarTitleText": "文件管理",
+				//#ifdef H5
+				"navigationStyle": "custom"
+				//#endif
+			}
+		},
+		{
 			"path": "pages/biz/org/index",
 			"style": {
 				"navigationBarTitleText": "机构管理",
