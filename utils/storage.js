@@ -4,7 +4,14 @@ import constant from './constant'
 let storageKey = 'storage_data'
 
 // 存储节点变量名
-let storageNodeKeys = [constant.sysBaseConfig, constant.userInfo, constant.userMobileMenus, constant.dictTypeTreeData]
+let storageNodeKeys = [
+	constant.envKey,
+	constant.allEnv,
+	constant.sysBaseConfig, 
+	constant.userInfo, 
+	constant.userMobileMenus, 
+	constant.dictTypeTreeData
+]
 
 // 存储的数据
 let storageData = uni.getStorageSync(storageKey) || {}

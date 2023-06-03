@@ -1,6 +1,6 @@
 <template>
 	<view class="login-container">
-		<view class="logo-content">
+		<view class="logo-content" @tap="logoTap">
 			<image style="width: 100rpx;height: 100rpx;" :alt="sysBaseConfig.SNOWY_SYS_NAME"
 				:src="sysBaseConfig.SNOWY_SYS_LOGO" mode="widthFix">
 			</image>
@@ -54,7 +54,11 @@
 	const {
 		proxy
 	} = getCurrentInstance()
-
+	const logoTap = () => {
+		uni.reLaunch({
+			url: '/pages/config/index'
+		})
+	}
 	// let sysBaseConfig = ref({})
 	// // 确保获取准确的配置信息（防止因网络延迟导致的配置信息不同步）
 	// store.dispatch('GetSysBaseConfig').then(configData => {

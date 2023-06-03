@@ -24,9 +24,13 @@ import {
 	dictTree
 } from '@/api/dev/dictApi'
 import XEUtils from 'xe-utils'
-
+import env from '@/env.js'
 export default {
 	state: {
+		// 环境key
+		envKey: storage.get(constant.envKey) || env.DEFAULT_ENV_KEY,
+		// 所有环境
+		allEnv: storage.get(constant.allEnv) || env.DEFAULT_ALL_ENV,
 		// token信息
 		token: getToken(),
 		// 用户移动端菜单（用户菜单处理后的结果）
@@ -39,6 +43,14 @@ export default {
 		dictTypeTreeData: storage.get(constant.dictTypeTreeData),
 	},
 	mutations: {
+		SET_envKey: (state, envKey) => {
+			state.envKey = envKey
+			storage.set(constant.envKey, envKey)
+		},
+		SET_allEnv: (state, allEnv) => {
+			state.allEnv = allEnv
+			storage.set(constant.allEnv, allEnv)
+		},
 		SET_token: (state, token) => {
 			state.token = token
 			setToken(token)

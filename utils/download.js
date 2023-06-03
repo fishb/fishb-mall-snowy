@@ -33,7 +33,7 @@ const download = config => {
 	if (getToken() && !isToken) {
 		config.header[TOKEN_NAME] = TOKEN_PREFIX + getToken()
 	}
-	config.header.Domain = store.getters.tenantDomain || TENANT_DOMAIN
+	config.header.Domain = store.getters.allEnv[store.getters.envKey].tenantDomain
 	// get请求映射params参数
 	if (config.params) {
 		let url = config.url + '?' + tansParams(config.params)
@@ -45,7 +45,7 @@ const download = config => {
 			title: '努力加载中'
 		})
 		uni.downloadFile({
-			url: (config.baseUrl || BASE_URL) + config.url,
+			url: (config.baseUrl || store.getters.allEnv[store.getters.envKey].baseUrl) + config.url,
 			header: config.header,
 			timeout: config.timeout || TIMEOUT,
 			success: (response) => {

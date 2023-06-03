@@ -17,11 +17,9 @@ import {
 } from "@/utils/apiAdaptive"
 
 const {
-	BASE_URL,
 	TIMEOUT,
 	TOKEN_NAME,
-	TOKEN_PREFIX,
-	TENANT_DOMAIN
+	TOKEN_PREFIX
 } = config
 
 const upload = config => {
@@ -33,7 +31,7 @@ const upload = config => {
 	if (getToken() && !isToken) {
 		config.header[TOKEN_NAME] = TOKEN_PREFIX + getToken()
 	}
-	config.header.Domain = store.getters.tenantDomain || TENANT_DOMAIN
+	config.header.Domain = store.getters.allEnv[store.getters.envKey].tenantDomain
 	// get请求映射params参数
 	if (config.params) {
 		let url = config.url + '?' + tansParams(config.params)
@@ -46,7 +44,7 @@ const upload = config => {
 		})
 		uni.uploadFile({
 			timeout: config.timeout || TIMEOUT,
-			url: config.actionUrl || ((config.baseUrl || BASE_URL) + config.url),
+			url: config.actionUrl || ((config.baseUrl || store.getters.allEnv[store.getters.envKey].baseUrl) + config.url),
 			file: config.file,
 			filePath: config.filePath,
 			name: config.name || 'file',

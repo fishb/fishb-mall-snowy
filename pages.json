@@ -13,6 +13,26 @@
 			}
 		},
 		{
+			"path": "pages/config/index",
+			"style": {
+				"navigationBarTitleText": "环境设置",
+				"enablePullDownRefresh": false,
+				//#ifdef H5
+				"navigationStyle": "custom"
+				//#endif
+			}
+		},
+		{
+			"path": "pages/config/form",
+			"style": {
+				"navigationBarTitleText": "环境管理",
+				"enablePullDownRefresh": false,
+				//#ifdef H5
+				"navigationStyle": "custom"
+				//#endif
+			}
+		},
+		{
 			"path": "pages/common/webview/index",
 			"style": {
 				"navigationBarTitleText": "浏览网页"

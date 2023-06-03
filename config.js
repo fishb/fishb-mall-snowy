@@ -7,10 +7,10 @@ export default {
 	SERVER_TYPE: 'SNOWY',
 
 	// 接口地址，也就是后端地址
-	BASE_URL: 'http://localhost:82',
+	// BASE_URL: 'http://localhost:82',
 
 	// 后端配置文件的 snowy.config.common.front-url，相当于前端地址（开源版本非必要）
-	TENANT_DOMAIN: "http://localhost:81",
+	// TENANT_DOMAIN: "http://localhost:81",
 
 	// 请求超时
 	TIMEOUT: 10000,
@@ -49,6 +49,8 @@ export default {
 	NO_TOKEN_WHITE_LIST: [
 		noTokenBackUrl,
 		'/',
+		'/pages/config/index',
+		'/pages/config/form',
 		// '/pages/home/index',
 	],
 	// 有token访问退回页面

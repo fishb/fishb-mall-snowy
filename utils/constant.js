@@ -1,4 +1,6 @@
 const constant = {
+	envKey: "envKey",
+	allEnv: "allEnv",
 	sysBaseConfig: 'sysBaseConfig',
 	userInfo: 'userInfo',
 	userMenus: 'userMenus',
