@@ -42,6 +42,29 @@ export default {
 		// 默认重置密码
 		SNOWY_SYS_DEFAULT_PASSWORD: '123456'
 	},
+	
+	// 首页配置
+	HOME_CONFIGS: [
+		// 轮播
+		{
+			name: "轮播",
+			code: "swiper",
+			isShow: true,
+		},
+		// 图表
+		{
+			name: "图表",
+			code: "chart",
+			isShow: true,
+		},
+		// 日程
+		{
+			name: "日程",
+			code: "schedule",
+			isShow: true,
+		},
+		
+	],
 
 	// 没有token访问退回页面
 	NO_TOKEN_BACK_URL: noTokenBackUrl,
@@ -62,6 +85,7 @@ export default {
 		'/pages/mine/index',
 		'/pages/mine/setting/index',
 		'/pages/mine/info/edit',
+		'/pages/mine/home-config/index',
 		'/pages/mine/pwd/index',
 		'/pages/mine/info/index',
 	]

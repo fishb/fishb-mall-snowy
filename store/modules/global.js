@@ -33,6 +33,8 @@ export default {
 		allEnv: storage.get(constant.allEnv) || env.DEFAULT_ALL_ENV,
 		// token信息
 		token: getToken(),
+		// 首页配置
+		homeConfigs: storage.get(constant.homeConfigs) || config.HOME_CONFIGS,
 		// 用户移动端菜单（用户菜单处理后的结果）
 		userMobileMenus: storage.get(constant.userMobileMenus),
 		// 用户信息
@@ -54,6 +56,10 @@ export default {
 		SET_token: (state, token) => {
 			state.token = token
 			setToken(token)
+		},
+		SET_homeConfigs: (state, homeConfigs) => {
+			state.homeConfigs = homeConfigs
+			storage.set(constant.homeConfigs, homeConfigs)
 		},
 		SET_userMobileMenus: (state, userMobileMenus) => {
 			state.userMobileMenus = userMobileMenus

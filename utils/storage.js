@@ -7,7 +7,8 @@ let storageKey = 'storage_data'
 let storageNodeKeys = [
 	constant.envKey,
 	constant.allEnv,
-	constant.sysBaseConfig, 
+	constant.sysBaseConfig,
+	constant.homeConfigs,
 	constant.userInfo, 
 	constant.userMobileMenus, 
 	constant.dictTypeTreeData
