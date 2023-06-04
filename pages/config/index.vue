@@ -17,22 +17,18 @@
 			</uni-row>
 		</view>
 		<uni-card :border="false" v-for="(item, key) in filterEnv(allEnv)" :key="key" :index="key">
-			<template v-slot:title>
-				<view style="margin-top: 30upx; margin-left: 20upx;">
-					<radio-group @change="envChange">
-						<label>
-							<uni-row>
-								<uni-col :span="3">
-									<radio :value="key" :checked="key === envKey" />
-								</uni-col>
-								<uni-col :span="21">
-									<view>{{item.name}}</view>
-								</uni-col>
-							</uni-row>
-						</label>
-					</radio-group>
-				</view>
-			</template>
+			<radio-group @change="envChange">
+				<label>
+					<uni-row>
+						<uni-col :span="3">
+							<radio :value="key" :checked="key === envKey" />
+						</uni-col>
+						<uni-col :span="21">
+							<view>{{item.name}}</view>
+						</uni-col>
+					</uni-row>
+				</label>
+			</radio-group>
 			<view @tap="$refs.morePopupRef.open({key:key, ...item})">
 				<uni-row>
 					<uni-col :span="6">
@@ -59,7 +55,7 @@
 			</view>
 		</uni-card>
 
-		<button type="primary" class="btn-login" @click="loginBtn">登录</button>
+		<button type="primary" class="conf-btn-login" @click="loginBtn">登录</button>
 
 		<!-- 新增悬浮按钮 -->
 		<uni-fab :pattern="{
@@ -134,7 +130,7 @@
 	page {
 		background-color: #ffffff;
 	}
-	.btn-login {
+	.conf-btn-login {
 		margin: 50upx 25upx;
 		background-color: $uni-primary;
 	}
