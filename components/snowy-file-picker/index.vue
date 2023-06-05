@@ -24,6 +24,7 @@
 	} from '@/utils/auth'
 	import config from "@/config.js"
 	import XEUtils from 'xe-utils'
+	import store from '@/store'
 	const emits = defineEmits(['update:modelValue'])
 
 	const props = defineProps({
@@ -110,7 +111,7 @@
 				"uuid": res.data,
 				"name": tempFile.name,
 				"extname": tempFile.extname,
-				"url": `${config.BASE_URL}/dev/file/download?id=${res.data}`,
+				"url": `${store.getters.allEnv[store.getters.envKey].baseUrl}/dev/file/download?id=${res.data}`,
 			})
 			imgId.value.push(res.data)
 		}
@@ -119,7 +120,7 @@
 				"uuid": res.data,
 				"name": tempFile.name,
 				"extname": tempFile.extname,
-				"url": `${config.BASE_URL}/dev/file/download?id=${res.data}`,
+				"url": `${store.getters.allEnv[store.getters.envKey].baseUrl}/dev/file/download?id=${res.data}`,
 			}
 			imgId.value = res.data
 		}
