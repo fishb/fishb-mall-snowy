@@ -1,10 +1,12 @@
 <template>
-	<uni-file-picker return-type="returnType" v-model="imgVal" @select="select" @delete="del" :auto-upload="true"
+	<cus-file-picker return-type="returnType" v-model="imgVal" @select="select" @delete="del" :auto-upload="true"
 		v-bind="$attrs">
-	</uni-file-picker>
+	</cus-file-picker>
 </template>
 
 <script setup>
+	// uploadImage、uploadFile有调整
+	import cusFilePicker from "./cus-file-picker.vue";
 	import {
 		ref,
 		reactive,
