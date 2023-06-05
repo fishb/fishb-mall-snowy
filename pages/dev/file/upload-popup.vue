@@ -47,7 +47,7 @@
 	// 表单中使用文件上传示例
 	// const formRef = ref()
 	// const formData = ref({
-	// 	file: ['1664989145386385410']
+	// 	file: ['1664989145386385410','1665706408393490433', '1665710300330115073']
 	// })
 	// const submit = () => {
 	// 	console.log(formData.value)

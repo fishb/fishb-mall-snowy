@@ -54,7 +54,7 @@
 			uni.openDocument({
 				filePath: response.tempFilePath,
 				success: () => {
-					resolve(response)
+					
 				}
 			});
 		})
