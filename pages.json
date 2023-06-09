@@ -13,6 +13,26 @@
 			}
 		},
 		{
+			"path": "pages/config/index",
+			"style": {
+				"navigationBarTitleText": "环境设置",
+				"enablePullDownRefresh": false,
+				//#ifdef H5
+				"navigationStyle": "custom"
+				//#endif
+			}
+		},
+		{
+			"path": "pages/config/form",
+			"style": {
+				"navigationBarTitleText": "环境管理",
+				"enablePullDownRefresh": false,
+				//#ifdef H5
+				"navigationStyle": "custom"
+				//#endif
+			}
+		},
+		{
 			"path": "pages/common/webview/index",
 			"style": {
 				"navigationBarTitleText": "浏览网页"
@@ -22,14 +42,24 @@
 			"path": "pages/home/index",
 			"style": {
 				"navigationBarTitleText": "小诺移动端框架",
+				//#ifdef H5
 				"navigationStyle": "custom"
-				
+				//#endif
 			}
 		},
 		{
 			"path": "pages/work/index",
 			"style": {
 				"navigationBarTitleText": "工作台",
+				//#ifdef H5
+				"navigationStyle": "custom"
+				//#endif
+			}
+		},
+		{
+			"path": "pages/dev/file/index",
+			"style": {
+				"navigationBarTitleText": "文件管理",
 				//#ifdef H5
 				"navigationStyle": "custom"
 				//#endif
@@ -108,6 +138,16 @@
 			"path": "pages/mine/info/index",
 			"style": {
 				"navigationBarTitleText": "个人信息",
+				"enablePullDownRefresh": false,
+				//#ifdef H5
+				"navigationStyle": "custom"
+				//#endif
+			}
+		},
+		{
+			"path": "pages/mine/home-config/index",
+			"style": {
+				"navigationBarTitleText": "首页设置",
 				"enablePullDownRefresh": false,
 				//#ifdef H5
 				"navigationStyle": "custom"

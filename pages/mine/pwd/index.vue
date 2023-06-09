@@ -18,7 +18,7 @@
 <script setup>
 	import {
 		userUpdatePassword
-	} from "@/api/system/userCenterApi.js"
+	} from "@/api/sys/userCenterApi.js"
 	import {
 		onReady
 	} from '@dcloudio/uni-app'

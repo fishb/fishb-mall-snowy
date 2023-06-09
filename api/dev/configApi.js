@@ -3,7 +3,7 @@ import request from '@/utils/request'
 export function configSysBaseList() {
 	return request({
 		url: '/dev/config/sysBaseList',
-		headers: {
+		extConf: {
 			isToken: false
 		},
 		method: 'get',

@@ -7,10 +7,10 @@ export default {
 	SERVER_TYPE: 'SNOWY',
 
 	// 接口地址，也就是后端地址
-	BASE_URL: 'http://localhost:82',
+	// BASE_URL: 'http://localhost:82',
 
 	// 后端配置文件的 snowy.config.common.front-url，相当于前端地址（开源版本非必要）
-	TENANT_DOMAIN: "http://localhost:81",
+	// TENANT_DOMAIN: "http://localhost:81",
 
 	// 请求超时
 	TIMEOUT: 10000,
@@ -42,6 +42,29 @@ export default {
 		// 默认重置密码
 		SNOWY_SYS_DEFAULT_PASSWORD: '123456'
 	},
+	
+	// 首页配置
+	HOME_CONFIGS: [
+		// 轮播
+		{
+			name: "轮播",
+			code: "swiper",
+			isShow: true,
+		},
+		// 图表
+		{
+			name: "图表",
+			code: "chart",
+			isShow: true,
+		},
+		// 日程
+		{
+			name: "日程",
+			code: "schedule",
+			isShow: true,
+		},
+		
+	],
 
 	// 没有token访问退回页面
 	NO_TOKEN_BACK_URL: noTokenBackUrl,
@@ -49,6 +72,8 @@ export default {
 	NO_TOKEN_WHITE_LIST: [
 		noTokenBackUrl,
 		'/',
+		'/pages/config/index',
+		'/pages/config/form',
 		// '/pages/home/index',
 	],
 	// 有token访问退回页面
@@ -60,6 +85,7 @@ export default {
 		'/pages/mine/index',
 		'/pages/mine/setting/index',
 		'/pages/mine/info/edit',
+		'/pages/mine/home-config/index',
 		'/pages/mine/pwd/index',
 		'/pages/mine/info/index',
 	]

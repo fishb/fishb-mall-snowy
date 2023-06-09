@@ -9,7 +9,7 @@ import {
 } from '@/api/login'
 import {
 	userLoginMobileMenu
-} from '@/api/system/userCenterApi'
+} from '@/api/sys/userCenterApi'
 import {
 	getToken,
 	setToken,
@@ -24,11 +24,17 @@ import {
 	dictTree
 } from '@/api/dev/dictApi'
 import XEUtils from 'xe-utils'
-
+import env from '@/env.js'
 export default {
 	state: {
+		// 环境key
+		envKey: storage.get(constant.envKey) || env.DEFAULT_ENV_KEY,
+		// 所有环境
+		allEnv: storage.get(constant.allEnv) || env.DEFAULT_ALL_ENV,
 		// token信息
 		token: getToken(),
+		// 首页配置
+		homeConfigs: storage.get(constant.homeConfigs) || config.HOME_CONFIGS,
 		// 用户移动端菜单（用户菜单处理后的结果）
 		userMobileMenus: storage.get(constant.userMobileMenus),
 		// 用户信息
@@ -39,9 +45,21 @@ export default {
 		dictTypeTreeData: storage.get(constant.dictTypeTreeData),
 	},
 	mutations: {
+		SET_envKey: (state, envKey) => {
+			state.envKey = envKey
+			storage.set(constant.envKey, envKey)
+		},
+		SET_allEnv: (state, allEnv) => {
+			state.allEnv = allEnv
+			storage.set(constant.allEnv, allEnv)
+		},
 		SET_token: (state, token) => {
 			state.token = token
 			setToken(token)
+		},
+		SET_homeConfigs: (state, homeConfigs) => {
+			state.homeConfigs = homeConfigs
+			storage.set(constant.homeConfigs, homeConfigs)
 		},
 		SET_userMobileMenus: (state, userMobileMenus) => {
 			state.userMobileMenus = userMobileMenus

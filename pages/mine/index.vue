@@ -24,11 +24,11 @@
 
 		<view class="content-section">
 			<uni-grid :column="4" :showBorder="false">
-				<uni-grid-item @tap="handleQQ">
+				<uni-grid-item @tap="handleToHomeConfig">
 					<view class="grid-item-box">
-						<snowy-icon style="background-color:#2979ff;" type="staff-filled" size="30" color="#FFFFFF">
+						<snowy-icon style="background-color:#2979ff;" type="home-filled" size="30" color="#FFFFFF">
 						</snowy-icon>
-						<text class="text">QQ群</text>
+						<text class="text">首页设置</text>
 					</view>
 				</uni-grid-item>
 				<uni-grid-item @tap="handleBuilding">
@@ -117,9 +117,9 @@
 			url: '/pages/login'
 		})
 	}
-	const handleQQ = () =>{
-		uni.showToast({
-			title: '732230670'
+	const handleToHomeConfig = () =>{
+		uni.navigateTo({
+			url:'/pages/mine/home-config/index'
 		})
 	}
 	const handleBuilding = () => {

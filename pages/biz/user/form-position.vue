@@ -45,7 +45,7 @@
 		modelValue: {
 			type: String,
 			default: '',
-			requre: false
+			required: false
 		},
 	})
 
