@@ -18,7 +18,7 @@
 <script setup>
 	import HomeSwiper from './home-swiper.vue'
 	import HomeChart from './home-chart.vue'
-	import HomeSchedule from './home-schedule.vue'
+	import HomeSchedule from './home-schedule/index.vue'
 	
 	const props = defineProps({
 		code: {
