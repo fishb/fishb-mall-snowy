@@ -9,7 +9,7 @@ import {
 } from '@/api/login'
 import {
 	userLoginMobileMenu
-} from '@/api/system/userCenterApi'
+} from '@/api/sys/userCenterApi'
 import {
 	getToken,
 	setToken,

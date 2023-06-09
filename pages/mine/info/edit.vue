@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-	import { userUpdateUserInfo } from '@/api/system/userCenterApi'
+	import { userUpdateUserInfo } from '@/api/sys/userCenterApi'
 	import {
 		reactive,
 		ref
