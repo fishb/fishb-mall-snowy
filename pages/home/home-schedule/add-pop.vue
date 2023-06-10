@@ -58,7 +58,12 @@
 
 <style lang="scss">
 	.container {
+		/* #ifdef H5 */
 		margin: 15upx 15upx 120upx 15upx;
+		/* #endif */
+		/* #ifndef H5 */
+		margin: 15upx;
+		/* #endif */
 		border-radius: 5upx;
 		padding: 25upx;
 		background-color: $uni-white;
