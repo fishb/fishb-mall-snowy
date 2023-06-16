@@ -9,14 +9,15 @@
 						item.extname === 'jpng' ||
 						item.extname === 'ico' ||
 						item.extname === 'gif'" class="file-image" :src="item.url" mode="aspectFill" @click.stop="prviewImage(item,index)"></image>
-				<image v-else-if="item.extname === 'doc'" class="file-image" src="/static/images/fileImg/docx.png" mode="aspectFill" @click.stop="openFile(item,index)"></image>
-				<image v-else-if="item.extname === 'xls'" class="file-image" src="/static/images/fileImg/xlsx.png" mode="aspectFill" @click.stop="openFile(item,index)"></image>
-				<image v-else-if="item.extname === 'zip'" class="file-image" src="/static/images/fileImg/zip.png" mode="aspectFill" @click.stop="openFile(item,index)"></image>
-				<image v-else-if="item.extname === 'rar'" class="file-image" src="/static/images/fileImg/rar.png" mode="aspectFill" @click.stop="openFile(item,index)"></image>
-				<image v-else-if="item.extname === 'ppt'" class="file-image" src="/static/images/fileImg/ppt.png" mode="aspectFill" @click.stop="openFile(item,index)"></image>
-				<image v-else-if="item.extname === 'txt'" class="file-image" src="/static/images/fileImg/txt.png" mode="aspectFill" @click.stop="openFile(item,index)"></image>
-				<image v-else-if="item.extname === 'html'" class="file-image" src="/static/images/fileImg/html.png" mode="aspectFill" @click.stop="openFile(item,index)"></image>
-				<image v-else class="file-image" src="/static/images/fileImg/file.png" mode="aspectFill" @click.stop="openFile(item,index)"></image>
+				<!-- ${$store.getters.allEnv[$store.getters.envKey].baseUrl} -->
+				<image v-else-if="item.extname === 'doc'" class="file-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/docx.png'" mode="aspectFill" @click.stop="openFile(item,index)"></image>
+				<image v-else-if="item.extname === 'xls'" class="file-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/xlsx.png'" mode="aspectFill" @click.stop="openFile(item,index)"></image>
+				<image v-else-if="item.extname === 'zip'" class="file-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/zip.png'" mode="aspectFill" @click.stop="openFile(item,index)"></image>
+				<image v-else-if="item.extname === 'rar'" class="file-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/rar.png'" mode="aspectFill" @click.stop="openFile(item,index)"></image>
+				<image v-else-if="item.extname === 'ppt'" class="file-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/ppt.png'" mode="aspectFill" @click.stop="openFile(item,index)"></image>
+				<image v-else-if="item.extname === 'txt'" class="file-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/txt.png'" mode="aspectFill" @click.stop="openFile(item,index)"></image>
+				<image v-else-if="item.extname === 'html'" class="file-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/html.png'" mode="aspectFill" @click.stop="openFile(item,index)"></image>
+				<image v-else class="file-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/file.png'" mode="aspectFill" @click.stop="openFile(item,index)"></image>
 				<!-- |||||||||||||||||||||||此处有调整-结束||||||||||||||||||||||||||||||||| -->
 				<view v-if="delIcon && !readonly" class="icon-del-box" @click.stop="delFile(index)">
 					<view class="icon-del"></view>

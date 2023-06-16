@@ -19,13 +19,14 @@
 		getCurrentInstance,
 		computed
 	} from "vue";
+	import store from '@/store'
 	const current = ref(0)
 	const swiperDotIndex = ref(0)
 	const data = reactive([{
-			image: '/static/images/swiper/swiper1.jpg'
+			image: `${store.getters.allEnv[store.getters.envKey].baseUrl}/images/swiper/swiper1.jpg`
 		},
 		{
-			image: '/static/images/swiper/swiper2.jpg'
+			image: `${store.getters.allEnv[store.getters.envKey].baseUrl}/images/swiper/swiper2.jpg`
 		},
 	])
 	const changeSwiper = (e) => {

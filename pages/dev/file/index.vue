@@ -35,24 +35,32 @@
 												item.suffix === 'ico' ||
 												item.suffix === 'gif'" class="item-row-content-image" :src="item.thumbnail"></image>
 											<image v-else-if="item.suffix === 'doc' || item.suffix === 'docx'"
-												class="item-row-content-image" src="/static/images/fileImg/docx.png">
+												class="item-row-content-image"
+												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/docx.png'">
 											</image>
 											<image v-else-if="item.suffix === 'xls' || item.suffix === 'xlsx'"
-												class="item-row-content-image" src="/static/images/fileImg/xlsx.png">
+												class="item-row-content-image"
+												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/xlsx.png'">
 											</image>
 											<image v-else-if="item.suffix === 'zip'" class="item-row-content-image"
-												src="/static/images/fileImg/zip.png"></image>
+												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/zip.png'">
+											</image>
 											<image v-else-if="item.suffix === 'rar'" class="item-row-content-image"
-												src="/static/images/fileImg/rar.png"></image>
+												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/rar.png'">
+											</image>
 											<image v-else-if="item.suffix === 'ppt' || item.suffix === 'pptx'"
-												class="item-row-content-image" src="/static/images/fileImg/ppt.png">
+												class="item-row-content-image"
+												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/ppt.png'">
 											</image>
 											<image v-else-if="item.suffix === 'txt'" class="item-row-content-image"
-												src="/static/images/fileImg/txt.png"></image>
+												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/txt.png'">
+											</image>
 											<image v-else-if="item.suffix === 'html'" class="item-row-content-image"
-												src="/static/images/fileImg/html.png"></image>
+												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/html.png'">
+											</image>
 											<image v-else class="item-row-content-image"
-												src="/static/images/fileImg/file.png"></image>
+												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/file.png'">
+											</image>
 										</view>
 									</uni-col>
 								</uni-row>
@@ -87,8 +95,8 @@
 									</uni-col>
 								</uni-row>
 							</view>
-							
-							
+
+
 							<view class="item-row">
 								<uni-row>
 									<uni-col :span="4">
@@ -220,18 +228,23 @@
 	.file-list {
 		margin: 15upx;
 		border-radius: 5upx;
+
 		.item {
 			width: 100vw;
+
 			.item-row {
 				margin: 20upx 10upx;
+
 				.item-row-title {
 					font-size: 25upx;
 					color: #999;
 				}
+
 				.item-row-content {
 					font-size: 25upx;
 					text-align: right;
 					word-break: break-all;
+
 					.item-row-content-image {
 						width: 100upx;
 						height: 100upx;

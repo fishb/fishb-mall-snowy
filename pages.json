@@ -1,7 +1,5 @@
 {
-	"pages": [
-		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		{
+	"pages": [{
 			"snowyCode": "login",
 			"path": "pages/login",
 			"style": {
@@ -10,32 +8,6 @@
 				//#ifdef H5
 				"navigationStyle": "custom"
 				//#endif
-			}
-		},
-		{
-			"path": "pages/config/index",
-			"style": {
-				"navigationBarTitleText": "环境设置",
-				"enablePullDownRefresh": false,
-				//#ifdef H5
-				"navigationStyle": "custom"
-				//#endif
-			}
-		},
-		{
-			"path": "pages/config/form",
-			"style": {
-				"navigationBarTitleText": "环境管理",
-				"enablePullDownRefresh": false,
-				//#ifdef H5
-				"navigationStyle": "custom"
-				//#endif
-			}
-		},
-		{
-			"path": "pages/common/webview/index",
-			"style": {
-				"navigationBarTitleText": "浏览网页"
 			}
 		},
 		{
@@ -57,75 +29,6 @@
 			}
 		},
 		{
-			"path": "pages/dev/file/index",
-			"style": {
-				"navigationBarTitleText": "文件管理",
-				//#ifdef H5
-				"navigationStyle": "custom"
-				//#endif
-			}
-		},
-		{
-			"path": "pages/biz/org/index",
-			"style": {
-				"navigationBarTitleText": "机构管理",
-				//#ifdef H5
-				"navigationStyle": "custom"
-				//#endif
-			}
-		},
-		{
-			"path": "pages/biz/org/form",
-			"style": {
-				"navigationBarTitleText": "机构管理",
-				"onReachBottomDistance": 50, //50代表距离底部多少的距离 这个根据自己的需求 一般都是50
-				//#ifdef H5
-				"navigationStyle": "custom"
-				//#endif
-			}
-		},
-		{
-			"path": "pages/biz/position/index",
-			"style": {
-				"navigationBarTitleText": "职位管理",
-				"enablePullDownRefresh": true,
-				//#ifdef H5
-				"navigationStyle": "custom"
-				//#endif
-			}
-		},
-		{
-			"path": "pages/biz/position/form",
-			"style": {
-				"navigationBarTitleText": "职位管理",
-				//#ifdef H5
-				"navigationStyle": "custom"
-				//#endif
-			}
-		},
-		{
-			"path": "pages/biz/user/index",
-			"style": {
-				"navigationBarTitleText": "用户管理",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 50, //50代表距离底部多少的距离 这个根据自己的需求 一般都是50
-				//#ifdef H5
-				"navigationStyle": "custom"
-				//#endif
-			}
-		},
-		{
-			"path": "pages/biz/user/form",
-			"style": {
-				"navigationBarTitleText": "用户管理",
-				// "enablePullDownRefresh": true,
-				"onReachBottomDistance": 50, //50代表距离底部多少的距离 这个根据自己的需求 一般都是50
-				//#ifdef H5
-				"navigationStyle": "custom"
-				//#endif
-			}
-		},
-		{
 			"path": "pages/mine/index",
 			"style": {
 				"navigationBarTitleText": "我的",
@@ -133,44 +36,181 @@
 				"navigationStyle": "custom"
 				//#endif
 			}
+		}
+	],
+	"subPackages": [{
+			"root": "pages/config",
+			"pages": [{
+					"path": "index",
+					"style": {
+						"navigationBarTitleText": "环境设置",
+						"enablePullDownRefresh": false,
+						//#ifdef H5
+						"navigationStyle": "custom"
+						//#endif
+					}
+				},
+				{
+					"path": "form",
+					"style": {
+						"navigationBarTitleText": "环境管理",
+						"enablePullDownRefresh": false,
+						//#ifdef H5
+						"navigationStyle": "custom"
+						//#endif
+					}
+				}
+			]
 		},
 		{
-			"path": "pages/mine/info/index",
-			"style": {
-				"navigationBarTitleText": "个人信息",
-				"enablePullDownRefresh": false,
-				//#ifdef H5
-				"navigationStyle": "custom"
-				//#endif
-			}
+			"root": "pages/common",
+			"pages": [{
+				"path": "webview/index",
+				"style": {
+					"navigationBarTitleText": "浏览网页",
+					"enablePullDownRefresh": false,
+					//#ifdef H5
+					"navigationStyle": "custom"
+					//#endif
+				}
+			}]
 		},
 		{
-			"path": "pages/mine/home-config/index",
-			"style": {
-				"navigationBarTitleText": "首页设置",
-				"enablePullDownRefresh": false,
-				//#ifdef H5
-				"navigationStyle": "custom"
-				//#endif
-			}
+			"root": "pages/dev",
+			"pages": [{
+				"path": "file/index",
+				"style": {
+					"navigationBarTitleText": "文件管理",
+					"enablePullDownRefresh": false,
+					//#ifdef H5
+					"navigationStyle": "custom"
+					//#endif
+				}
+			}]
 		},
 		{
-			"path": "pages/mine/info/edit",
-			"style": {
-				"navigationBarTitleText": "编辑资料",
-				//#ifdef H5
-				"navigationStyle": "custom"
-				//#endif
-			}
+			"root": "pages/biz/org",
+			"pages": [{
+					"path": "index",
+					"style": {
+						"navigationBarTitleText": "机构管理",
+						"enablePullDownRefresh": false,
+						//#ifdef H5
+						"navigationStyle": "custom"
+						//#endif
+					}
+				},
+				{
+					"path": "form",
+					"style": {
+						"navigationBarTitleText": "机构管理",
+						"enablePullDownRefresh": false,
+						//#ifdef H5
+						"navigationStyle": "custom"
+						//#endif
+					}
+				}
+			]
 		},
 		{
-			"path": "pages/mine/pwd/index",
-			"style": {
-				"navigationBarTitleText": "修改密码",
-				//#ifdef H5
-				"navigationStyle": "custom"
-				//#endif
-			}
+			"root": "pages/biz/position",
+			"pages": [{
+					"path": "index",
+					"style": {
+						"navigationBarTitleText": "职位管理",
+						"enablePullDownRefresh": false,
+						//#ifdef H5
+						"navigationStyle": "custom"
+						//#endif
+					}
+				},
+				{
+					"path": "form",
+					"style": {
+						"navigationBarTitleText": "职位管理",
+						"enablePullDownRefresh": false,
+						//#ifdef H5
+						"navigationStyle": "custom"
+						//#endif
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/biz/user",
+			"pages": [{
+					"path": "index",
+					"style": {
+						"navigationBarTitleText": "用户管理",
+						"enablePullDownRefresh": true,
+						"onReachBottomDistance": 50,
+						//#ifdef H5
+						"navigationStyle": "custom"
+						//#endif
+					}
+				},
+				{
+					"path": "form",
+					"style": {
+						"navigationBarTitleText": "用户管理",
+						"enablePullDownRefresh": false,
+						"onReachBottomDistance": 50,
+						//#ifdef H5
+						"navigationStyle": "custom"
+						//#endif
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/mine/info",
+			"pages": [{
+					"path": "index",
+					"style": {
+						"navigationBarTitleText": "个人信息",
+						"enablePullDownRefresh": false,
+						//#ifdef H5
+						"navigationStyle": "custom"
+						//#endif
+					}
+				},
+				{
+					"path": "edit",
+					"style": {
+						"navigationBarTitleText": "编辑资料",
+						"enablePullDownRefresh": false,
+						//#ifdef H5
+						"navigationStyle": "custom"
+						//#endif
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/mine/home-config",
+			"pages": [{
+				"path": "index",
+				"style": {
+					"navigationBarTitleText": "首页设置",
+					"enablePullDownRefresh": false,
+					//#ifdef H5
+					"navigationStyle": "custom"
+					//#endif
+				}
+			}]
+		},
+		{
+			"root": "pages/mine/pwd",
+			"pages": [{
+				"path": "index",
+				"style": {
+					"navigationBarTitleText": "修改密码",
+					"enablePullDownRefresh": false,
+					//#ifdef H5
+					"navigationStyle": "custom"
+					//#endif
+				}
+			}]
 		}
 	],
 	"tabBar": {
