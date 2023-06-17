@@ -1,15 +1,20 @@
 <template>
-	<view class="container-icon">
+	<view class="container-icon" :style="{ backgroundColor: backgroundColor }">
 		<uni-icons v-bind="$attrs">
 		</uni-icons>
 	</view>
 </template>
 
 <script setup>
-
+	const props = defineProps({
+		backgroundColor: {
+			type: String,
+			required: false
+		},
+	})
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.container-icon {
 		width: 80upx;
 		height: 80upx;

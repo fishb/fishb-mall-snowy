@@ -30,7 +30,7 @@
 		ref,
 		getCurrentInstance,
 		computed
-	} from "vue";
+	} from "vue"
 
 	import morePopup from './more-popup.vue'
 

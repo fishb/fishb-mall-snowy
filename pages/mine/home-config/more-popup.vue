@@ -19,13 +19,7 @@
 		reactive,
 		ref,
 		getCurrentInstance
-	} from "vue";
-
-	import {
-		toast,
-		showConfirm,
-		tansParams
-	} from '@/utils/common'
+	} from "vue"
 	// 弹出ref
 	const popupRef = ref()
 	// 打开

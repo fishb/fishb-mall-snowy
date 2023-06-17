@@ -7,21 +7,18 @@ import {
 	reloadCodes
 } from '@/utils/errorCode'
 import {
-	toast,
-	showConfirm,
 	tansParams
 } from '@/utils/common'
+import modal from '@/plugins/modal'
 import config from '@/config'
 import {
 	prefixUrl
 } from "@/utils/apiAdaptive"
 
 const {
-	BASE_URL,
 	TIMEOUT,
 	TOKEN_NAME,
-	TOKEN_PREFIX,
-	TENANT_DOMAIN
+	TOKEN_PREFIX
 } = config
 
 const download = config => {
@@ -41,9 +38,7 @@ const download = config => {
 		config.url = url
 	}
 	return new Promise((resolve, reject) => {
-		uni.showLoading({
-			title: '努力加载中'
-		})
+		modal.loading('努力加载中')
 		uni.downloadFile({
 			url: (config.baseUrl || store.getters.allEnv[store.getters.envKey].baseUrl) + config.url,
 			header: config.header,
@@ -56,7 +51,7 @@ const download = config => {
 				reject(error)
 			},
 			complete: () => {
-				uni.hideLoading()
+				modal.closeLoading()
 			}
 		})
 	})

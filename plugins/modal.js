@@ -10,7 +10,7 @@ export default {
   msgError(content) {
     uni.showToast({
       title: content,
-      icon: 'error'
+      icon: 'error',
     })
   },
   // 成功消息
@@ -25,9 +25,9 @@ export default {
     uni.hideToast()
   },
   // 弹出提示
-  alert(content) {
+  alert(content, title) {
     uni.showModal({
-      title: '提示',
+      title: title || '警告提示',
       content: content,
       showCancel: false
     })

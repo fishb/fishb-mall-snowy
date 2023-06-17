@@ -1,13 +1,13 @@
 <template>
 	<view>
-		<view style="margin: 15upx;">
+		<view class="search-container">
 			<uni-row>
-				<view style="display: flex; align-items: center; justify-content: center;">
+				<view  class="main">
 					<uni-col :span="22">
 						<uni-search-bar placeholder="请输入环境标题" v-model="searchName" cancelButton="none"></uni-search-bar>
 					</uni-col>
 					<uni-col :span="2">
-						<view style="color: #2979ff;" @click="resetEnv">
+						<view class="reset" @click="resetEnv">
 							<text>
 								重置\n环境
 							</text>
@@ -55,7 +55,7 @@
 			</view>
 		</uni-card>
 
-		<button type="primary" class="conf-btn-login" @click="loginBtn">登录</button>
+		<button class="conf-btn-login" type="primary" @click="loginBtn">确认</button>
 
 		<!-- 新增悬浮按钮 -->
 		<uni-fab :pattern="{
@@ -126,9 +126,20 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	page {
 		background-color: #ffffff;
+	}
+	.search-container{
+		margin: 15upx;
+		.main{
+			display: flex; 
+			align-items: center; 
+			justify-content: center;
+			.reset{
+				color: #2979ff;
+			}
+		}
 	}
 	.conf-btn-login {
 		margin: 50upx 25upx;

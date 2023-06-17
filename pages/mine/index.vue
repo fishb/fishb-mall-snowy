@@ -26,28 +26,28 @@
 			<uni-grid :column="4" :showBorder="false">
 				<uni-grid-item @tap="handleToHomeConfig">
 					<view class="grid-item-box">
-						<snowy-icon style="background-color:#2979ff;" type="home-filled" size="30" color="#FFFFFF">
+						<snowy-icon backgroundColor = "#2979ff" type="home-filled" size="30" color="#FFFFFF">
 						</snowy-icon>
 						<text class="text">首页设置</text>
 					</view>
 				</uni-grid-item>
 				<uni-grid-item @tap="handleBuilding">
 					<view class="grid-item-box">
-						<snowy-icon style="background-color:#fa3534;" type="flag-filled" size="30" color="#FFFFFF">
+						<snowy-icon backgroundColor = "#fa3534" type="flag-filled" size="30" color="#FFFFFF">
 						</snowy-icon>
 						<text class="text">建设中</text>
 					</view>
 				</uni-grid-item>
 				<uni-grid-item @tap="handleBuilding">
 					<view class="grid-item-box">
-						<snowy-icon style="background-color:#ff9900;" type="flag-filled" size="30" color="#FFFFFF">
+						<snowy-icon backgroundColor = "#ff9900" type="flag-filled" size="30" color="#FFFFFF">
 						</snowy-icon>
 						<text class="text">建设中</text>
 					</view>
 				</uni-grid-item>
 				<uni-grid-item @tap="handleBuilding">
 					<view class="grid-item-box">
-						<snowy-icon style="background-color:#19be6b;" type="flag-filled" size="30" color="#FFFFFF">
+						<snowy-icon backgroundColor = "#19be6b" type="flag-filled" size="30" color="#FFFFFF">
 						</snowy-icon>
 						<text class="text">建设中</text>
 					</view>
