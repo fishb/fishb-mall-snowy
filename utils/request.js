@@ -6,11 +6,8 @@ import {
 	errorCodeMap,
 	reloadCodes
 } from '@/utils/errorCode'
-import {
-	toast,
-	showConfirm,
-	tansParams
-} from '@/utils/common'
+import { tansParams } from '@/utils/common'
+import modal from '@/plugins/modal'
 import config from '@/config'
 import {
 	prefixUrl
@@ -39,9 +36,7 @@ const request = config => {
 		config.url = url
 	}
 	return new Promise((resolve, reject) => {
-		uni.showLoading({
-			title: '努力加载中'
-		})
+		modal.loading('努力加载中')
 		uni.request({
 			method: config.method || 'get',
 			timeout: config.timeout || TIMEOUT,
@@ -53,17 +48,15 @@ const request = config => {
 			const code = response.data.code || 200
 			const msg = response.data.msg || errorCodeMap[code] || errorCodeMap['default']
 			if (reloadCodes.includes(code)) {
-				showConfirm(msg || '登录状态已过期，您可以清除缓存，重新进行登录?').then(res => {
-					if (res.confirm) {
-						store.commit('CLEAR_cache')
-						uni.reLaunch({
-							url: '/pages/login'
-						})
-					}
+				modal.confirm(msg || '登录状态已过期，您可以清除缓存，重新进行登录?').then(() => {
+					store.commit('CLEAR_cache')
+					uni.reLaunch({
+						url: '/pages/login'
+					})
 				})
 				reject('无效的会话，或者会话已过期，请重新登录。')
 			} else if (code !== 200) {
-				toast(msg)
+				modal.alert(msg)
 				reject(code)
 			}
 			resolve(response.data)
@@ -80,10 +73,10 @@ const request = config => {
 			} else if (errMsg.includes('request:fail')) {
 				errMsg = '请求失败'
 			}
-			toast(errMsg)
+			modal.alert(errMsg)
 			reject(error)
-		}).finally(() => {
-			uni.hideLoading()
+		}).finally(() => { 
+			modal.closeLoading()
 		})
 	})
 }
