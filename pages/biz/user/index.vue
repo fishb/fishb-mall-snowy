@@ -1,6 +1,6 @@
 <template>
 	<!-- 搜索 -->
-	<uni-search-bar v-model:value="searchFormState.searchKey" @confirm="searchConfirm"></uni-search-bar>
+	<uni-search-bar v-model="searchFormState.searchKey" @confirm="loadData(true)"></uni-search-bar>
 	<!-- 自定义面包屑 -->
 	<view class="crumb">
 		<text v-for="(item, index) in allSelOrg" :key="index" class="text-center" @click="clickOrgCru(item, index)"
@@ -89,13 +89,6 @@
 	})
 	let userData = ref([])
 
-	// 查询
-	const searchConfirm = ({
-		value
-	}) => {
-		searchFormState.searchKey = value
-		uni.startPullDownRefresh()
-	}
 	// 加载数据
 	const loadData = (isReset = false) => {
 		if (isReset) {
