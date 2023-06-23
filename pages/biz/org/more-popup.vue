@@ -19,16 +19,10 @@
 		ref,
 		getCurrentInstance
 	} from "vue";
-
 	import {
 		orgDelete
-	} from '@/api/biz/bizOrgApi'
-
-	import {
-		toast,
-		showConfirm,
-		tansParams
-	} from '@/utils/common'
+	} from '@/api/biz/bizOrgApi.js'
+	import modal from '@/plugins/modal.js'
 
 	const emits = defineEmits(['handleOk'])
 
@@ -51,18 +45,13 @@
 	}
 	// 删除
 	const del = () => {
-		showConfirm(`是否确认删除【${ record.value.name }】机构？`).then(res => {
-			if (res.confirm) {
-				uni.showLoading()
-				orgDelete([{
-					id: record.value.id
-				}]).then(res => {
-					uni.hideLoading()
-					toast(`${ record.value.name }机构已删除`)
-					emits('handleOk')
-					popupRef.value.close()
-				})
-			}
+		modal.confirm(`是否确认删除【${ record.value.name }】机构？`).then(() => {
+			orgDelete([{
+				id: record.value.id
+			}]).then(res => {
+				emits('handleOk')
+				popupRef.value.close()
+			})
 		})
 	}
 	// 取消

@@ -20,18 +20,12 @@
 		ref,
 		getCurrentInstance
 	} from "vue";
-
 	import {
 		fileDelete,
 		fileDownload
 	} from '@/api/dev/fileApi'
-
-	import {
-		toast,
-		showConfirm,
-		tansParams
-	} from '@/utils/common'
-
+	import modal from '@/plugins/modal.js'
+	
 	const emits = defineEmits(['handleOk'])
 
 	// 删除弹出ref
@@ -62,18 +56,13 @@
 	}
 	// 删除
 	const del = () => {
-		showConfirm(`确定要删除【${ record.value.name }】文件吗？`).then(res => {
-			if (res.confirm) {
-				uni.showLoading()
-				fileDelete([{
-					id: record.value.id
-				}]).then(res => {
-					uni.hideLoading()
-					toast(`${ record.value.name }文件已删除`)
-					emits('handleOk')
-					popupRef.value.close()
-				})
-			}
+		modal.confirm(`确定要删除【${ record.value.name }】文件吗？`).then(() => {
+			fileDelete([{
+				id: record.value.id
+			}]).then(res => {
+				emits('handleOk')
+				popupRef.value.close()
+			})
 		})
 	}
 	// 取消

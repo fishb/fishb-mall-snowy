@@ -1,6 +1,6 @@
 <template>
 	<!-- 搜索 -->
-	<uni-search-bar v-model:value="searchFormState.searchKey" @confirm="searchConfirm"></uni-search-bar>
+	<uni-search-bar v-model="searchFormState.searchKey" @confirm="loadData(true)"></uni-search-bar>
 	<!-- 自定义面包屑 -->
 	<view class="crumb">
 		<text v-for="(item, index) in allSelOrg" :key="index" class="text-center" @click="clickOrgCru(item, index)"
@@ -8,7 +8,6 @@
 			{{ item.name + (index === (allSelOrg.length-1) ? '' : ' | ') }}
 		</text>
 	</view>
-
 	<view class="user-list">
 		<uni-list>
 			<!-- 机构 -->
@@ -29,14 +28,12 @@
 			buttonColor: '#007AFF',
 			iconColor: '#fff'
 		}" horizontal="right" vertical="bottom" direction="horizontal" @fabClick="add"></uni-fab>
-
 	<!-- 更多操作 -->
 	<morePopup ref="morePopupRef" @handleOk="loadData(true)"></morePopup>
 </template>
 
 <script setup>
 	import morePopup from '@/pages/biz/user/more-popup.vue'
-
 	import {
 		orgTree
 	} from '@/api/biz/bizOrgApi'
@@ -55,7 +52,7 @@
 		onPullDownRefresh,
 		onReachBottom
 	} from "@dcloudio/uni-app"
-
+	import XEUtils from 'xe-utils'
 	// 新增悬浮按钮
 	const add = () => {
 		uni.navigateTo({
@@ -89,28 +86,20 @@
 	})
 	let userData = ref([])
 
-	// 查询
-	const searchConfirm = ({
-		value
-	}) => {
-		searchFormState.searchKey = value
-		uni.startPullDownRefresh()
-	}
 	// 加载数据
-	const loadData = (isReset = false) => {
+	const loadData = (isReset) => {
 		if (isReset) {
-			// 重置分页
 			parameter.current = 1
-			// 重置数据
 			userData.value = []
 		}
-
 		Object.assign(parameter, searchFormState)
 		userPage(parameter).then(res => {
-			if (res.data && res.data.records && res.data.records.length > 0) {
-				userData.value = userData.value.concat(res.data.records)
-				parameter.current++
+			if (XEUtils.isEmpty(res?.data?.records)){
+				return
 			}
+			userData.value = userData.value.concat(res.data.records)
+			parameter.current++
+		}).finally(()=>{
 			uni.stopPullDownRefresh()
 		})
 	}
@@ -120,18 +109,14 @@
 	const clickOrgCru = (item, index) => {
 		curSelOrg.value = item.children
 		allSelOrg.value.splice(index + 1, allSelOrg.value.length - (index + 1))
-
 		searchFormState.orgId = (item.id === '0' ? '' : item.id)
-		// uni.startPullDownRefresh()
 		loadData(true)
 	}
 	// 点击机构
 	const clickOrg = (item, index) => {
 		curSelOrg.value = item.children
 		allSelOrg.value.push(item)
-
 		searchFormState.orgId = item.id
-		// uni.startPullDownRefresh()
 		loadData(true)
 	}
 
@@ -159,14 +144,12 @@
 		overflow-x: scroll;
 		background-color: white;
 		padding: 20upx;
-
 		.crumb-text {
 			display: inline-block;
 			margin-left: 5px;
 			text-align: center;
 		}
 	}
-
 	.user-list {
 		margin: 15upx;
 		border-radius: 5upx;

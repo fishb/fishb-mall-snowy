@@ -19,7 +19,7 @@
 			<uni-forms-item label="指定主管" name="directorId" >
 				<snowy-user-picker v-model="formData.directorId" placeholder="请选择主管">
 				</snowy-user-picker>
-			</uni-forms-item>
+			</uni-forms-item>			
 		</uni-forms>
 		<button class="btn-sub" type="primary" @click="submit">提交</button>
 	</view>
@@ -43,7 +43,7 @@
 		onPullDownRefresh,
 		onReachBottom
 	} from "@dcloudio/uni-app"
-
+	
 	const formRef = ref()
 	let formData = ref({
 		sortCode: 99
@@ -57,15 +57,12 @@
 		orgDetail({
 			id: option.id
 		}).then(res => {
-			formData.value = res.data
+			formData.value = res?.data
 		})
 	})
-
 	const submit = () => {
 		formRef.value.validate().then(res => {
-			uni.showLoading()
 			submitForm(formData.value, !formData.value.id).then(respond => {
-				uni.hideLoading()
 				uni.$emit('formBack', {
 					data: respond.data
 				})
@@ -73,8 +70,6 @@
 					delta: 1
 				})
 			})
-		}).catch(err => {
-			console.error('父表单错误信息：', err);
 		})
 	}
 </script>

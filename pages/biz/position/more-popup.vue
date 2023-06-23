@@ -19,16 +19,10 @@
 		ref,
 		getCurrentInstance
 	} from "vue";
-
 	import {
 		positionDelete
-	} from '@/api/biz/bizPositionApi'
-
-	import {
-		toast,
-		showConfirm,
-		tansParams
-	} from '@/utils/common'
+	} from '@/api/biz/bizPositionApi.js'
+	import modal from '@/plugins/modal.js'
 
 	const emits = defineEmits(['handleOk'])
 
@@ -37,7 +31,7 @@
 	// 弹出ref
 	const popupRef = ref()
 	// 打开
-	let record = ref({})
+	const record = ref({})
 	const open = (data) => {
 		record.value = data
 		popupRef.value.open("bottom")
@@ -51,18 +45,13 @@
 	}
 	// 删除
 	const del = () => {
-		showConfirm(`是否确认删除【${ record.value.name }】职位？`).then(res => {
-			if (res.confirm) {
-				uni.showLoading()
-				positionDelete([{
-					id: record.value.id
-				}]).then(res => {
-					uni.hideLoading()
-					toast(`${ record.value.name }职位已删除`)
-					emits('handleOk')
-					popupRef.value.close()
-				})
-			}
+		modal.confirm(`是否确认删除【${ record.value.name }】职位？`).then(() => {
+			positionDelete([{
+				id: record.value.id
+			}]).then(res => {
+				emits('handleOk')
+				popupRef.value.close()
+			})
 		})
 	}
 	// 取消
