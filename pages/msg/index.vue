@@ -20,23 +20,25 @@
 					:rightText="item.createTime"
 					@click="clickMsg(item, index)">
 					<template v-slot:body>
-						<uni-row>
-							<uni-col :span="24">
-								<view class="msg-title">
-									{{item.subject}}
-								</view>
-							</uni-col>
-							<uni-col :span="24">
-								<view class="msg-content">
-									<rich-text :nodes="item.content"></rich-text>
-								</view>
-							</uni-col>
-							<uni-col :span="24">
-								<view class="msg-footer">
-									{{item.createTime}}
-								</view>
-							</uni-col>
-						</uni-row>
+						<view class="msg-item">
+							<uni-row>
+								<uni-col :span="24">
+									<view class="msg-title">
+										{{item.subject}}
+									</view>
+								</uni-col>
+								<uni-col :span="24">
+									<view class="msg-content">
+										<rich-text :nodes="item.content"></rich-text>
+									</view>
+								</uni-col>
+								<uni-col :span="24">
+									<view class="msg-footer">
+										{{item.createTime}}
+									</view>
+								</uni-col>
+							</uni-row>
+						</view>
 					</template>
 					<template v-slot:footer>
 						<uni-icons v-show="!item.read" type="smallcircle-filled" size="10" color="#e43d33"></uni-icons>
@@ -121,21 +123,24 @@
 	.msg-list {
 		margin: 15upx;
 		border-radius: 5upx;
-		.msg-title {
-			color: #3a3a3a;
-			margin: 20upx 0;
-			font-size: 30upx;
-			font-weight: bold;
-		}
-		.msg-content {
-			color: #909399;
-			font-size: 26upx;
-		}
-		.msg-footer {
-			margin-top: 20upx;
-			color: #909399;
-			font-size: 26upx;
-			text-align: right;
+		.msg-item {
+			width: 100vw;
+			.msg-title {
+				color: #3a3a3a;
+				margin: 20upx 0;
+				font-size: 30upx;
+				font-weight: bold;
+			}
+			.msg-content {
+				color: #909399;
+				font-size: 26upx;
+			}
+			.msg-footer {
+				margin-top: 20upx;
+				color: #909399;
+				font-size: 26upx;
+				text-align: right;
+			}
 		}
 	}
 </style>

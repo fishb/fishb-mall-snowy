@@ -23,7 +23,7 @@
 	import {
 		fileDelete,
 		fileDownload
-	} from '@/api/dev/fileApi'
+	} from '@/api/dev/fileApi.js'
 	import modal from '@/plugins/modal.js'
 	
 	const emits = defineEmits(['handleOk'])
