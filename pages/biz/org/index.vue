@@ -55,9 +55,9 @@
 	const morePopupRef = ref()
 
 	// 所有选择的机构
-	let allSelOrg = ref([])
+	const allSelOrg = ref([])
 	// 当前选择的机构
-	let curSelOrg = ref([])
+	const curSelOrg = ref([])
 
 	// 展示
 	onShow(() => {

@@ -23,11 +23,6 @@
 		orgDelete
 	} from '@/api/biz/bizOrgApi.js'
 	import modal from '@/plugins/modal.js'
-	import {
-		toast,
-		showConfirm,
-		tansParams
-	} from '@/utils/common'
 
 	const emits = defineEmits(['handleOk'])
 
