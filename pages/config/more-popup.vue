@@ -19,13 +19,9 @@
 		ref,
 		getCurrentInstance
 	} from "vue";
-	import {
-		toast,
-		showConfirm,
-		tansParams
-	} from '@/utils/common'
 	import XEUtils from "xe-utils"
 	import store from '@/store'
+	import modal from '@/plugins/modal.js'
 	
 	const emits = defineEmits(['handleOk'])
 
@@ -48,13 +44,11 @@
 	}
 	// 删除
 	const del = () => {
-		showConfirm(`是否确认删除【${ record.value.name }】环境？`).then(res => {
-			if (res.confirm) {
-				let obj = XEUtils.clone(store.getters.allEnv, true)
-				delete obj[record.value.key]				
-				store.commit('SET_allEnv', obj)
-				popupRef.value.close()
-			}
+		modal.confirm(`是否确认删除【${ record.value.name }】环境？`).then(() => {
+			let obj = XEUtils.clone(store.getters.allEnv, true)
+			delete obj[record.value.key]				
+			store.commit('SET_allEnv', obj)
+			popupRef.value.close()
 		})
 	}
 	// 取消
