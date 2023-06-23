@@ -176,8 +176,8 @@
 		onPullDownRefresh,
 		onReachBottom
 	} from "@dcloudio/uni-app"
-
-
+	import XEUtils from 'xe-utils'
+	
 	const searchFormState = reactive({})
 	const parameter = reactive({
 		current: 1,
@@ -185,19 +185,19 @@
 	})
 	const fileData = ref([])
 	// 加载数据
-	const loadData = (isReset = false) => {
+	const loadData = (isReset) => {
 		if (isReset) {
-			// 重置分页
 			parameter.current = 1
-			// 重置数据
 			fileData.value = []
 		}
 		Object.assign(parameter, searchFormState)
 		filePage(parameter).then(res => {
-			if (res.data && res.data.records && res.data.records.length > 0) {
-				fileData.value = fileData.value.concat(res.data.records)
-				parameter.current++
+			if (XEUtils.isEmpty(res?.data?.records)){
+				return
 			}
+			fileData.value = fileData.value.concat(res.data.records)
+			parameter.current++
+		}).finally(()=>{
 			uni.stopPullDownRefresh()
 		})
 	}
