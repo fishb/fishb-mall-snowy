@@ -45,7 +45,7 @@
 	}
 	// 删除
 	const del = () => {
-		showConfirm(`是否确认删除【${ record.value.name }】职位？`).then(res => {
+		modal.confirm(`是否确认删除【${ record.value.name }】职位？`).then(() => {
 			positionDelete([{
 				id: record.value.id
 			}]).then(res => {
