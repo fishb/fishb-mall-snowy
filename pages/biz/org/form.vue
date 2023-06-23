@@ -57,15 +57,13 @@
 		orgDetail({
 			id: option.id
 		}).then(res => {
-			formData.value = res.data
+			formData.value = res?.data
 		})
 	})
 
 	const submit = () => {
 		formRef.value.validate().then(res => {
-			uni.showLoading()
 			submitForm(formData.value, !formData.value.id).then(respond => {
-				uni.hideLoading()
 				uni.$emit('formBack', {
 					data: respond.data
 				})

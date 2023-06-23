@@ -20,8 +20,6 @@
 			</uni-list-item>
 		</uni-list>
 	</view>
-
-
 	<!-- 新增悬浮按钮 -->
 	<uni-fab v-if="hasPerm('mobileBizOrgAdd')" :pattern="{
 			color: '#7A7E83',
@@ -30,7 +28,6 @@
 			buttonColor: '#007AFF',
 			iconColor: '#fff'
 		}" horizontal="right" vertical="bottom" direction="horizontal" @fabClick="add"></uni-fab>
-
 	<!-- 更多操作 -->
 	<morePopup ref="morePopupRef" @handleOk="loadData()"></morePopup>
 </template>
@@ -71,11 +68,11 @@
 
 	const loadData = () => {
 		orgTree().then(res => {
-			curSelOrg.value = res.data
+			curSelOrg.value = res?.data || []
 			allSelOrg.value = [{
 				id: '0',
 				name: '全部',
-				children: res.data
+				children: res?.data || []
 			}]
 		})
 	}
