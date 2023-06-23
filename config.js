@@ -6,12 +6,6 @@ export default {
 	// 服务平台类型（SNOWY或SNOWY_CLOUD）
 	SERVER_TYPE: 'SNOWY',
 
-	// 接口地址，也就是后端地址
-	// BASE_URL: 'http://localhost:82',
-
-	// 后端配置文件的 snowy.config.common.front-url，相当于前端地址（开源版本非必要）
-	// TENANT_DOMAIN: "http://localhost:81",
-
 	// 请求超时
 	TIMEOUT: 10000,
 

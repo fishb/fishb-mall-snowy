@@ -138,7 +138,7 @@
 					"path": "index",
 					"style": {
 						"navigationBarTitleText": "职位管理",
-						"enablePullDownRefresh": false,
+						"enablePullDownRefresh": true,
 						//#ifdef H5
 						"navigationStyle": "custom"
 						//#endif
