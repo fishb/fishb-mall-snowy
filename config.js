@@ -81,6 +81,8 @@ export default {
 	// 登录（有token）可以访问的页面白名单
 	HAS_TOKEN_WHITE_LIST: [
 		hasTokenBackUrl,
+		'/pages/msg/index',
+		'/pages/msg/detail',
 		'/pages/work/index',
 		'/pages/mine/index',
 		'/pages/mine/setting/index',

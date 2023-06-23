@@ -26,3 +26,21 @@ export function userUpdatePassword(data) {
 		data: data
 	})
 }
+
+// 获取登录用户的站内信分页
+export function userLoginUnreadMessagePage(data) {
+	return request({
+		url: '/sys/userCenter/loginUnreadMessagePage',
+		method: 'get',
+		data: data
+	})
+}
+
+// 读取登录用户站内信详情
+export function userLoginUnreadMessageDetail(data) {
+	return request({
+		url: '/sys/userCenter/loginUnreadMessageDetail',
+		method: 'get',
+		data: data
+	})
+}

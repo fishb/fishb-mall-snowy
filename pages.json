@@ -29,6 +29,26 @@
 			}
 		},
 		{
+			"path": "pages/msg/index",
+			"style": {
+				"navigationBarTitleText": "消息",
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50,
+				//#ifdef H5
+				"navigationStyle": "custom"
+				//#endif
+			}
+		},
+		{
+			"path": "pages/msg/detail",
+			"style": {
+				"navigationBarTitleText": "消息详情",
+				//#ifdef H5
+				"navigationStyle": "custom"
+				//#endif
+			}
+		},
+		{
 			"path": "pages/mine/index",
 			"style": {
 				"navigationBarTitleText": "我的",
@@ -223,13 +243,17 @@
 				"iconPath": "static/images/tabbar/home.png",
 				"selectedIconPath": "static/images/tabbar/home_.png",
 				"text": "首页"
-			}, {
+			},{
 				"pagePath": "pages/work/index",
 				"iconPath": "static/images/tabbar/work.png",
 				"selectedIconPath": "static/images/tabbar/work_.png",
 				"text": "工作台"
-			},
-			{
+			},{
+				"pagePath": "pages/msg/index",
+				"iconPath": "static/images/tabbar/msg.png",
+				"selectedIconPath": "static/images/tabbar/msg_.png",
+				"text": "消息"
+			},{
 				"pagePath": "pages/mine/index",
 				"iconPath": "static/images/tabbar/mine.png",
 				"selectedIconPath": "static/images/tabbar/mine_.png",
