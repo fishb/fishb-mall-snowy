@@ -92,6 +92,7 @@
 			}
 			msgData.value = msgData.value.concat(res.data.records)
 			parameter.current++
+		}).finally(()=>{
 			uni.stopPullDownRefresh()
 		})
 	}
