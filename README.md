@@ -1,22 +1,60 @@
-## 产品介绍
+# Snowy-Mobile
+
+## 介绍
 Snowy谐音“小诺”，恰应小诺团队名称；意思为”下雪的、纯洁的“，寓意框架追求简洁至上，大道至简。
 
-## 相关地址
+## 演示截图
 
-演示地址：https://snowymobile.xiaonuo.vip
+### 1、环境配置
+![](README_files/29.jpg)
+### 2、动态主页
+![](README_files/30.jpg)
+### 3、主页-日程
+![](README_files/31.jpg)
+### 4、工作台-消息-我的
+![](README_files/32.jpg)
+### 5、机构管理
 
-搭配后端：
+机构树：
 
-|  名称   |             用途             |                         官方链接                         |
-| :-------: | :--------------------------: | :------------------------------------------------------: |
-| Snowy |            前后端分离            |   https://gitee.com/xiaonuobase/snowy   |
-| Snowy-Cloud  |           微服务前后分离          |   https://gitee.com/xiaonuobase/snowy-cloud    |
-| Snowy-Solon | 前后端分离（Solon版） | https://gitee.com/xiaonuoadmin/snowy-solon |
+![](README_files/33.jpg)
+### 6、职位管理
 
+机构树+职位列表：
+
+![](README_files/34.jpg)
+### 7、人员管理
+
+机构树+人员列表-表单中动态职位：
+
+![](README_files/35.jpg)
+### 8、文件管理
+
+代码中有表单中使用文件示例：
+
+![](README_files/36.jpg)
+### 9、企业版功能-发起流程
+
+动态表单+自定义表单+草稿箱：
+
+![](README_files/37.jpg)
+### 9、企业版功能-已发申请
+![](README_files/38.jpg)
+### 10、企业版功能-待办事宜
+![](README_files/39.jpg)
+### 11、企业版功能-已办事宜
+![](README_files/40.jpg)
+### 12、企业版功能-抄送事宜
+![](README_files/41.jpg)
+### 13、企业版功能-流程监控
+
+功能太多了，就不一一截图了：
+
+![](README_files/42.jpg)
 ## 软件架构
 1、项目主体架构使用的是vue3和vite 
 
-2、UI方面用的是uni-ui（主要）和colorUI
+2、UI方面用的是uni-ui（主要）、ucharts （图表）
 
 3、请求和页面跳转用的都是uniapp官方的，没有用框架
 
