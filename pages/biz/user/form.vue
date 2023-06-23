@@ -139,19 +139,16 @@
 		reactive,
 		ref
 	} from "vue"
-	import tool from '@/plugins/tool'
-
+	import tool from '@/plugins/tool.js'
 	import {
 		userDetail,
 		userPositionSelector,
 		submitForm
-	} from '@/api/biz/bizUserApi'
-
+	} from '@/api/biz/bizUserApi.js'
 	import SnowyOrgPicker from '@/components/snowy-org-picker.vue'
 	import SnowyUserPicker from '@/components/snowy-user-picker.vue'
 	import SnowySelPicker from '@/components/snowy-sel-picker.vue'
 	import formPosition from '@/pages/biz/user/form-position.vue'
-
 	import {
 		onLoad,
 		onShow,
@@ -188,7 +185,7 @@
 	// 性别
 	const genderOptions = tool.dictList('GENDER')
 	// 职位
-	let positionData = ref([])
+	const positionData = ref([])
 	// 民族
 	const nationOptions = tool.dictList('NATION')
 	// 身份证件
@@ -206,7 +203,7 @@
 		userDetail({
 			id: option.id
 		}).then(res => {
-			formData.value = res.data
+			formData.value = res?.data
 			// 職位
 			if(!formData.value.orgId){
 				return
@@ -234,16 +231,11 @@
 
 	}
 	const submit = () => {
-		//获取所有页面栈实例列表(警告)
-		// const pages = getCurrentPages();
-		// console.log("form表单：获取所有页面栈实例列表", pages)
 		// 子表单数据给父表单数据赋值，并校验子表单数据
 		positionJsonRef.value.formListEmitAndValidate().then(result => {
 			// 父表单校验
 			formRef.value.validate().then(res => {
-				uni.showLoading()
 				submitForm(formData.value, !formData.value.id).then(respond => {
-					uni.hideLoading()
 					uni.$emit('formBack', {
 						data: respond.data
 					})

@@ -21,7 +21,7 @@
 	} from "vue";
 	import {
 		positionDelete
-	} from '@/api/biz/bizPositionApi'
+	} from '@/api/biz/bizPositionApi.js'
 	import modal from '@/plugins/modal.js'
 
 	const emits = defineEmits(['handleOk'])

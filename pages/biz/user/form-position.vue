@@ -81,7 +81,6 @@
 
 	// 新增
 	const add = () => {
-		// console.log(JSON.parse(JSON.stringify(props.modelValue)))
 		dataList.value.unshift({
 			orgId: "",
 			positionId: "",
