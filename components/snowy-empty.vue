@@ -1,16 +1,16 @@
 <template>
 	<view class="empty-box">
-		<text>{{ tips }}</text>
+		<image :src="imgUrl" mode="aspectFit"></image>
 	</view>
 </template>
 
 <script setup>
 	const props = defineProps({
-		tips: {
+		imgUrl: {
 			type: String,
 			required: false,
-			default: "页面数据为空",
-		},
+			default: "/static/empty.svg",
+		}
 	})
 </script>
 
