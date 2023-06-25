@@ -25,7 +25,8 @@
 					确定
 				</view>
 			</view>
-
+			<!-- 搜索 -->
+			<uni-search-bar v-model="searchFormState.searchKey" @confirm="loadUserData(true)" ></uni-search-bar>
 			<!-- 面包屑 -->
 			<view class="crumb">
 				<text v-for="(item, index) in allClickSelOrg" :key="index" @click="clickOrgCru(item, index)"
@@ -52,7 +53,7 @@
 				</view>
 			</view>
 			<!-- 部门和人员 -->
-			<view class="orgAndUser">
+			<scroll-view class="orgAndUser" :scroll-y="true" @scrolltolower="scrolltolower">
 				<!-- 部门 -->
 				<uni-list class="org">
 					<uni-list-item v-for="(item, index) in curClickSelOrg" :key="index">
@@ -69,17 +70,18 @@
 				</uni-list>
 				<!-- 人员 -->
 				<uni-list :border="false">
-					<uni-list-chat v-for="(item, index) in userData" :key="index" :title="item.name"
-						:avatar="item.avatar" :note="item.orgName + ' | '+ item.positionName +' | '+item.genderName"
-						:time="item.entryDate" :clickable="true" @click="clickUser(item, index)">
-						<uni-icons v-show="!isMultiple ? item.id != curSelUserId: curSelUserId.indexOf(item.id) == -1"
-							type="circle" :size="25"></uni-icons>
-						<uni-icons v-show="!isMultiple ? item.id == curSelUserId: curSelUserId.indexOf(item.id) != -1"
-							type="checkbox-filled" :size="25" color="#2979ff">
-						</uni-icons>
+					<uni-list-chat 
+						v-for="(item, index) in userData" :key="index" 
+						:title="item?.name"
+						:avatar="item?.avatar || '/static/logo.png'" 
+						:note="item?.orgName + ' | '+ item?.positionName +' | '+item?.genderName"
+						:time="item?.entryDate" 
+						:clickable="true" @click="clickUser(item, index)">
+						<uni-icons v-show="!isMultiple ? item.id != curSelUserId: curSelUserId.indexOf(item.id) == -1" type="circle" :size="25"></uni-icons>
+						<uni-icons v-show="!isMultiple ? item.id == curSelUserId: curSelUserId.indexOf(item.id) != -1" type="checkbox-filled" :size="25" color="#2979ff"></uni-icons>
 					</uni-list-chat>
 				</uni-list>
-			</view>
+			</scroll-view>
 		</uni-popup>
 	</view>
 </template>
@@ -87,10 +89,11 @@
 <script setup>
 	import {
 		orgTree
-	} from '@/api/biz/bizOrgApi'
+	} from '@/api/biz/bizOrgApi.js'
 	import {
-		userPage
-	} from '@/api/biz/bizUserApi'
+		userSelector,
+		getUserListByIdList
+	} from '@/api/components/picker/userPickerApi.js'
 	import {
 		reactive,
 		ref,
@@ -99,11 +102,16 @@
 		inject
 	} from "vue";
 	import XEUtils from 'xe-utils'
+	import {
+		onLoad,
+		onShow,
+		onReady,
+		onPullDownRefresh,
+		onReachBottom
+	} from "@dcloudio/uni-app"
 
 	const emits = defineEmits(['update:modelValue', 'cancel', 'confirm'])
-
 	const props = defineProps({
-		// value: [String, Array],
 		modelValue: [String, Array],
 		border: {
 			type: Boolean,
@@ -117,19 +125,21 @@
 		},
 		placeholder: {
 			type: String,
-			default: "请选择机构",
+			default: "请选择",
 			required: false
-		}
+		},
+		getUserListByIdListUrl: {
+			type: String,
+			default: null,
+			required: false
+		},
+		userSelectorUrl: {
+			type: String,
+			default: null,
+			required: false
+		},
 	})
 	// 数据类型校验
-	// if (props.value) {
-	// 	if (!props.isMultiple && typeof props.value !== "string") {
-	// 		console.error("单选所传value值应为字符串")
-	// 	}
-	// 	if (!!props.isMultiple && !Array.isArray(props.value)) {
-	// 		console.error("多选所传value值应为数组")
-	// 	}
-	// }
 	if (props.modelValue) {
 		if (!props.isMultiple && typeof props.modelValue !== "string") {
 			console.error("单选所传modelValue值应为字符串")
@@ -138,25 +148,23 @@
 			console.error("多选所传modelValue值应为数组")
 		}
 	}
-
 	// 弹出
 	const popupRef = ref()
 
-	let searchFormState = reactive({})
-	let parameter = reactive({
+	const searchFormState = reactive({})
+	const parameter = reactive({
 		current: 1,
-		size: -1
+		size: 10
 	})
-	let userData = ref([])
+	const userData = ref([])
 
 	// 当前选中的机构id及机构
-	let curSelUserId = !props.isMultiple ? ref("") : ref([])
-	let curSelUser = !props.isMultiple ? ref({}) : ref([])
-
+	const curSelUserId = !props.isMultiple ? ref("") : ref([])
+	const curSelUser = !props.isMultiple ? ref({}) : ref([])
 	// 所有点击选中机构【页面数据】
-	let allClickSelOrg = ref([])
+	const allClickSelOrg = ref([])
 	// 当前点击选中机构【页面数据】
-	let curClickSelOrg = ref([])
+	const curClickSelOrg = ref([])
 	orgTree().then(res => {
 		curClickSelOrg.value = res.data
 		allClickSelOrg.value = [{
@@ -166,79 +174,64 @@
 		}]
 	})
 	// 监听函数
-	// watch(() => props.value, (newValue, oldValue) => {
-	// 	curSelUserId.value = newValue
-	// }, {
-	// 	deep: false,
-	// 	immediate: false
-	// })
 	watch(() => props.modelValue, (newValue, oldValue) => {
-		// curSelUserId.value = XEUtils.clone(newValue, true)
-		loadUserData()
+		initData()
+		loadUserData(true)
 	}, {
 		deep: false,
 		immediate: false
 	})
 
-	const loadUserData = () => {
-		Object.assign(parameter, searchFormState)
-		userPage(parameter).then(res => {
-			if (res.data && res.data.records) {
-				userData.value = res.data.records
-				// 单选curSelUser初始化值赋值
-				if (!props.isMultiple) {
-					if (props.modelValue) {
-						curSelUserId.value = XEUtils.clone(props.modelValue, true)
-					} else {
-						curSelUserId.value = ""
-					}
-
-					if (curSelUserId.value) {
-						const curSelOrgArr = XEUtils.filterTree(userData.value, item => {
-							return curSelUserId.value === item.id
-						})
-						if (curSelOrgArr && curSelOrgArr.length === 1) {
-							curSelUser.value = curSelOrgArr[0]
-						} else {
-							// id存在数据，但是没有找到对应的数据
-							// curSelUser.value = {
-							// 	id: curSelUserId.value,
-							// 	name: curSelUserId.value
-							// }
-						}
-					} else {
-						curSelUser.value = {}
-					}
-				}
-				// 多选curSelUser初始化值赋值
-				if (!!props.isMultiple) {
-
-					if (props.modelValue && props.modelValue.length > 0) {
-						curSelUserId.value = XEUtils.clone(props.modelValue, true)
-					} else {
-						curSelUserId.value = []
-					}
-
-					if (curSelUserId.value && curSelUserId.value.length > 0) {
-						curSelUser.value = XEUtils.filterTree(userData.value, item => {
-							return curSelUserId.value.includes(item.id)
-						})
-					} else {
-						curSelUser.value = []
-					}
-				}
+	const initData = () => {
+		// 单选curSelUser初始化值赋值
+		if (!props.isMultiple) {
+			if (!XEUtils.isEmpty(props.modelValue)) {
+				getUserListByIdList({
+					idList: [props.modelValue]
+				}).then(res => {
+					curSelUser.value = !XEUtils.isEmpty(res.data)? res.data[0] : {}
+				})
+				curSelUserId.value = XEUtils.clone(props.modelValue, true)
+			} else {
+				curSelUser.value = {}
+				curSelUserId.value = ""
 			}
+		}
+		// 多选curSelUser初始化值赋值
+		if (!!props.isMultiple) {
+			if (!XEUtils.isEmpty(props.modelValue)) {
+				getUserListByIdList({
+					idList: props.modelValue
+				}, props.getUserListByIdListUrl).then(res => {
+					curSelUser.value = !XEUtils.isEmpty(res.data)? res.data : []
+				})
+				curSelUserId.value = XEUtils.clone(props.modelValue, true)
+			} else {
+				curSelUser.value = []
+				curSelUserId.value = []
+			}
+		}
+	}
+	
+	const loadUserData = (isReset) => {
+		if (isReset) {
+			parameter.current = 1
+			userData.value = []
+		}
+		Object.assign(parameter, searchFormState)
+		userSelector(parameter, props.userSelectorUrl).then(res => {
+			if (XEUtils.isEmpty(res?.data?.records)) {
+				return
+			}
+			userData.value = userData.value.concat(res.data.records)
+			parameter.current++
 		})
 	}
-
-	// 初始化数据
-	loadUserData()
-
 
 	// 点击输入框
 	const handleInput = () => {
 		// 重新初始化数据，防止数据更新
-		loadUserData()
+		loadUserData(true)
 		popupRef.value.open('bottom')
 	}
 
@@ -248,7 +241,7 @@
 		allClickSelOrg.value.splice(index + 1, allClickSelOrg.value.length - (index + 1))
 
 		searchFormState.orgId = (item.id === '0' ? null : item.id)
-		loadUserData()
+		loadUserData(true)
 	}
 
 	// 点击用户
@@ -294,14 +287,14 @@
 		allClickSelOrg.value.push(item)
 
 		searchFormState.orgId = (item.id === '0' ? null : item.id)
-		loadUserData()
+		loadUserData(true)
 	}
-
 
 	// 取消
 	const cancel = () => {
 		// 重置数据
-		loadUserData()
+		initData()
+		loadUserData(true)
 		popupRef.value.close()
 	}
 
@@ -315,9 +308,13 @@
 		})
 		popupRef.value.close()
 	}
+	
+	const scrolltolower = () =>{
+		loadUserData()
+	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.snowy-user-picker {
 		.input {
 			.input-value {
