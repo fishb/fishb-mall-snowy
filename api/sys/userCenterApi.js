@@ -27,6 +27,15 @@ export function userUpdatePassword(data) {
 	})
 }
 
+// 获取登录用户的职位信息
+export function userLoginPositionInfo(data) {
+	return request({
+		url: '/sys/userCenter/loginPositionInfo',
+		method: 'get',
+		data: data
+	})
+}
+
 // 获取登录用户的站内信分页
 export function userLoginUnreadMessagePage(data) {
 	return request({
@@ -41,6 +50,16 @@ export function userLoginUnreadMessageDetail(data) {
 	return request({
 		url: '/sys/userCenter/loginUnreadMessageDetail',
 		method: 'get',
+		data: data
+	})
+}
+
+
+// 根据id集合获取职位集合
+export function getPositionListByIdList(data) {
+	return request({
+		url: '/sys/userCenter/getPositionListByIdList',
+		method: 'post',
 		data: data
 	})
 }

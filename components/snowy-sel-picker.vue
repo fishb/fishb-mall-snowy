@@ -44,7 +44,7 @@
 				</view>
 			</view>
 			<!-- 面板数据 -->
-			<view class="data">
+			<scroll-view class="data" :scroll-y="true" @scrolltolower="scrolltolower">
 				<uni-list>
 					<uni-list-item v-for="(item, index) in rangeData" :key="index">
 						<!-- 选择icon -->
@@ -65,7 +65,7 @@
 						</template>
 					</uni-list-item>
 				</uni-list>
-			</view>
+			</scroll-view>
 		</uni-popup>
 	</view>
 </template>
@@ -80,7 +80,7 @@
 	} from "vue";
 	import XEUtils from 'xe-utils'
 
-	const emits = defineEmits(['update:modelValue', 'cancel', 'confirm'])
+	const emits = defineEmits(['update:modelValue', 'queryCurSelData', 'scrollToLower', 'cancel', 'confirm'])
 
 	const props = defineProps({
 		// value: [String, Array],
@@ -117,7 +117,15 @@
 			type: Boolean,
 			default: false,
 			required: false
-		}
+		},
+		// 是否开启大数据模式，如果开启大数据模式，
+		// 那么就要实现queryCurSelData方法，并提供相应的回调（通过服务端获取已选择的数据）
+		// 与此同时要实现scrollToLower方法（用于分页加载）
+		isBigData: {
+			type: Boolean,
+			default: false,
+			required: false
+		},
 	})
 	// 数据类型校验
 	// if (props.value) {
@@ -141,90 +149,71 @@
 	const popupRef = ref()
 
 	// 当前选中的数据key及数据
-	let curSelDataKey = !props.isMultiple ? ref("") : ref([])
-	let curSelData = !props.isMultiple ? ref({}) : ref([])
+	const curSelDataKey = !props.isMultiple ? ref("") : ref([])
+	const curSelData = !props.isMultiple ? ref({}) : ref([])
 
-
-	// 下拉数据
-	let rangeData = ref([])
-
-	// 监听函数
-	// watch(() => props.value, (newValue, oldValue) => {
-	// 	curSelDataKey.value = newValue
-	// }, {
-	// 	deep: false,
-	// 	immediate: false
-	// })
 	watch(() => props.modelValue, (newValue, oldValue) => {
-		// curSelDataKey.value = XEUtils.clone(newValue, true)
-		loadData()
+		initData()
 	}, {
 		deep: false,
 		immediate: false
 	})
 
 	watch(() => props.rangeData, (newValue, oldValue) => {
-		rangeData.value = props.rangeData;
-		loadData()
+		if(!props.isBigData){
+			initData()
+		}
 	}, {
 		deep: false,
 		immediate: false
 	})
-
-	const loadData = () => {
-		// 下拉数据
-		if (props.rangeData && props.rangeData.length > 0) {
-			rangeData.value = props.rangeData;
-		} else {
-			rangeData.value = []
-		}
-
+	
+	const initData = () => {
 		// 单选curSelData初始化值赋值
 		if (!props.isMultiple) {
-			if (props.modelValue) {
-				curSelDataKey.value = XEUtils.clone(props.modelValue, true)
-			} else {
-				curSelDataKey.value = ""
-			}
-			if (curSelDataKey.value) {
-				const curSelDataArr = XEUtils.filterTree(rangeData.value, item => {
-					return curSelDataKey.value === item[props.map.key]
+			curSelDataKey.value = props.modelValue ? XEUtils.clone(props.modelValue, true) : ""
+			if(props.isBigData){
+				emits('queryCurSelData', curSelDataKey.value, (val) => {
+					curSelData.value = val
 				})
-				if (curSelDataArr && curSelDataArr.length === 1) {
-					curSelData.value = curSelDataArr[0]
+			}else{
+				if (!XEUtils.isEmpty(curSelDataKey.value)) {
+					const curSelDataArr = XEUtils.filterTree(props.rangeData, item => {
+						return curSelDataKey.value === item[props.map.key]
+					})
+					if (curSelDataArr && curSelDataArr.length === 1) {
+						curSelData.value = curSelDataArr[0]
+					}
+				} else {
+					curSelData.value = {}
 				}
-			} else {
-				curSelData.value = {}
 			}
+			
 		}
 		// 多选curSelData初始化值赋值
 		if (!!props.isMultiple) {
-
-			if (props.modelValue && props.modelValue.length > 0) {
-				curSelDataKey.value = XEUtils.clone(props.modelValue, true)
-			} else {
-				curSelDataKey.value = []
-			}
-
-			if (curSelDataKey.value && curSelDataKey.value.length > 0) {
-				curSelData.value = XEUtils.filterTree(rangeData.value, item => {
-					return curSelDataKey.value.includes(item[props.map.key])
+			curSelDataKey.value = props.modelValue ? XEUtils.clone(props.modelValue, true) : []
+			
+			if(props.isBigData){
+				emits('queryCurSelData', curSelDataKey.value, (val) => {
+					curSelData.value = val
 				})
-			} else {
-				curSelData.value = []
+			}else{
+				if (!XEUtils.isEmpty(curSelDataKey.value)) {
+					curSelData.value = XEUtils.filterTree(props.rangeData, item => {
+						return curSelDataKey.value.includes(item[props.map.key])
+					})
+				} else {
+					curSelData.value = []
+				}
 			}
 		}
 
 	}
 
-	// 初始化数据
-	loadData()
-
-
 	// 点击输入框
 	const handleInput = () => {
-		// 重新初始化数据，防止数据更新
-		loadData()
+		// initData()
 		popupRef.value.open('bottom')
 	}
 	// 选择或删除数据
@@ -270,7 +259,7 @@
 	// 取消
 	const cancel = () => {
 		// 重置数据
-		loadData()
+		initData()
 		popupRef.value.close()
 	}
 
@@ -284,6 +273,12 @@
 		})
 		popupRef.value.close()
 	}
+	const scrolltolower = () =>{
+		emits('scrollToLower')
+	}
+	defineExpose({
+		initData
+	})
 </script>
 
 <style lang="scss">

@@ -88,11 +88,9 @@
 
 <script setup>
 	import {
-		orgTree
-	} from '@/api/biz/bizOrgApi.js'
-	import {
+		orgTreeSelector,
 		userSelector,
-		getUserListByIdList
+		getUserListByIdList,
 	} from '@/api/components/picker/userPickerApi.js'
 	import {
 		reactive,
@@ -118,26 +116,40 @@
 			default: true,
 			required: false
 		},
-		isMultiple: {
-			type: Boolean,
-			default: false,
-			required: false
-		},
 		placeholder: {
 			type: String,
 			default: "请选择",
 			required: false
 		},
+		// 是否多选
+		isMultiple: {
+			type: Boolean,
+			default: false,
+			required: false
+		},
+		// 部门树url
+		orgTreeSelectorUrl: {
+			type: String,
+			default: null,
+			required: false
+		},
+		// 通过请求服务端获取已选中用户名的url
 		getUserListByIdListUrl: {
 			type: String,
 			default: null,
 			required: false
 		},
+		// 用户分页地址
 		userSelectorUrl: {
 			type: String,
 			default: null,
 			required: false
 		},
+		autoInitData: {
+			type: Boolean,
+			default: true,
+			required: false
+		}
 	})
 	// 数据类型校验
 	if (props.modelValue) {
@@ -165,23 +177,30 @@
 	const allClickSelOrg = ref([])
 	// 当前点击选中机构【页面数据】
 	const curClickSelOrg = ref([])
-	orgTree().then(res => {
-		curClickSelOrg.value = res.data
-		allClickSelOrg.value = [{
-			id: '0',
-			name: '全部',
-			children: res.data
-		}]
-	})
+	
 	// 监听函数
 	watch(() => props.modelValue, (newValue, oldValue) => {
 		initData()
-		loadUserData(true)
 	}, {
 		deep: false,
 		immediate: false
 	})
-
+	
+	const loadOrgTree = (orgTreeParam) => {
+		orgTreeSelector(orgTreeParam, props.orgTreeSelectorUrl).then(res => {
+			curClickSelOrg.value = res.data
+			allClickSelOrg.value = [{
+				id: '0',
+				name: '全部',
+				children: res.data
+			}]
+		})
+	}
+	
+	if(props.autoInitData){
+		loadOrgTree()
+	}
+	
 	const initData = () => {
 		// 单选curSelUser初始化值赋值
 		if (!props.isMultiple) {
@@ -213,11 +232,12 @@
 		}
 	}
 	
-	const loadUserData = (isReset) => {
+	const loadUserData = (isReset, userSelectorParam) => {
 		if (isReset) {
 			parameter.current = 1
 			userData.value = []
 		}
+		Object.assign(parameter, userSelectorParam)
 		Object.assign(parameter, searchFormState)
 		userSelector(parameter, props.userSelectorUrl).then(res => {
 			if (XEUtils.isEmpty(res?.data?.records)) {
@@ -227,11 +247,15 @@
 			parameter.current++
 		})
 	}
-
+	
+	if(props.autoInitData){
+		loadUserData(true)
+	}
+	
 	// 点击输入框
 	const handleInput = () => {
 		// 重新初始化数据，防止数据更新
-		loadUserData(true)
+		// loadUserData(true)
 		popupRef.value.open('bottom')
 	}
 
@@ -294,7 +318,7 @@
 	const cancel = () => {
 		// 重置数据
 		initData()
-		loadUserData(true)
+		// loadUserData(true)
 		popupRef.value.close()
 	}
 
@@ -312,6 +336,12 @@
 	const scrolltolower = () =>{
 		loadUserData()
 	}
+	
+	defineExpose({
+		initData,
+		loadOrgTree,
+		loadUserData
+	})
 </script>
 
 <style lang="scss" scoped>
