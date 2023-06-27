@@ -218,7 +218,7 @@
 			}
 		})
 	}
-
+	loadData()
 	// 点击输入框
 	const handleInput = () => {
 		// 重新初始化数据，防止数据更新

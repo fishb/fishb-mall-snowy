@@ -19,6 +19,7 @@
 				:clickable="true" @click="moreClick(item)">
 			</uni-list-chat>
 		</uni-list>
+		<snowy-empty v-if="$utils.isEmpty(userData)" />
 	</view>
 	<!-- 新增悬浮按钮 -->
 	<uni-fab v-if="hasPerm('mobileBizUserAdd')" :pattern="{
@@ -53,6 +54,7 @@
 		onReachBottom
 	} from "@dcloudio/uni-app"
 	import XEUtils from 'xe-utils'
+	import SnowyEmpty from "@/components/snowy-empty.vue"
 	// 新增悬浮按钮
 	const add = () => {
 		uni.navigateTo({

@@ -19,6 +19,7 @@
 				</template>
 			</uni-list-item>
 		</uni-list>
+		<snowy-empty v-if="$utils.isEmpty(curSelOrg)" />
 	</view>
 	<!-- 新增悬浮按钮 -->
 	<uni-fab v-if="hasPerm('mobileBizOrgAdd')" :pattern="{
@@ -36,7 +37,7 @@
 	import {
 		orgTree
 	} from '@/api/biz/bizOrgApi'
-
+	import SnowyEmpty from "@/components/snowy-empty.vue"
 	import {
 		reactive,
 		ref,
