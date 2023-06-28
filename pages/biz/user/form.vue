@@ -40,12 +40,12 @@
 				<uni-forms-item label="选择职位" name="positionId" required
 					:rules="[{ required: true, errorMessage: '请选择职位' }]">
 					<snowy-sel-picker :map="{key: 'id', label: 'name'}" v-model="formData.positionId"
-						:rangeData="positionData" placeholder="请选择选择职位"></snowy-sel-picker>
+						:rangeData="positionData" placeholder="请选择选择职位" :isBigData="true" @queryCurSelData="positionQueryCurSelData" @scrollToLower="positionScrollToLower"></snowy-sel-picker>
 				</uni-forms-item>
 
 				<uni-forms-item label="选择主管" name="directorId">
 					<!-- 多选属性:isMultiple="true" -->
-					<snowy-user-picker v-model="formData.directorId" placeholder="请选择主管">
+					<snowy-user-picker ref="directorRef" v-model="formData.directorId" placeholder="请选择主管" :autoInitData="false">
 					</snowy-user-picker>
 				</uni-forms-item>
 				<uni-forms-item label="员工编号" name="empNo">
@@ -143,8 +143,11 @@
 	import {
 		userDetail,
 		userPositionSelector,
-		submitForm
+		submitForm,
 	} from '@/api/biz/bizUserApi.js'
+	import {
+		getPositionListByIdList
+	} from '@/api/sys/userCenterApi.js'
 	import SnowyOrgPicker from '@/components/snowy-org-picker.vue'
 	import SnowyUserPicker from '@/components/snowy-user-picker.vue'
 	import SnowySelPicker from '@/components/snowy-sel-picker.vue'
@@ -156,7 +159,8 @@
 		onPullDownRefresh,
 		onReachBottom
 	} from "@dcloudio/uni-app"
-
+	import XEUtils from "xe-utils"
+	
 	const curView = ref(0)
 	const formRef = ref()
 	// 表单数据
@@ -194,7 +198,29 @@
 	const cultureLevelOptions = tool.dictList('CULTURE_LEVEL')
 	// 职位
 	const positionJsonRef = ref()
-
+	
+	const directorRef = ref()
+	
+	// 职位参数
+	const positionParam = reactive({
+		current: 1,
+		size: 10
+	})
+	// 职位分页加载
+	const loadPositionSelector = (isReset) => {
+		if (isReset) {
+			positionParam.current = 1
+			positionData.value = []
+		}
+		userPositionSelector(positionParam).then(res => {
+			if (XEUtils.isEmpty(res?.data?.records)){
+				return
+			}
+			positionData.value =  positionData.value.concat(res.data.records)
+			positionParam.current++
+		})
+	}
+	
 	// 加載
 	onLoad((option) => {
 		if(!option.id){
@@ -208,12 +234,9 @@
 			if(!formData.value.orgId){
 				return
 			}
-			const param = {
-				orgId: formData.value.orgId
-			}
-			userPositionSelector(param).then(res => {
-				positionData.value = res.data
-			})
+			positionParam.orgId = formData.value.orgId
+			loadPositionSelector(true)
+			directorRef.value.loadUserData(true, {orgId: formData.value.orgId})
 		})
 	})
 	// 机构
@@ -222,14 +245,28 @@
 		curSelOrg
 	}) => {
 		formData.value.positionId = null
-		const param = {
-			orgId: curSelOrgId
-		}
-		userPositionSelector(param).then(res => {
-			positionData.value = res.data
-		})
-
+		positionParam.orgId = curSelOrgId
+		loadPositionSelector(true)
+		// directorRef.value.loadOrgTree()
+		formData.value.directorId = null
+		directorRef.value.loadUserData(true, {orgId: curSelOrgId})
 	}
+	// 根据职位id进行查询
+	const positionQueryCurSelData = (curSelDataKey, callback) => {
+		if(!XEUtils.isEmpty(curSelDataKey)){
+			getPositionListByIdList({
+				idList: [curSelDataKey]
+			}).then(res => {
+				callback(res.data[0])
+			})
+		}
+		
+	}
+	// 职位下拉触发
+	const positionScrollToLower = () => {
+		loadPositionSelector()
+	}
+	
 	const submit = () => {
 		// 子表单数据给父表单数据赋值，并校验子表单数据
 		positionJsonRef.value.formListEmitAndValidate().then(result => {
@@ -252,7 +289,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.container {
 		margin: 15upx;
 		border-radius: 5upx;

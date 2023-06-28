@@ -124,15 +124,6 @@
 			required: false
 		}
 	})
-	// 数据类型校验
-	// if (props.value) {
-	// 	if (!props.isMultiple && typeof props.value !== "string") {
-	// 		console.error("单选所传value值应为字符串")
-	// 	}
-	// 	if (!!props.isMultiple && !Array.isArray(props.value)) {
-	// 		console.error("多选所传value值应为数组")
-	// 	}
-	// }
 	if (props.modelValue) {
 		if (!props.isMultiple && typeof props.modelValue !== "string") {
 			console.error("单选所传modelValue值应为字符串")
@@ -146,23 +137,15 @@
 	const popupRef = ref()
 
 	// 当前选中的机构id及机构
-	let curSelOrgId = !props.isMultiple ? ref("") : ref([])
-	let curSelOrg = !props.isMultiple ? ref({}) : ref([])
+	const curSelOrgId = !props.isMultiple ? ref("") : ref([])
+	const curSelOrg = !props.isMultiple ? ref({}) : ref([])
 
 	// 所有点击选中机构【页面数据】
-	let allClickSelOrg = ref([])
+	const allClickSelOrg = ref([])
 	// 当前点击选中机构【页面数据】
-	let curClickSelOrg = ref([])
-
-	// 监听函数
-	// watch(() => props.value, (newValue, oldValue) => {
-	// 	curSelOrgId.value = newValue
-	// }, {
-	// 	deep: false,
-	// 	immediate: false
-	// })
+	const curClickSelOrg = ref([])
+	
 	watch(() => props.modelValue, (newValue, oldValue) => {
-		// curSelOrgId.value = XEUtils.clone(newValue, true)
 		loadData()
 	}, {
 		deep: false,
@@ -202,13 +185,11 @@
 
 			// 单选curSelOrg初始化值赋值
 			if (!props.isMultiple) {
-
 				if (props.modelValue) {
 					curSelOrgId.value = XEUtils.clone(props.modelValue, true)
 				} else {
 					curSelOrgId.value = ""
 				}
-
 				if (curSelOrgId.value) {
 					const curSelOrgArr = XEUtils.filterTree(allClickSelOrg.value, item => {
 						return curSelOrgId.value === item.id
@@ -222,13 +203,11 @@
 			}
 			// 多选curSelOrg初始化值赋值
 			if (!!props.isMultiple) {
-
 				if (props.modelValue && props.modelValue.length > 0) {
 					curSelOrgId.value = XEUtils.clone(props.modelValue, true)
 				} else {
 					curSelOrgId.value = []
 				}
-
 				if (curSelOrgId.value && curSelOrgId.value.length > 0) {
 					curSelOrg.value = XEUtils.filterTree(allClickSelOrg.value, item => {
 						return curSelOrgId.value.includes(item.id)
@@ -239,15 +218,10 @@
 			}
 		})
 	}
-
-	// 初始化数据
 	loadData()
-
-
 	// 点击输入框
 	const handleInput = () => {
 		// 重新初始化数据，防止数据更新
-		loadData()
 		popupRef.value.open('bottom')
 	}
 

@@ -34,7 +34,7 @@
 				<uni-grid-item v-for="(item, j) in handleData(userMenu.id, userMenu.children)" :index="j"
 					:key="handleKey(item,j)" @tap="gridItemClick(userMenu.id, item, j)">
 					<view class="grid-item-box">
-						<snowy-icon :backgroundColor="item.color" custom-prefix="snowy" :type="item.icon" size="30" color="#FFFFFF"></snowy-icon>
+						<snowy-icon :backgroundColor="item.color" custom-prefix="snowy" :type="item.icon" size="20" color="#FFFFFF"></snowy-icon>
 						<text class="text">{{item.title}}</text>
 					</view>
 				</uni-grid-item>

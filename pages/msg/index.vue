@@ -45,6 +45,7 @@
 					</template>
 				</uni-list-item>
 			</uni-list>
+			<snowy-empty v-if="$utils.isEmpty(msgData)" />
 		</view>
 	</view>
 </template>
@@ -65,6 +66,7 @@
 		onPullDownRefresh,
 		onReachBottom
 	} from "@dcloudio/uni-app"
+	import SnowyEmpty from "@/components/snowy-empty.vue"
 	
 	const curView = ref(0)
 	const segmentedList = ref([])

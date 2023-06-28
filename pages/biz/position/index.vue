@@ -36,6 +36,7 @@
 				</template>
 			</uni-list-item>
 		</uni-list>
+		<snowy-empty v-if="$utils.isEmpty(positionData)" />
 	</view>
 	<!-- 新增悬浮按钮 -->
 	<uni-fab v-if="hasPerm('mobileBizPositionAdd')" :pattern="{
@@ -71,6 +72,7 @@
 	import morePopup from '@/pages/biz/position/more-popup.vue'
 	import SnowyIcon from '@/components/snowy-icon.vue'
 	import XEUtils from 'xe-utils'
+	import SnowyEmpty from "@/components/snowy-empty.vue"
 	
 	const morePopupRef = ref()
 	// 所有选择的机构

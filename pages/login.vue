@@ -62,10 +62,6 @@
 	const sysBaseConfig = computed(() => {
 		return store.getters.sysBaseConfig
 	})
-	if (sysBaseConfig.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN) {
-		loginCaptcha()
-	}
-
 	const validCodeBase64 = ref("")
 	const loginForm = reactive({
 		account: 'superAdmin',
@@ -73,7 +69,6 @@
 		validCode: '',
 		validCodeReqNo: '',
 	})
-
 	// 获取图形验证码
 	const loginCaptcha = () => {
 		getPicCaptcha().then(res => {
@@ -81,12 +76,15 @@
 			loginForm.validCodeReqNo = res.data.validCodeReqNo
 		})
 	}
+	if (sysBaseConfig.value.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN) {
+		loginCaptcha()
+	}
 	// 登录方法
 	const handleLogin = async () => {
 		if (loginForm.account === "") {
-			proxy.$modal.msgError("请输入您的账号")
+			proxy.$modal.msgError("请输入账号")
 		} else if (loginForm.password === "") {
-			proxy.$modal.msgError("请输入您的密码")
+			proxy.$modal.msgError("请输入密码")
 		} else if (loginForm.validCode === "" && sysBaseConfig.value.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN === 'true') {
 			proxy.$modal.msgError("请输入验证码")
 		} else {
@@ -95,7 +93,6 @@
 	}
 	// 密码登录
 	const pwdLogin = async () => {
-		proxy.$modal.loading("登录中...")
 		store.dispatch('Login', loginForm).then(() => {
 			// 所有异步请求结束之后才能够进行下一步操作
 			Promise.all([
@@ -104,14 +101,19 @@
 				store.dispatch('GetDictTypeTreeData'),
 			]).then((result) => {
 				proxy.$tab.reLaunch('/pages/home/index')
-				proxy.$modal.closeLoading()
 			}).catch(err => {
 				onFeedTap()
-				console.error(err)
+				if (sysBaseConfig.value.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN) {
+					loginCaptcha()
+					loginForm.validCode = ""
+				}
 			})
 		}).catch(err => {
 			onFeedTap()
-			console.error(err)
+			if (sysBaseConfig.value.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN) {
+				loginCaptcha()
+				loginForm.validCode = ""
+			}
 		})
 
 	}
