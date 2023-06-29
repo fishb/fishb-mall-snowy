@@ -88,11 +88,6 @@
 
 <script setup>
 	import {
-		orgTreeSelector,
-		userSelector,
-		getUserListByIdList,
-	} from '@/api/components/picker/userPickerApi.js'
-	import {
 		reactive,
 		ref,
 		getCurrentInstance,
@@ -127,22 +122,28 @@
 			default: false,
 			required: false
 		},
-		// 部门树url
-		orgTreeSelectorUrl: {
-			type: String,
-			default: null,
+		// 部门树api
+		orgTreeApi: {
+			type: Function,
+			default: () => {
+				return Promise.resolve()
+			},
 			required: false
 		},
-		// 通过请求服务端获取已选中用户名的url
-		getUserListByIdListUrl: {
-			type: String,
-			default: null,
+		// 已选择用户数据api
+		checkedUserListApi: {
+			type: Function,
+			default: () => {
+				return Promise.resolve()
+			},
 			required: false
 		},
-		// 用户分页地址
-		userSelectorUrl: {
-			type: String,
-			default: null,
+		// 用户分页api
+		userPageApi: {
+			type: Function,
+			default: () => {
+				return Promise.resolve()
+			},
 			required: false
 		},
 		autoInitData: {
@@ -187,12 +188,12 @@
 	})
 	
 	const loadOrgTree = (orgTreeParam) => {
-		orgTreeSelector(orgTreeParam, props.orgTreeSelectorUrl).then(res => {
-			curClickSelOrg.value = res.data
+		props.orgTreeApi().then(res => {
+			curClickSelOrg.value = res?.data || []
 			allClickSelOrg.value = [{
 				id: '0',
 				name: '全部',
-				children: res.data
+				children: res?.data || []
 			}]
 		})
 	}
@@ -205,10 +206,10 @@
 		// 单选curSelUser初始化值赋值
 		if (!props.isMultiple) {
 			if (!XEUtils.isEmpty(props.modelValue)) {
-				getUserListByIdList({
+				props.checkedUserListApi({
 					idList: [props.modelValue]
 				}).then(res => {
-					curSelUser.value = !XEUtils.isEmpty(res.data)? res.data[0] : {}
+					curSelUser.value = !XEUtils.isEmpty(res?.data)? res?.data[0] : {}
 				})
 				curSelUserId.value = XEUtils.clone(props.modelValue, true)
 			} else {
@@ -219,10 +220,10 @@
 		// 多选curSelUser初始化值赋值
 		if (!!props.isMultiple) {
 			if (!XEUtils.isEmpty(props.modelValue)) {
-				getUserListByIdList({
+				props.checkedUserListApi({
 					idList: props.modelValue
-				}, props.getUserListByIdListUrl).then(res => {
-					curSelUser.value = !XEUtils.isEmpty(res.data)? res.data : []
+				}).then(res => {
+					curSelUser.value = !XEUtils.isEmpty(res?.data)? res.data : []
 				})
 				curSelUserId.value = XEUtils.clone(props.modelValue, true)
 			} else {
@@ -239,7 +240,7 @@
 		}
 		Object.assign(parameter, userSelectorParam)
 		Object.assign(parameter, searchFormState)
-		userSelector(parameter, props.userSelectorUrl).then(res => {
+		props.userPageApi(parameter).then(res => {
 			if (XEUtils.isEmpty(res?.data?.records)) {
 				return
 			}

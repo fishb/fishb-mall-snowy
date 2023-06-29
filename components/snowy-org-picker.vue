@@ -86,10 +86,6 @@
 
 <script setup>
 	import {
-		orgTree
-	} from '@/api/biz/bizOrgApi'
-
-	import {
 		reactive,
 		ref,
 		getCurrentInstance,
@@ -116,6 +112,13 @@
 		placeholder: {
 			type: String,
 			default: "请选择机构",
+			required: false
+		},
+		orgTreeApi: {
+			type: Function,
+			default: () => {
+				return Promise.resolve()
+			},
 			required: false
 		},
 		isTopLevel: {
@@ -153,14 +156,14 @@
 	})
 
 	const loadData = () => {
-		orgTree().then(res => {
+		props.orgTreeApi().then(res => {
 			if (props.isTopLevel) {
 				// 含有顶级
 				curClickSelOrg.value = [{
 					id: '0',
 					parentId: '-1',
 					name: '顶级',
-					children: res.data
+					children: res?.data
 				}]
 				allClickSelOrg.value = [{
 					id: '-1',
@@ -169,17 +172,17 @@
 						id: '0',
 						parentId: '-1',
 						name: '顶级',
-						children: res.data
+						children: res?.data
 					}]
 				}]
 			} else {
 				// 不含有顶级
-				curClickSelOrg.value = res.data
+				curClickSelOrg.value = res?.data || []
 				allClickSelOrg.value = [{
 					id: '0',
 					parentId: '-1',
 					name: '全部',
-					children: res.data
+					children: res?.data
 				}]
 			}
 

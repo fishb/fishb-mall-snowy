@@ -63,3 +63,12 @@ export function getPositionListByIdList(data) {
 		data: data
 	})
 }
+
+// 根据id集合获取用户集合
+export function userCenterGetUserListByIdList(data) {
+	return request({
+		url: '/sys/userCenter/getUserListByIdList',
+		method: 'post',
+		data: data
+	})
+}
