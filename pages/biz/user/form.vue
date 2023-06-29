@@ -34,7 +34,7 @@
 				</uni-forms-item>
 				<uni-forms-item label="选择组织" name="orgId" required :rules="[{ required: true, errorMessage: '请选择组织' }]">
 					<!-- 多选属性:isMultiple="true" -->
-					<snowy-org-picker v-model="formData.orgId" placeholder="请选择组织" @confirm="orgChange">
+					<snowy-org-picker v-model="formData.orgId" placeholder="请选择组织" @confirm="orgChange" :org-tree-api="selectorApiFunction.orgTreeApi">
 					</snowy-org-picker>
 				</uni-forms-item>
 				<uni-forms-item label="选择职位" name="positionId" required
@@ -43,12 +43,11 @@
 						:rangeData="positionData" placeholder="请选择选择职位" :isBigData="true" @queryCurSelData="positionQueryCurSelData" @scrollToLower="positionScrollToLower"></snowy-sel-picker>
 				</uni-forms-item>
 				<uni-forms-item label="选择主管" name="directorId">
-					<!-- 多选属性:isMultiple="true" -->
+					<!-- 多选属性:isMultiple="true" ref="directorRef" :autoInitData="false" -->
 					<snowy-user-picker 
-						ref="directorRef" 
 						v-model="formData.directorId" 
 						placeholder="请选择主管" 
-						:autoInitData="false"
+						:org-tree-api="selectorApiFunction.orgTreeApi"
 						:user-page-api="selectorApiFunction.userPageApi"
 						:checked-user-list-api="selectorApiFunction.checkedUserListApi">
 					</snowy-user-picker>
@@ -147,7 +146,8 @@
 		userDetail,
 		userPositionSelector,
 		submitForm,
-		userSelector
+		userSelector,
+		userOrgTreeSelector
 	} from '@/api/biz/bizUserApi.js'
 	import {
 		getPositionListByIdList,
@@ -204,10 +204,15 @@
 	// 职位
 	const positionJsonRef = ref()
 	
-	const directorRef = ref()
+	// const directorRef = ref()
 	
 	// 传递用户选择器需要的API
 	const selectorApiFunction = {
+		orgTreeApi: (param) => {
+			return userOrgTreeSelector(param).then((res) => {
+				return Promise.resolve(res)
+			})
+		},
 		userPageApi: (param) => {
 			return userSelector(param).then((res) => {
 				return Promise.resolve(res)
@@ -256,7 +261,7 @@
 			}
 			positionParam.orgId = formData.value.orgId
 			loadPositionSelector(true)
-			directorRef.value.loadUserData(true, {orgId: formData.value.orgId})
+			// directorRef.value.loadUserData(true, {orgId: formData.value.orgId})
 		})
 	})
 	// 机构
@@ -268,8 +273,8 @@
 		positionParam.orgId = curSelOrgId
 		loadPositionSelector(true)
 		// directorRef.value.loadOrgTree()
-		formData.value.directorId = null
-		directorRef.value.loadUserData(true, {orgId: curSelOrgId})
+		// formData.value.directorId = null
+		// directorRef.value.loadUserData(true, {orgId: curSelOrgId})
 	}
 	// 根据职位id进行查询
 	const positionQueryCurSelData = (curSelDataKey, callback) => {

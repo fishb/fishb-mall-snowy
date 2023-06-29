@@ -5,12 +5,13 @@
 			labelWidth="50px">
 			<uni-forms-item label="机构" name="orgId" required :rules="[{ required: true, errorMessage: '请选择机构' }]">
 				<!-- 多选属性:isMultiple="true" -->
-				<snowy-org-picker v-model="item.orgId" placeholder="请选择机构" @confirm="(data)=>{orgChange(data,index)}">
+				<snowy-org-picker v-model="item.orgId" placeholder="请选择机构" @confirm="(data)=>{orgChange(data,index)}" :org-tree-api="selectorApiFunction.orgTreeApi">
 				</snowy-org-picker>
 			</uni-forms-item>
 			<uni-forms-item label="职位" name="positionId" required :rules="[{ required: true, errorMessage: '请选择职位' }]" >
-				<snowy-sel-picker 
-					:ref="`positionRef${ index }`" 
+				<!--   -->
+				<snowy-sel-picker
+					:ref="`positionRef${ index }`"
 					:map="{key: 'id', label: 'name'}" 
 					v-model="item.positionId"
 					:rangeData="positionDataList[index]" 
@@ -20,12 +21,12 @@
 					@queryCurSelData="positionQueryCurSelData"></snowy-sel-picker>
 			</uni-forms-item>
 			<uni-forms-item label="主管" name="directorId">
-				<!-- 多选属性:isMultiple="true" -->
+				<!-- 多选属性:isMultiple="true"  :autoInitData="false" -->
 				<snowy-user-picker 
-					:ref="`directorRef${ index }`" 
+					:ref="`directorRef${ index }`"
 					v-model="item.directorId" 
 					placeholder="请选择主管" 
-					:autoInitData="false"
+					:org-tree-api="selectorApiFunction.orgTreeApi"
 					:user-page-api="selectorApiFunction.userPageApi"
 					:checked-user-list-api="selectorApiFunction.checkedUserListApi">
 				</snowy-user-picker>
@@ -41,7 +42,8 @@
 	import SnowySelPicker from '@/components/snowy-sel-picker.vue'
 	import {
 		userPositionSelector,
-		userSelector
+		userSelector,
+		userOrgTreeSelector
 	} from '@/api/biz/bizUserApi'
 	import {
 		getPositionListByIdList,
@@ -78,6 +80,11 @@
 	const dataList = ref([])
 	// 传递用户选择器需要的API
 	const selectorApiFunction = {
+		orgTreeApi: (param) => {
+			return userOrgTreeSelector(param).then((res) => {
+				return Promise.resolve(res)
+			})
+		},
 		userPageApi: (param) => {
 			return userSelector(param).then((data) => {
 				return Promise.resolve(data)
@@ -116,7 +123,7 @@
 			nextTick(() => {
 				proxy.$refs[`positionRef${ index }`][0].initData()
 				proxy.$refs[`directorRef${ index }`][0].initData()
-				proxy.$refs[`directorRef${ index }`][0].loadUserData(true, {orgId: item.orgId})
+				// proxy.$refs[`directorRef${ index }`][0].loadUserData(true, {orgId: item.orgId})
 			})
 		})
 	}
@@ -131,8 +138,8 @@
 		positionParamList.value[index].orgId = curSelOrgId
 		loadPositionSelector(true, index)
 		// 重置用户数据
-		dataList.value[index].directorId = null
-		proxy.$refs[`directorRef${ index }`][0].loadUserData(true, {orgId: curSelOrgId})
+		// dataList.value[index].directorId = null
+		// proxy.$refs[`directorRef${ index }`][0].loadUserData(true, {orgId: curSelOrgId})
 	}
 	// 根据职位id进行查询
 	const positionQueryCurSelData = (curSelDataKey, callback) => {
