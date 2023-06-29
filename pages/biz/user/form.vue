@@ -42,10 +42,15 @@
 					<snowy-sel-picker :map="{key: 'id', label: 'name'}" v-model="formData.positionId"
 						:rangeData="positionData" placeholder="请选择选择职位" :isBigData="true" @queryCurSelData="positionQueryCurSelData" @scrollToLower="positionScrollToLower"></snowy-sel-picker>
 				</uni-forms-item>
-
 				<uni-forms-item label="选择主管" name="directorId">
 					<!-- 多选属性:isMultiple="true" -->
-					<snowy-user-picker ref="directorRef" v-model="formData.directorId" placeholder="请选择主管" :autoInitData="false">
+					<snowy-user-picker 
+						ref="directorRef" 
+						v-model="formData.directorId" 
+						placeholder="请选择主管" 
+						:autoInitData="false"
+						:user-page-api="selectorApiFunction.userPageApi"
+						:checked-user-list-api="selectorApiFunction.checkedUserListApi">
 					</snowy-user-picker>
 				</uni-forms-item>
 				<uni-forms-item label="员工编号" name="empNo">
@@ -58,7 +63,6 @@
 					<uni-datetime-picker type="date" return-type="string" format="YYYY-MM-DD"
 						v-model="formData.entryDate" />
 				</uni-forms-item>
-
 				<!-- required :rules="[{ required: true, errorMessage: '请添加任职信息' }]" -->
 				<uni-forms-item label="任职信息" name="positionJson">
 					<formPosition v-model="formData.positionJson" ref="positionJsonRef"></formPosition>
@@ -71,7 +75,6 @@
 					<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.nation"
 						:rangeData="nationOptions" placeholder="请选择民族"></snowy-sel-picker>
 				</uni-forms-item>
-
 				<uni-forms-item label="籍贯" name="nativePlace">
 					<uni-easyinput v-model="formData.nativePlace" placeholder="请输入籍贯"></uni-easyinput>
 				</uni-forms-item>
@@ -144,9 +147,11 @@
 		userDetail,
 		userPositionSelector,
 		submitForm,
+		userSelector
 	} from '@/api/biz/bizUserApi.js'
 	import {
-		getPositionListByIdList
+		getPositionListByIdList,
+		userCenterGetUserListByIdList
 	} from '@/api/sys/userCenterApi.js'
 	import SnowyOrgPicker from '@/components/snowy-org-picker.vue'
 	import SnowyUserPicker from '@/components/snowy-user-picker.vue'
@@ -201,11 +206,26 @@
 	
 	const directorRef = ref()
 	
+	// 传递用户选择器需要的API
+	const selectorApiFunction = {
+		userPageApi: (param) => {
+			return userSelector(param).then((data) => {
+				return Promise.resolve(data)
+			})
+		},
+		checkedUserListApi: (param) => {
+			return userCenterGetUserListByIdList(param).then((data) => {
+				return Promise.resolve(data)
+			})
+		}
+	}
+	
 	// 职位参数
 	const positionParam = reactive({
 		current: 1,
 		size: 10
 	})
+	
 	// 职位分页加载
 	const loadPositionSelector = (isReset) => {
 		if (isReset) {
