@@ -209,13 +209,13 @@
 	// 传递用户选择器需要的API
 	const selectorApiFunction = {
 		userPageApi: (param) => {
-			return userSelector(param).then((data) => {
-				return Promise.resolve(data)
+			return userSelector(param).then((res) => {
+				return Promise.resolve(res)
 			})
 		},
 		checkedUserListApi: (param) => {
-			return userCenterGetUserListByIdList(param).then((data) => {
-				return Promise.resolve(data)
+			return userCenterGetUserListByIdList(param).then((res) => {
+				return Promise.resolve(res)
 			})
 		}
 	}

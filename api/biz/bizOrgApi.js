@@ -44,3 +44,21 @@ export function orgDetail(data) {
 		data: data
 	})
 }
+
+// 获取机构树选择器
+export function orgTreeSelector(data) {
+	return request({
+		url: '/biz/org/orgTreeSelector',
+		method: 'get',
+		data: data
+	})
+}
+
+// 获取人员选择器
+export function orgUserSelector(data) {
+	return request({
+		url: '/biz/org/userSelector',
+		method: 'get',
+		data: data
+	})
+}

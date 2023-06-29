@@ -3,7 +3,7 @@
 		<uni-forms ref="formRef" :model="formData" label-position="top" labelWidth="75px">
 			<uni-forms-item label="所属机构" name="orgId" required :rules="[{ required: true, errorMessage: '请选择所属机构' }]">
 				<!-- :isTopLevel="true" -->
-				<snowy-org-picker v-model="formData.orgId" placeholder="请选择所属机构">
+				<snowy-org-picker v-model="formData.orgId" placeholder="请选择所属机构" :org-tree-api="selectorApiFunction.orgTreeApi">
 				</snowy-org-picker>
 			</uni-forms-item>
 			<uni-forms-item label="岗位名称" name="name" required :rules="[{ required: true, errorMessage: '请输入岗位名称' }]">
@@ -40,11 +40,21 @@
 		onPullDownRefresh,
 		onReachBottom
 	} from "@dcloudio/uni-app"
+	import {
+		orgTree
+	} from '@/api/biz/bizOrgApi'
 	
 	const formRef = ref()
 	let formData = ref({
 		sortCode: 99
 	})
+	const selectorApiFunction = {
+		orgTreeApi: (param) => {
+			return orgTree(param).then((res) => {
+				return Promise.resolve(res)
+			})
+		}
+	}
 	const positionCategoryOptions = tool.dictList('POSITION_CATEGORY')
 	// 加載
 	onLoad((option) => {
