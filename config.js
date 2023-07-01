@@ -68,6 +68,7 @@ export default {
 		'/',
 		'/pages/config/index',
 		'/pages/config/form',
+		'/pages/common/webview/index',
 		// '/pages/home/index',
 	],
 	// 有token访问退回页面

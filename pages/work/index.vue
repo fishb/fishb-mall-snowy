@@ -118,9 +118,23 @@
 				fail(error) {
 					proxy.$modal.alert('请将【' + item.title + '】的移动端路由地址(' + item.path +
 						')与uniapp的page.json的path路径对应！')
-					console.log(error)
+					console.error(error)
 				}
 			})
+		}else if (item.menuType == 'IFRAME') {
+			uni.navigateTo({
+				url: `/pages/common/webview/index?url=${item.path}`,
+			})
+		}else if (item.menuType == 'LINK') {
+			// #ifdef H5
+			self.location.href = item.path
+			// #endif
+			
+			// #ifndef H5
+			uni.navigateTo({
+				url: `/pages/common/webview/index?url=${item.path}`,
+			})
+			// #endif
 		}
 	}
 </script>
@@ -130,7 +144,6 @@
 		font-size: 26rpx;
 		margin-top: 10rpx;
 	}
-
 	.grid-item-box {
 		flex: 1;
 		/* #ifndef APP-NVUE */
@@ -139,6 +152,6 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		padding: 15px 0;
+		padding: 15upx 0;
 	}
 </style>
