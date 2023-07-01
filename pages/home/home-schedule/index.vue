@@ -38,7 +38,7 @@
 	import AddPop from './add-pop.vue'
 
 	const scheduleList = ref([])
-	const scheduleDate = ref(XEUtils.toDateString(new Date(), 'YYYY-MM-DD'))
+	const scheduleDate = ref(XEUtils.toDateString(new Date(), 'yyyy-MM-dd'))
 	const addPopRef = ref()
 
 	const seleScheduleList = () => {
