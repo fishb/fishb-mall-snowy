@@ -1,6 +1,7 @@
 import store from '@/store'
 import config from '@/config'
 import XEUtils from 'xe-utils'
+import modal from '@/plugins/modal.js'
 
 const TokenKey = 'App-Token'
 
@@ -18,19 +19,12 @@ export function removeToken() {
 
 // 页面跳转 校验权限
 export function checkPermission(path) {
-	// console.log(path)
-	// console.log("token", !!getToken())
-	// console.log("匿名白名單", !!config.NO_TOKEN_WHITE_LIST.includes(path))
-	// console.log("登录白名單", !!config.HAS_TOKEN_WHITE_LIST.includes(path))
 	if (!getToken()) {
 		// 没有token
 		if (config.NO_TOKEN_WHITE_LIST.includes(path)) {
 			return true
 		} else {
-			uni.showToast({
-				title: "页面【" + path + "】需要进行登录，才能进行访问！",
-				icon: 'none'
-			})
+			modal.alert("页面【" + path + "】需要进行登录，才能进行访问！")
 			uni.reLaunch({
 				url: config.NO_TOKEN_BACK_URL
 			})
@@ -56,14 +50,10 @@ export function checkPermission(path) {
 					}
 				}
 			})
-			// console.log("是否允许访问：",isVisit)
 			if (isVisit) {
 				return true
 			} else {
-				uni.showToast({
-					title: "页面【" + path + "】需要进行授权，才能进行访问！",
-					icon: 'none'
-				})
+				modal.alert("页面【" + path + "】需要进行授权，才能进行访问！")
 				// 无权访问
 				uni.reLaunch({
 					url: config.HAS_TOKEN_BACK_URL
