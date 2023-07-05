@@ -19,7 +19,7 @@
 		</uni-list>
 
 		<!-- 更多操作 @handleOk=""-->
-		<morePopup ref="morePopupRef"></morePopup>
+		<more ref="moreRef"></more>
 	</view>
 </template>
 
@@ -32,7 +32,7 @@
 		computed
 	} from "vue"
 
-	import morePopup from './more-popup.vue'
+	import more from './more.vue'
 
 	// 快捷用户菜单
 	const homeConfigs = computed(() => {
@@ -43,9 +43,9 @@
 		item.isShow = e.detail.value
 		store.commit("SET_homeConfigs", homeConfigs.value)
 	}
-	const morePopupRef = ref()
+	const moreRef = ref()
 	const moreOpt = (item, index) => {
-		morePopupRef.value.open(homeConfigs.value, index)
+    moreRef.value.open(homeConfigs.value, index)
 	}
 </script>
 
