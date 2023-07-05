@@ -11,9 +11,9 @@
 			<uni-list-item v-for="(item, index) in curSelOrg" :key="index" :title="item.name"
 				:showArrow="item.children? true : false" :clickable="true" @click="clickOrg(item, index)">
 			</uni-list-item>
-			
+
 			<uni-list-item v-for="(item, index) in positionData" :key="index" :title="item.name" :clickable="true"
-				@click="morePopupRef.open(item)">
+				@click="$refs.moreRef.open(item)">
 				<template v-slot:header>
 					<view v-if="item.category == 'HIGH'" style="width: 42px; height: 42px;">
 						<snowy-icon backgroundColor="#f3a73f" type="vip-filled" size="20" color="#FFFFFF"></snowy-icon>
@@ -32,7 +32,7 @@
 					</view>
 				</template>
 				<template v-slot:footer>
-					
+
 				</template>
 			</uni-list-item>
 		</uni-list>
@@ -47,7 +47,7 @@
 			iconColor: '#fff'
 		}" horizontal="right" vertical="bottom" direction="horizontal" @fabClick="add"></uni-fab>
 	<!-- 更多操作 -->
-	<morePopup ref="morePopupRef" @handleOk="loadData(true)"></morePopup>
+	<more ref="moreRef" @handleOk="loadData(true)"></more>
 </template>
 
 <script setup>
@@ -69,17 +69,16 @@
 		onPullDownRefresh,
 		onReachBottom
 	} from "@dcloudio/uni-app"
-	import morePopup from '@/pages/biz/position/more-popup.vue'
+	import more from '@/pages/biz/position/more.vue'
 	import SnowyIcon from '@/components/snowy-icon.vue'
 	import XEUtils from 'xe-utils'
 	import SnowyEmpty from "@/components/snowy-empty.vue"
-	
-	const morePopupRef = ref()
+
 	// 所有选择的机构
 	const allSelOrg = ref([])
 	// 当前选择的机构
 	const curSelOrg = ref([])
-	
+
 	orgTree().then(res => {
 		curSelOrg.value = res?.data || []
 		allSelOrg.value.push({
@@ -88,7 +87,7 @@
 			children: res?.data || []
 		})
 	})
-	
+
 	const searchFormState = reactive({})
 	const parameter = reactive({
 		current: 1,
@@ -168,20 +167,20 @@
 		margin: 15upx;
 		border-radius: 5upx;
 		.biz-list-body {
-			display: flex; 
-			flex-direction: column; 
-			flex: 1; 
-			overflow: hidden; 
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			overflow: hidden;
 			padding: 2px 0;
 			.biz-list-body-name {
 				flex: 1;
-				font-size: 14px; 
+				font-size: 14px;
 				margin: 0 10px;
 			}
 			.biz-list-body-category {
 				flex: 1;
-				font-size: 12px; 
-				margin: 5px 10px; 
+				font-size: 12px;
+				margin: 5px 10px;
 				color:#999;
 			}
 		}

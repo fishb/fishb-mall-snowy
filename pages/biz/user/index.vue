@@ -30,11 +30,11 @@
 			iconColor: '#fff'
 		}" horizontal="right" vertical="bottom" direction="horizontal" @fabClick="add"></uni-fab>
 	<!-- 更多操作 -->
-	<morePopup ref="morePopupRef" @handleOk="loadData(true)"></morePopup>
+	<more ref="moreRef" @handleOk="loadData(true)"></more>
 </template>
 
 <script setup>
-	import morePopup from '@/pages/biz/user/more-popup.vue'
+	import more from '@/pages/biz/user/more.vue'
 	import {
 		orgTree
 	} from '@/api/biz/bizOrgApi'
@@ -62,9 +62,9 @@
 		})
 	}
 	// 更多操作
-	const morePopupRef = ref()
+	const moreRef = ref()
 	const moreClick = (record) => {
-		morePopupRef.value.open(record)
+    moreRef.value.open(record)
 	}
 
 	// 所有选择的机构

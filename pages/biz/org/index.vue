@@ -10,7 +10,7 @@
 			<uni-list-item v-for="(item, index) in curSelOrg" :key="index">
 				<!-- 名称 -->
 				<template v-slot:body>
-					<text class="org-list-name" @click="morePopupRef.open(item)">{{item.name}}</text>
+					<text class="org-list-name" @click="moreRef.open(item)">{{item.name}}</text>
 				</template>
 				<!-- 右侧icon -->
 				<template v-slot:footer>
@@ -30,7 +30,7 @@
 			iconColor: '#fff'
 		}" horizontal="right" vertical="bottom" direction="horizontal" @fabClick="add"></uni-fab>
 	<!-- 更多操作 -->
-	<morePopup ref="morePopupRef" @handleOk="loadData()"></morePopup>
+	<more ref="moreRef" @handleOk="loadData()"></more>
 </template>
 
 <script setup>
@@ -51,9 +51,9 @@
 		onReachBottom
 	} from "@dcloudio/uni-app"
 
-	import morePopup from '@/pages/biz/org/more-popup.vue'
+	import more from '@/pages/biz/org/more.vue'
 
-	const morePopupRef = ref()
+	const moreRef = ref()
 
 	// 所有选择的机构
 	const allSelOrg = ref([])
