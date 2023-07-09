@@ -2,15 +2,13 @@
 	<view>
 		<view class="search-container">
 			<uni-row>
-				<view  class="main">
+				<view class="main">
 					<uni-col :span="22">
 						<uni-search-bar placeholder="请输入环境标题" v-model="searchName" cancelButton="none"></uni-search-bar>
 					</uni-col>
 					<uni-col :span="2">
 						<view class="reset" @click="resetEnv">
-							<text>
-								重置\n环境
-							</text>
+							<text> 重置\n环境 </text>
 						</view>
 					</uni-col>
 				</view>
@@ -37,14 +35,12 @@
 					<uni-col :span="18">
 						<view>{{key}}</view>
 					</uni-col>
-
 					<uni-col :span="6">
 						<view>baseUrl：</view>
 					</uni-col>
 					<uni-col :span="18">
 						<view>{{item.baseUrl}}</view>
 					</uni-col>
-					
 					<uni-col :span="6">
 						<view>tenant：</view>
 					</uni-col>
@@ -54,9 +50,7 @@
 				</uni-row>
 			</view>
 		</uni-card>
-
 		<button class="conf-btn-login" type="primary" @click="loginBtn">确认</button>
-
 		<!-- 新增悬浮按钮 -->
 		<uni-fab :pattern="{
 				color: '#7A7E83',
@@ -69,29 +63,19 @@
 		<morePopup ref="morePopupRef"></morePopup>
 	</view>
 </template>
-
 <script setup>
-	import {
-		ref,
-		reactive,
-		onMounted,
-		getCurrentInstance,
-		computed
-	} from 'vue'
+	import { ref, reactive, onMounted, getCurrentInstance, computed } from 'vue'
 	import store from '@/store'
 	import morePopup from './more-popup.vue'
 	import XEUtils from "xe-utils"
-	import env from '@/env.js'
-
+	import env from '@/env'
 	const searchName = ref('')
-
 	const envKey = computed(() => {
 		return store.getters.envKey
 	})
 	const allEnv = computed(() => {
 		return store.getters.allEnv
 	})
-
 	// 过滤
 	const filterEnv = (allEnv) => {
 		const obj = {}
@@ -107,15 +91,14 @@
 		store.commit('SET_envKey', env.DEFAULT_ENV_KEY)
 		store.commit('SET_allEnv', env.DEFAULT_ALL_ENV)
 	}
-
 	// 切换
 	const envChange = (evt) => {
 		// 设置当前环境key
 		store.commit('SET_envKey', evt.detail.value)
 	}
-	const loginBtn = ()=>{
+	const loginBtn = () => {
 		uni.reLaunch({
-			url:'/pages/login'
+			url: '/pages/login'
 		})
 	}
 	// 新增
@@ -125,22 +108,25 @@
 		})
 	}
 </script>
-
 <style lang="scss" scoped>
 	page {
 		background-color: #ffffff;
 	}
-	.search-container{
+
+	.search-container {
 		margin: 15upx;
-		.main{
-			display: flex; 
-			align-items: center; 
+
+		.main {
+			display: flex;
+			align-items: center;
 			justify-content: center;
-			.reset{
+
+			.reset {
 				color: #2979ff;
 			}
 		}
 	}
+
 	.conf-btn-login {
 		margin: 50upx 25upx;
 		background-color: $uni-primary;

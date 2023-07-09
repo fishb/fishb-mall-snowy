@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-
 // 获取人员分页
 export function userPage(data) {
 	return request({
@@ -8,7 +7,6 @@ export function userPage(data) {
 		data: data
 	})
 }
-
 // 提交表单 add为false时为编辑，默认为新增
 export function submitForm(data, add = true) {
 	return request({
@@ -17,7 +15,6 @@ export function submitForm(data, add = true) {
 		data: data
 	})
 }
-
 // 删除人员
 export function userDelete(data) {
 	return request({
@@ -26,7 +23,6 @@ export function userDelete(data) {
 		data: data
 	})
 }
-
 // 获取人员详情
 export function userDetail(data) {
 	return request({
@@ -35,7 +31,6 @@ export function userDetail(data) {
 		data: data
 	})
 }
-
 // 禁用人员
 export function userDisableUser(data) {
 	return request({
@@ -44,7 +39,6 @@ export function userDisableUser(data) {
 		data: data
 	})
 }
-
 // 启用人员
 export function userEnableUser(data) {
 	return request({
@@ -53,7 +47,6 @@ export function userEnableUser(data) {
 		data: data
 	})
 }
-
 // 重置人员密码
 export function userResetPassword(data) {
 	return request({
@@ -62,7 +55,6 @@ export function userResetPassword(data) {
 		data: data
 	})
 }
-
 // 获取组织选择器
 export function userOrgTreeSelector(data) {
 	return request({
@@ -71,7 +63,6 @@ export function userOrgTreeSelector(data) {
 		data: data
 	})
 }
-
 // 获取职位选择器
 export function userPositionSelector(data) {
 	return request({
@@ -80,7 +71,6 @@ export function userPositionSelector(data) {
 		data: data
 	})
 }
-
 // 获取角色选择器
 export function userRoleSelector(data) {
 	return request({
@@ -89,7 +79,6 @@ export function userRoleSelector(data) {
 		data: data
 	})
 }
-
 // 获取人员选择器
 export function userSelector(data) {
 	return request({
@@ -98,7 +87,6 @@ export function userSelector(data) {
 		data: data
 	})
 }
-
 // 人员拥有角色
 export function userOwnRole(data) {
 	return request({
@@ -107,7 +95,6 @@ export function userOwnRole(data) {
 		data: data
 	})
 }
-
 // 给人员授权角色
 export function grantRole(data) {
 	return request({

@@ -12,22 +12,11 @@
 		</view>
 	</uni-popup>
 </template>
-
 <script setup>
-	import {
-		reactive,
-		ref,
-		getCurrentInstance
-	} from "vue";
-	import {
-		orgDelete
-	} from '@/api/biz/bizOrgApi.js'
-	import modal from '@/plugins/modal.js'
-
+	import { reactive, ref, getCurrentInstance } from "vue"
+	import { orgDelete } from '@/api/biz/bizOrgApi'
+	import modal from '@/plugins/modal'
 	const emits = defineEmits(['handleOk'])
-
-	// 删除弹出ref
-	const delPopRef = ref()
 	// 弹出ref
 	const popupRef = ref()
 	// 打开
@@ -62,14 +51,15 @@
 		open
 	})
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 	.container {
 		margin: 15upx;
 		border-radius: 5upx;
 		padding: 5upx;
 		background-color: $uni-white;
+
 		.item {
-			text-align:center;
+			text-align: center;
 		}
 	}
 </style>

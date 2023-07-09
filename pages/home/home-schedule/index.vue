@@ -2,9 +2,7 @@
 	<view>
 		<uni-section :title="`日程`" type="square"></uni-section>
 		<uni-calendar :insert="true" :lunar="true" @change="change" :showMonth="false" />
-		<view class="add-schedule" @tap="add">
-			新增
-		</view>
+		<view class="add-schedule" @tap="add"> 新增 </view>
 		<uni-list :border="false">
 			<uni-list-item :show-extra-icon="true" :extra-icon="{
 					color: '#2979ff',
@@ -22,25 +20,14 @@
 		<add-pop ref="addPopRef" @ok="seleScheduleList()"></add-pop>
 	</view>
 </template>
-
 <script setup>
-	import {
-		reactive,
-		ref,
-		getCurrentInstance,
-		computed
-	} from "vue";
-	import {
-		indexScheduleList,
-		indexScheduleDeleteSchedule
-	} from '@/api/sys/indexApi'
+	import { reactive, ref, getCurrentInstance, computed } from "vue"
+	import { indexScheduleList, indexScheduleDeleteSchedule } from '@/api/sys/indexApi'
 	import XEUtils from 'xe-utils'
 	import AddPop from './add-pop.vue'
-
 	const scheduleList = ref([])
 	const scheduleDate = ref(XEUtils.toDateString(new Date(), 'yyyy-MM-dd'))
 	const addPopRef = ref()
-
 	const seleScheduleList = () => {
 		indexScheduleList({
 			scheduleDate: scheduleDate.value
@@ -49,16 +36,13 @@
 		})
 	}
 	seleScheduleList()
-
 	const change = (e) => {
 		scheduleDate.value = e.fulldate
 		seleScheduleList()
 	}
-
 	const add = () => {
 		addPopRef.value.onOpen(scheduleDate)
 	}
-
 	const del = (schedule) => {
 		const params = [{
 			id: schedule.id
@@ -68,8 +52,7 @@
 		})
 	}
 </script>
-
-<style lang="scss">
+<style lang="scss" scoped>
 	.add-schedule {
 		cursor: pointer;
 		margin: 25upx;

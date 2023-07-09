@@ -9,7 +9,6 @@ import store from '@/store'
  * 想要判断 button1 或 button2 的权限，可以写成：hasPerm(['button1', 'button2' ])
  * 想要判断 button1 与 button2 的权限，可以写成：hasPerm(['button1', 'button2' ], 'and')
  */
-
 export function hasPerm(data, rule = 'or') {
 	if (!data) {
 		return false

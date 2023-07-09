@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-
 // 添加当前用户日程
 export function indexScheduleAdd(data) {
 	return request({
@@ -8,7 +7,6 @@ export function indexScheduleAdd(data) {
 		data: data
 	})
 }
-
 // 删除日程
 export function indexScheduleDeleteSchedule(data) {
 	return request({
@@ -17,7 +15,6 @@ export function indexScheduleDeleteSchedule(data) {
 		data: data
 	})
 }
-
 // 获取当前用户日程列表
 export function indexScheduleList(data) {
 	return request({
@@ -26,7 +23,6 @@ export function indexScheduleList(data) {
 		data: data
 	})
 }
-
 // 获取当前用户站内信列表
 export function indexMessageList(data) {
 	return request({
@@ -35,7 +31,6 @@ export function indexMessageList(data) {
 		data: data
 	})
 }
-
 // 获取站内信详情
 export function indexMessageDetail(data) {
 	return request({
@@ -44,7 +39,6 @@ export function indexMessageDetail(data) {
 		data: data
 	})
 }
-
 // 获取当前用户访问日志列表
 export function indexVisLogList(data) {
 	return request({
@@ -53,7 +47,6 @@ export function indexVisLogList(data) {
 		data: data
 	})
 }
-
 // 获取当前用户操作日志列表
 export function indexOpLogList(data) {
 	return request({

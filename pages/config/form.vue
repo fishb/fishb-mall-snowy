@@ -17,33 +17,20 @@
 		<button class="btn-sub" type="primary" @click="submit">提交</button>
 	</view>
 </template>
-
 <script setup>
-	import {
-		nextTick,
-		reactive,
-		ref
-	} from "vue"
+	import { nextTick, reactive, ref } from "vue"
 	import store from '@/store'
 	import XEUtils from "xe-utils"
-	import {
-		onLoad,
-		onShow,
-		onReady,
-		onPullDownRefresh,
-		onReachBottom
-	} from "@dcloudio/uni-app"
+	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	const formRef = ref()
 	let formData = ref({})
-	
 	// 加載
 	onLoad((option) => {
-		if(!option.record){
+		if (!option.record) {
 			return
 		}
 		formData.value = JSON.parse(decodeURIComponent(option.record));
 	})
-	
 	const submit = () => {
 		formRef.value.validate().then(res => {
 			let obj = XEUtils.clone(store.getters.allEnv, true)
@@ -56,17 +43,16 @@
 			uni.navigateBack({
 				delta: 1
 			})
-			
 		})
 	}
 </script>
-
-<style lang="scss">
+<style lang="scss" scoped>
 	.container {
 		margin: 15upx;
 		border-radius: 5upx;
 		padding: 25upx;
 		background-color: $uni-white;
+
 		.btn-sub {
 			background-color: $uni-primary;
 		}

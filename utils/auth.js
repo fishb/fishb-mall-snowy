@@ -2,21 +2,16 @@ import store from '@/store'
 import config from '@/config'
 import XEUtils from 'xe-utils'
 import modal from '@/plugins/modal.js'
-
 const TokenKey = 'App-Token'
-
 export function getToken() {
 	return uni.getStorageSync(TokenKey)
 }
-
 export function setToken(token) {
 	return uni.setStorageSync(TokenKey, token)
 }
-
 export function removeToken() {
 	return uni.removeStorageSync(TokenKey)
 }
-
 // 页面跳转 校验权限
 export function checkPermission(path) {
 	if (!getToken()) {

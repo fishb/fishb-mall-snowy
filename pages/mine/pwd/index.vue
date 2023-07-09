@@ -14,20 +14,11 @@
 		</uni-forms>
 	</view>
 </template>
-
 <script setup>
-	import {
-		userUpdatePassword
-	} from "@/api/sys/userCenterApi.js"
-	import {
-		onReady
-	} from '@dcloudio/uni-app'
-	import {
-		reactive,
-		ref
-	} from 'vue'
-	import modal from "../../../plugins/modal";
-
+	import { userUpdatePassword } from "@/api/sys/userCenterApi"
+	import { onReady } from '@dcloudio/uni-app'
+	import { reactive, ref } from 'vue'
+	import modal from "@/plugins/modal";
 	const form = ref()
 	const user = reactive({
 		oldPassword: undefined,
@@ -43,15 +34,13 @@
 		},
 		newPassword: {
 			rules: [{
-					required: true,
-					errorMessage: '新密码不能为空',
-				},
-				{
-					minLength: 6,
-					maxLength: 20,
-					errorMessage: '长度在 6 到 20 个字符'
-				}
-			]
+				required: true,
+				errorMessage: '新密码不能为空',
+			}, {
+				minLength: 6,
+				maxLength: 20,
+				errorMessage: '长度在 6 到 20 个字符'
+			}]
 		},
 		confirmPassword: {
 			rules: [{
@@ -77,13 +66,13 @@
 		})
 	}
 </script>
-
-<style lang="scss">
+<style lang="scss" scoped>
 	.pwd-container {
 		margin: 15upx;
 		border-radius: 5upx;
 		padding: 25upx;
 		background-color: $uni-white;
+
 		.btn-sub {
 			background-color: $uni-primary;
 		}

@@ -2,7 +2,7 @@
  * 适配App端震动反馈,当发生错误时可以进行震动反馈,提升用户体验
  */
 export default function onFeedTap() {
-	let platform=uni.getSystemInfoSync().platform
+	let platform = uni.getSystemInfoSync().platform
 	// #ifdef APP-PLUS
 	if (platform == "ios") {
 		let UIImpactFeedbackGenerator = plus.ios.importClass('UIImpactFeedbackGenerator');

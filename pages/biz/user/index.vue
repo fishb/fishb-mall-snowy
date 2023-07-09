@@ -3,20 +3,16 @@
 	<uni-search-bar v-model="searchFormState.searchKey" @confirm="loadData(true)"></uni-search-bar>
 	<!-- 自定义面包屑 -->
 	<view class="crumb">
-		<text v-for="(item, index) in allSelOrg" :key="index" class="text-center" @click="clickOrgCru(item, index)"
-			:class="index === (allSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
+		<text v-for="(item, index) in allSelOrg" :key="index" class="text-center" @click="clickOrgCru(item, index)" :class="index === (allSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
 			{{ item.name + (index === (allSelOrg.length-1) ? '' : ' | ') }}
 		</text>
 	</view>
 	<view class="user-list">
 		<uni-list>
 			<!-- 机构 -->
-			<uni-list-item v-for="(item, index) in curSelOrg" :key="index" :title="item.name" :showArrow="true"
-				:clickable="true" @click="clickOrg(item, index)"></uni-list-item>
+			<uni-list-item v-for="(item, index) in curSelOrg" :key="index" :title="item.name" :showArrow="true" :clickable="true" @click="clickOrg(item, index)"></uni-list-item>
 			<!-- 人员 -->
-			<uni-list-chat v-for="(item, index) in userData" :key="index" :title="item.name" :avatar="item.avatar"
-				:note="item.orgName + ' | '+ item.positionName +' | '+item.genderName" :time="item.entryDate"
-				:clickable="true" @click="moreClick(item)">
+			<uni-list-chat v-for="(item, index) in userData" :key="index" :title="item.name" :avatar="item.avatar" :note="item.orgName + ' | '+ item.positionName +' | '+item.genderName" :time="item.entryDate" :clickable="true" @click="moreClick(item)">
 			</uni-list-chat>
 		</uni-list>
 		<snowy-empty v-if="$utils.isEmpty(userData)" />
@@ -32,27 +28,12 @@
 	<!-- 更多操作 -->
 	<more ref="moreRef" @handleOk="loadData(true)"></more>
 </template>
-
 <script setup>
 	import more from '@/pages/biz/user/more.vue'
-	import {
-		orgTree
-	} from '@/api/biz/bizOrgApi'
-	import {
-		userPage
-	} from '@/api/biz/bizUserApi'
-	import {
-		reactive,
-		ref,
-		getCurrentInstance
-	} from "vue"
-	import {
-		onLoad,
-		onShow,
-		onReady,
-		onPullDownRefresh,
-		onReachBottom
-	} from "@dcloudio/uni-app"
+	import { orgTree } from '@/api/biz/bizOrgApi'
+	import { userPage } from '@/api/biz/bizUserApi'
+	import { reactive, ref, getCurrentInstance } from "vue"
+	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	import XEUtils from 'xe-utils'
 	import SnowyEmpty from "@/components/snowy-empty.vue"
 	// 新增悬浮按钮
@@ -64,9 +45,8 @@
 	// 更多操作
 	const moreRef = ref()
 	const moreClick = (record) => {
-    moreRef.value.open(record)
+		moreRef.value.open(record)
 	}
-
 	// 所有选择的机构
 	let allSelOrg = ref([])
 	// 当前选择的机构
@@ -79,7 +59,6 @@
 			children: res.data
 		})
 	})
-
 	// 用户相关逻辑
 	let searchFormState = reactive({})
 	let parameter = reactive({
@@ -87,7 +66,6 @@
 		size: 10
 	})
 	let userData = ref([])
-
 	// 加载数据
 	const loadData = (isReset) => {
 		if (isReset) {
@@ -96,17 +74,16 @@
 		}
 		Object.assign(parameter, searchFormState)
 		userPage(parameter).then(res => {
-			if (XEUtils.isEmpty(res?.data?.records)){
+			if (XEUtils.isEmpty(res?.data?.records)) {
 				return
 			}
 			userData.value = userData.value.concat(res.data.records)
 			parameter.current++
-		}).finally(()=>{
+		}).finally(() => {
 			uni.stopPullDownRefresh()
 		})
 	}
 	loadData(true)
-
 	// 点击机构面包屑
 	const clickOrgCru = (item, index) => {
 		curSelOrg.value = item.children
@@ -121,14 +98,12 @@
 		searchFormState.orgId = item.id
 		loadData(true)
 	}
-
 	// 展示
 	onShow(() => {
 		uni.$once('formBack', (data) => {
 			loadData(true)
 		})
 	})
-
 	// 下拉刷新
 	onPullDownRefresh(() => {
 		loadData(true)
@@ -138,7 +113,7 @@
 		loadData()
 	})
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 	.crumb {
 		margin: 15upx;
 		border-radius: 5upx;
@@ -146,12 +121,14 @@
 		overflow-x: scroll;
 		background-color: white;
 		padding: 20upx;
+
 		.crumb-text {
 			display: inline-block;
 			margin-left: 5px;
 			text-align: center;
 		}
 	}
+
 	.user-list {
 		margin: 15upx;
 		border-radius: 5upx;

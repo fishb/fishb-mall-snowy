@@ -2,29 +2,13 @@ import config from '@/config'
 import storage from '@/utils/storage'
 import constant from '@/utils/constant'
 import smCrypto from '@/utils/smCrypto'
-import {
-	login,
-	getLoginUser,
-	logout
-} from '@/api/login'
-import {
-	userLoginMobileMenu
-} from '@/api/sys/userCenterApi'
-import {
-	getToken,
-	setToken,
-	removeToken
-} from '@/utils/auth'
-
-import {
-	configSysBaseList
-} from '@/api/dev/configApi'
-
-import {
-	dictTree
-} from '@/api/dev/dictApi'
+import { login, getLoginUser, logout } from '@/api/login'
+import { userLoginMobileMenu } from '@/api/sys/userCenterApi'
+import { getToken, setToken, removeToken } from '@/utils/auth'
+import { configSysBaseList } from '@/api/dev/configApi'
+import { dictTree } from '@/api/dev/dictApi'
 import XEUtils from 'xe-utils'
-import env from '@/env.js'
+import env from '@/env'
 export default {
 	state: {
 		// 环境key
@@ -94,7 +78,6 @@ export default {
 			// 配置信息
 			// state.sysBaseConfig = {}
 			// storage.remove(constant.sysBaseConfig)
-
 			// storage.clean()
 		},
 	},
@@ -135,7 +118,6 @@ export default {
 				})
 			})
 		},
-
 		// 获取登錄用戶菜單
 		GetUserLoginMenu({
 			commit,
@@ -151,7 +133,6 @@ export default {
 				})
 			})
 		},
-
 		// 获取数据字典
 		GetDictTypeTreeData({
 			commit,
@@ -168,9 +149,7 @@ export default {
 					reject(error)
 				})
 			})
-
 		},
-
 		// 获取系统基础配置
 		GetSysBaseConfig({
 			commit,
@@ -193,7 +172,6 @@ export default {
 				reject(error)
 			})
 		},
-		
 		// 退出系统
 		LogOut({
 			commit,
@@ -210,6 +188,5 @@ export default {
 				})
 			})
 		}
-
 	}
 }

@@ -14,8 +14,7 @@
 				<uni-data-checkbox v-model="formData.gender" :localdata="genderOptions" />
 			</uni-forms-item>
 			<uni-forms-item label="生日" name="birthday">
-				<uni-datetime-picker type="date" return-type="string" format="YYYY-MM-DD"
-					v-model="formData.birthday" />
+				<uni-datetime-picker type="date" return-type="string" format="YYYY-MM-DD" v-model="formData.birthday" />
 			</uni-forms-item>
 			<uni-forms-item label="邮箱" name="email">
 				<uni-easyinput v-model="formData.email" placeholder="请输入邮箱"></uni-easyinput>
@@ -24,25 +23,16 @@
 		<button class="btn-sub" type="primary" @click="submit">提交</button>
 	</view>
 </template>
-
 <script setup>
 	import { userUpdateUserInfo } from '@/api/sys/userCenterApi'
-	import {
-		reactive,
-		ref
-	} from "vue";
-	import {
-		onLoad,
-		onReady
-	} from '@dcloudio/uni-app'
-	import store from '@/store/index.js'
+	import { reactive, ref } from "vue"
+	import { onLoad, onReady } from '@dcloudio/uni-app'
+	import store from '@/store/index'
 	import tool from '@/plugins/tool'
 	import modal from '@/plugins/modal'
 	import XEUtils from 'xe-utils'
-
 	import storage from '@/utils/storage'
 	import constant from '@/utils/constant'
-
 	const formRef = ref()
 	const formData = ref(XEUtils.clone(store.getters.userInfo, true))
 	const rules = reactive({
@@ -64,7 +54,7 @@
 	// 提交
 	const submit = () => {
 		formRef.value.validate().then(res => {
-			userUpdateUserInfo(formData.value).then(response =>{
+			userUpdateUserInfo(formData.value).then(response => {
 				// 更新缓存
 				store.commit('SET_userInfo', formData.value)
 				modal.msgSuccess('修改成功')
@@ -72,13 +62,13 @@
 		})
 	}
 </script>
-
-<style lang="scss">
+<style lang="scss" scoped>
 	.edit-container {
 		margin: 15upx;
 		border-radius: 5upx;
 		padding: 25upx;
 		background-color: $uni-white;
+
 		.btn-sub {
 			background-color: $uni-primary;
 		}

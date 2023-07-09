@@ -38,7 +38,6 @@
 				</uni-row>
 			</view>
 		</view>
-		
 		<view class="container">
 			<uni-row>
 				<uni-col :span="24">
@@ -63,27 +62,16 @@
 		</view>
 	</view>
 </template>
-
 <script setup>
-	import {
-		nextTick,
-		reactive,
-		ref
-	} from "vue"
-	import tool from '@/plugins/tool.js'
+	import { nextTick, reactive, ref } from "vue"
+	import tool from '@/plugins/tool'
 	import XEUtils from 'xe-utils'
-	import { userLoginUnreadMessageDetail } from '@/api/sys/userCenterApi.js'
-	import {
-		onLoad,
-		onShow,
-		onReady,
-		onPullDownRefresh,
-		onReachBottom
-	} from "@dcloudio/uni-app"
+	import { userLoginUnreadMessageDetail } from '@/api/sys/userCenterApi'
+	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	const record = ref({})
 	const receiveInfoList = ref([])
-	onLoad((option)=>{
-		if(!option.id){
+	onLoad((option) => {
+		if (!option.id) {
 			return
 		}
 		userLoginUnreadMessageDetail({
@@ -95,29 +83,32 @@
 		})
 	})
 </script>
-
 <style lang="scss" scoped>
 	.container {
 		margin: 15upx;
 		border-radius: 5upx;
 		padding: 25upx;
 		background-color: $uni-white;
-		
 	}
+
 	.item {
 		width: 100vw;
 	}
+
 	.item-row {
-		margin: 20upx 10upx;	
+		margin: 20upx 10upx;
 	}
+
 	.item-row-title {
 		font-size: 25upx;
 		color: #999;
 	}
+
 	.item-row-content {
 		font-size: 25upx;
 		text-align: right;
 	}
+
 	.table-list {
 		margin-top: 30upx;
 	}

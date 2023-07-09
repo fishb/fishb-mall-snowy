@@ -1,8 +1,7 @@
 <template>
 	<view>
 		<view class="sticky">
-			<uni-segmented-control :current="curView" :values="segmentedList"
-				styleType="button" activeColor="#007aff" @clickItem="(e) => {
+			<uni-segmented-control :current="curView" :values="segmentedList" styleType="button" activeColor="#007aff" @clickItem="(e) => {
 					if (curView != e.currentIndex) {
 						curView = e.currentIndex
 						loadData(true)
@@ -12,13 +11,7 @@
 		</view>
 		<view class="msg-list">
 			<uni-list>
-				<uni-list-item 
-					v-for="(item, index) in msgData"
-					:key="index"
-					:showArrow="false"
-					:clickable="true"
-					:rightText="item.createTime"
-					@click="clickMsg(item, index)">
+				<uni-list-item v-for="(item, index) in msgData" :key="index" :showArrow="false" :clickable="true" :rightText="item.createTime" @click="clickMsg(item, index)">
 					<template v-slot:body>
 						<view class="msg-item">
 							<uni-row>
@@ -49,29 +42,17 @@
 		</view>
 	</view>
 </template>
-
 <script setup>
-	import {
-		nextTick,
-		reactive,
-		ref
-	} from "vue"
-	import tool from '@/plugins/tool.js'
+	import { nextTick, reactive, ref } from "vue"
+	import tool from '@/plugins/tool'
 	import XEUtils from 'xe-utils'
-	import { userLoginUnreadMessagePage } from '@/api/sys/userCenterApi.js'
-	import {
-		onLoad,
-		onShow,
-		onReady,
-		onPullDownRefresh,
-		onReachBottom
-	} from "@dcloudio/uni-app"
+	import { userLoginUnreadMessagePage } from '@/api/sys/userCenterApi'
+	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	import SnowyEmpty from "@/components/snowy-empty.vue"
-	
 	const curView = ref(0)
 	const segmentedList = ref([])
 	const messageCategoryList = tool.dictList('MESSAGE_CATEGORY')
-	if(!XEUtils.isEmpty(messageCategoryList)){
+	if (!XEUtils.isEmpty(messageCategoryList)) {
 		messageCategoryList.forEach(item => {
 			segmentedList.value.push(item.text)
 		})
@@ -88,7 +69,7 @@
 			parameter.current = 1
 			msgData.value = []
 		}
-		searchFormState.category = XEUtils.isEmpty(messageCategoryList)?'':messageCategoryList[curView.value]?.value
+		searchFormState.category = XEUtils.isEmpty(messageCategoryList) ? '' : messageCategoryList[curView.value]?.value
 		Object.assign(parameter, searchFormState)
 		userLoginUnreadMessagePage(parameter).then(res => {
 			if (XEUtils.isEmpty(res?.data?.records)) {
@@ -96,16 +77,13 @@
 			}
 			msgData.value = msgData.value.concat(res.data.records)
 			parameter.current++
-		}).finally(()=>{
+		}).finally(() => {
 			uni.stopPullDownRefresh()
 		})
 	}
-	onShow(()=>{
+	onShow(() => {
 		loadData(true)
 	})
-	
-	
-	
 	// 下拉刷新
 	onPullDownRefresh(() => {
 		loadData(true)
@@ -120,23 +98,26 @@
 		})
 	}
 </script>
-
 <style lang="scss" scoped>
 	.msg-list {
 		margin: 15upx;
 		border-radius: 5upx;
+
 		.msg-item {
 			width: 100vw;
+
 			.msg-title {
 				color: #3a3a3a;
 				margin: 20upx 0;
 				font-size: 30upx;
 				font-weight: bold;
 			}
+
 			.msg-content {
 				color: #909399;
 				font-size: 26upx;
 			}
+
 			.msg-footer {
 				margin-top: 20upx;
 				color: #909399;
