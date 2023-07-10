@@ -1,6 +1,5 @@
 {
 	"pages": [{
-		"snowyCode": "login",
 		"path": "pages/login",
 		"style": {
 			"navigationBarTitleText": "登录",
