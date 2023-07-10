@@ -56,13 +56,26 @@ export default {
 	NO_TOKEN_BACK_URL: noTokenBackUrl,
 	// 不需要登录（没有token）页面白名单
 	NO_TOKEN_WHITE_LIST: [
-		noTokenBackUrl, '/', '/pages/config/index', '/pages/config/form', '/pages/common/webview/index',
+		noTokenBackUrl, 
+		'/', 
+		'/pages/config/index', 
+		'/pages/config/form', 
+		'/pages/common/webview/index',
 		// '/pages/home/index',
 	],
 	// 有token访问退回页面
 	HAS_TOKEN_BACK_URL: hasTokenBackUrl,
 	// 登录（有token）可以访问的页面白名单
 	HAS_TOKEN_WHITE_LIST: [
-		hasTokenBackUrl, '/pages/msg/index', '/pages/msg/detail', '/pages/work/index', '/pages/mine/index', '/pages/mine/setting/index', '/pages/mine/info/edit', '/pages/mine/home-config/index', '/pages/mine/pwd/index', '/pages/mine/info/index',
+		hasTokenBackUrl, 
+		'/pages/msg/index', 
+		'/pages/msg/detail', 
+		'/pages/work/index', 
+		'/pages/mine/index', 
+		'/pages/mine/setting/index', 
+		'/pages/mine/info/edit', 
+		'/pages/mine/home-config/index', 
+		'/pages/mine/pwd/index', 
+		'/pages/mine/info/index',
 	]
 }
