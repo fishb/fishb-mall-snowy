@@ -1,26 +1,11 @@
 import store from '@/store'
-import {
-	getToken
-} from '@/utils/auth'
-import {
-	errorCodeMap,
-	reloadCodes
-} from '@/utils/errorCode'
-import {
-	tansParams
-} from '@/utils/common'
+import { getToken } from '@/utils/auth'
+import { errorCodeMap, reloadCodes } from '@/utils/errorCode'
+import { tansParams } from '@/utils/common'
 import modal from '@/plugins/modal'
 import config from '@/config'
-import {
-	prefixUrl
-} from "@/utils/apiAdaptive"
-
-const {
-	TIMEOUT,
-	TOKEN_NAME,
-	TOKEN_PREFIX
-} = config
-
+import { prefixUrl } from "@/utils/apiAdaptive"
+const { TIMEOUT, TOKEN_NAME, TOKEN_PREFIX } = config
 const download = config => {
 	// 适配URL路径
 	config.url = prefixUrl(config.url)
@@ -45,7 +30,6 @@ const download = config => {
 			timeout: config.timeout || TIMEOUT,
 			success: (response) => {
 				resolve(response)
-				
 			},
 			fail: (error) => {
 				reject(error)
@@ -56,5 +40,4 @@ const download = config => {
 		})
 	})
 }
-
 export default download

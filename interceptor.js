@@ -1,9 +1,5 @@
-import {
-	getToken,
-	checkPermission
-} from '@/utils/auth'
+import { getToken, checkPermission } from '@/utils/auth'
 import XEUtils from 'xe-utils'
-
 // 页面跳转验证拦截器
 let list = ["navigateTo", "redirectTo", "reLaunch", "switchTab"]
 list.forEach(item => {

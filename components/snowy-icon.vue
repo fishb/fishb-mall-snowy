@@ -4,7 +4,6 @@
 		</uni-icons>
 	</view>
 </template>
-
 <script setup>
 	const props = defineProps({
 		backgroundColor: {
@@ -13,7 +12,6 @@
 		},
 	})
 </script>
-
 <style lang="scss" scoped>
 	.container-icon {
 		width: 80upx;

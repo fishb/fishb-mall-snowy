@@ -1,72 +1,35 @@
 <template>
-	<view v-for="(item, index) in dataList" :key="index" >
+	<view v-for="(item, index) in dataList" :key="index">
 		<button class="uni-btn" type="warn" @click="del(index)" :plain="true">删除任职</button>
-		<uni-forms :key="index" :ref="`formRef${ index }`" :model="item" label-position="left" validate-trigger="submit"
-			labelWidth="50px">
+		<uni-forms :key="index" :ref="`formRef${ index }`" :model="item" label-position="left" validate-trigger="submit" labelWidth="50px">
 			<uni-forms-item label="机构" name="orgId" required :rules="[{ required: true, errorMessage: '请选择机构' }]">
 				<!-- 多选属性:isMultiple="true" -->
 				<snowy-org-picker v-model="item.orgId" placeholder="请选择机构" @confirm="(data)=>{orgChange(data,index)}" :org-tree-api="selectorApiFunction.orgTreeApi">
 				</snowy-org-picker>
 			</uni-forms-item>
-			<uni-forms-item label="职位" name="positionId" required :rules="[{ required: true, errorMessage: '请选择职位' }]" >
+			<uni-forms-item label="职位" name="positionId" required :rules="[{ required: true, errorMessage: '请选择职位' }]">
 				<!--   -->
-				<snowy-sel-picker
-					:ref="`positionRef${ index }`"
-					:map="{key: 'id', label: 'name'}" 
-					v-model="item.positionId"
-					:rangeData="positionDataList[index]" 
-					placeholder="请选择选择职位" 
-					:isBigData="true" 
-					@scrollToLower="positionScrollToLower(index)" 
-					@queryCurSelData="positionQueryCurSelData"></snowy-sel-picker>
+				<snowy-sel-picker :ref="`positionRef${ index }`" :map="{key: 'id', label: 'name'}" v-model="item.positionId" :rangeData="positionDataList[index]" placeholder="请选择选择职位" :isBigData="true" @scrollToLower="positionScrollToLower(index)" @queryCurSelData="positionQueryCurSelData"></snowy-sel-picker>
 			</uni-forms-item>
 			<uni-forms-item label="主管" name="directorId">
 				<!-- 多选属性:isMultiple="true"  :autoInitData="false" -->
-				<snowy-user-picker 
-					:ref="`directorRef${ index }`"
-					v-model="item.directorId" 
-					placeholder="请选择主管" 
-					:org-tree-api="selectorApiFunction.orgTreeApi"
-					:user-page-api="selectorApiFunction.userPageApi"
-					:checked-user-list-api="selectorApiFunction.checkedUserListApi">
+				<snowy-user-picker :ref="`directorRef${ index }`" v-model="item.directorId" placeholder="请选择主管" :org-tree-api="selectorApiFunction.orgTreeApi" :user-page-api="selectorApiFunction.userPageApi" :checked-user-list-api="selectorApiFunction.checkedUserListApi">
 				</snowy-user-picker>
 			</uni-forms-item>
 		</uni-forms>
 	</view>
 	<button class="uni-btn" type="primary" @click="add" :plain="true">增加任职</button>
 </template>
-
 <script setup>
 	import SnowyOrgPicker from '@/components/snowy-org-picker.vue'
 	import SnowyUserPicker from '@/components/snowy-user-picker.vue'
 	import SnowySelPicker from '@/components/snowy-sel-picker.vue'
-	import {
-		userPositionSelector,
-		userSelector,
-		userOrgTreeSelector
-	} from '@/api/biz/bizUserApi'
-	import {
-		getPositionListByIdList,
-		userCenterGetUserListByIdList
-	} from '@/api/sys/userCenterApi.js'
+	import { userPositionSelector, userSelector, userOrgTreeSelector } from '@/api/biz/bizUserApi'
+	import { getPositionListByIdList, userCenterGetUserListByIdList } from '@/api/sys/userCenterApi'
 	import XEUtils from 'xe-utils'
-	import {
-		nextTick,
-		reactive,
-		ref,
-		watch,
-		getCurrentInstance
-	} from "vue"
-	import {
-		onLoad,
-		onShow,
-		onReady,
-		onPullDownRefresh,
-		onReachBottom
-	} from "@dcloudio/uni-app"
-	const {
-		proxy
-	} = getCurrentInstance()
+	import { nextTick, reactive, ref, watch, getCurrentInstance } from "vue"
+	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
+	const { proxy } = getCurrentInstance()
 	const emits = defineEmits(['update:modelValue'])
 	const props = defineProps({
 		modelValue: {
@@ -75,7 +38,6 @@
 			required: false
 		},
 	})
-
 	// 数据列表
 	const dataList = ref([])
 	// 传递用户选择器需要的API
@@ -100,26 +62,24 @@
 	const positionParamList = ref([])
 	// 职位下拉列表
 	const positionDataList = ref([])
-
 	watch(() => props.modelValue, (newValue, oldValue) => {
 		initData()
 	}, {
 		deep: false,
 		immediate: false
 	})
-	const initData = ()=>{
-		if(props.modelValue){
+	const initData = () => {
+		if (props.modelValue) {
 			dataList.value = XEUtils.clone(JSON.parse(props.modelValue), true)
-		}else{
+		} else {
 			dataList.value = []
 		}
 		dataList.value.forEach((item, index) => {
-			if(positionParamList.value[index] === undefined || positionParamList.value[index] === null){
+			if (positionParamList.value[index] === undefined || positionParamList.value[index] === null) {
 				positionParamList.value[index] = {}
 			}
 			positionParamList.value[index].orgId = item.orgId
 			loadPositionSelector(true, index)
-			
 			nextTick(() => {
 				proxy.$refs[`positionRef${ index }`][0].initData()
 				proxy.$refs[`directorRef${ index }`][0].initData()
@@ -127,7 +87,6 @@
 			})
 		})
 	}
-	
 	// 组织变换
 	const orgChange = ({
 		curSelOrgId,
@@ -143,7 +102,7 @@
 	}
 	// 根据职位id进行查询
 	const positionQueryCurSelData = (curSelDataKey, callback) => {
-		if(!XEUtils.isEmpty(curSelDataKey)){
+		if (!XEUtils.isEmpty(curSelDataKey)) {
 			getPositionListByIdList({
 				idList: [curSelDataKey]
 			}).then(res => {
@@ -159,16 +118,16 @@
 			positionDataList.value[index] = []
 		}
 		userPositionSelector(positionParamList.value[index]).then(res => {
-			if (XEUtils.isEmpty(res?.data?.records)){
+			if (XEUtils.isEmpty(res?.data?.records)) {
 				return
 			}
-			positionDataList.value[index] =  positionDataList.value[index].concat(res.data.records)
+			positionDataList.value[index] = positionDataList.value[index].concat(res.data.records)
 			positionParamList.value[index].current++
 		})
 	}
 	// 职位下拉触发
 	const positionScrollToLower = (index) => {
-		loadPositionSelector(false,index)
+		loadPositionSelector(false, index)
 	}
 	// 新增
 	const add = () => {
@@ -189,7 +148,7 @@
 	// 表单校验
 	const formListEmitAndValidate = () => {
 		// 更新数据
-		if(dataList.value && dataList.value.length > 0){
+		if (dataList.value && dataList.value.length > 0) {
 			emits('update:modelValue', JSON.stringify(dataList.value))
 		}
 		// 校验逻辑
@@ -206,7 +165,7 @@
 		return new Promise((resolve, reject) => {
 			Promise.all(promiseList).then((result) => {
 				resolve(result)
-			}).catch(err=>{
+			}).catch(err => {
 				reject(err)
 			})
 		})

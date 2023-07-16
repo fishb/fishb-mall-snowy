@@ -1,20 +1,15 @@
 const noTokenBackUrl = "/pages/login";
 const hasTokenBackUrl = "/pages/home/index"
-
 // 应用全局配置
 export default {
 	// 服务平台类型（SNOWY或SNOWY_CLOUD）
 	SERVER_TYPE: 'SNOWY',
-
 	// 请求超时
 	TIMEOUT: 10000,
-
 	// TokenName // Authorization
 	TOKEN_NAME: 'token',
-
 	// Token前缀，注意最后有个空格，如不需要需设置空字符串 // Bearer
 	TOKEN_PREFIX: '',
-
 	// 系统基础配置，这些是数据库中保存起来的
 	SYS_BASE_CONFIG: {
 		// 默认logo
@@ -36,7 +31,6 @@ export default {
 		// 默认重置密码
 		SNOWY_SYS_DEFAULT_PASSWORD: '123456'
 	},
-	
 	// 首页配置
 	HOME_CONFIGS: [
 		// 轮播
@@ -57,17 +51,15 @@ export default {
 			code: "schedule",
 			isShow: true,
 		},
-		
 	],
-
 	// 没有token访问退回页面
 	NO_TOKEN_BACK_URL: noTokenBackUrl,
 	// 不需要登录（没有token）页面白名单
 	NO_TOKEN_WHITE_LIST: [
-		noTokenBackUrl,
-		'/',
-		'/pages/config/index',
-		'/pages/config/form',
+		noTokenBackUrl, 
+		'/', 
+		'/pages/config/index', 
+		'/pages/config/form', 
 		'/pages/common/webview/index',
 		// '/pages/home/index',
 	],
@@ -75,15 +67,15 @@ export default {
 	HAS_TOKEN_BACK_URL: hasTokenBackUrl,
 	// 登录（有token）可以访问的页面白名单
 	HAS_TOKEN_WHITE_LIST: [
-		hasTokenBackUrl,
-		'/pages/msg/index',
-		'/pages/msg/detail',
-		'/pages/work/index',
-		'/pages/mine/index',
-		'/pages/mine/setting/index',
-		'/pages/mine/info/edit',
-		'/pages/mine/home-config/index',
-		'/pages/mine/pwd/index',
+		hasTokenBackUrl, 
+		'/pages/msg/index', 
+		'/pages/msg/detail', 
+		'/pages/work/index', 
+		'/pages/mine/index', 
+		'/pages/mine/setting/index', 
+		'/pages/mine/info/edit', 
+		'/pages/mine/home-config/index', 
+		'/pages/mine/pwd/index', 
 		'/pages/mine/info/index',
 	]
 }

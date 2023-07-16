@@ -14,12 +14,10 @@
 		</view>
 	</view>
 </template>
-
 <script setup>
 	import HomeSwiper from './home-swiper.vue'
 	import HomeChart from './home-chart.vue'
 	import HomeSchedule from './home-schedule/index.vue'
-	
 	const props = defineProps({
 		code: {
 			type: String,
@@ -33,8 +31,7 @@
 		},
 	})
 </script>
-
-<style lang="scss">
+<style lang="scss" scoped>
 	.item {
 		background-color: #ffffff;
 		margin: 15upx 0;

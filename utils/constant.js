@@ -8,5 +8,4 @@ const constant = {
 	userMobileMenus: 'userMobileMenus',
 	dictTypeTreeData: 'dictTypeTreeData',
 }
-
 export default constant

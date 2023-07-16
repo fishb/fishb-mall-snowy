@@ -1,8 +1,7 @@
 <template>
 	<view class="login-container">
 		<view class="logo-content" @tap="logoTap">
-			<image style="width: 100rpx;height: 100rpx;" :alt="sysBaseConfig.SNOWY_SYS_NAME"
-				:src="sysBaseConfig.SNOWY_SYS_LOGO" mode="widthFix">
+			<image style="width: 100rpx;height: 100rpx;" :alt="sysBaseConfig.SNOWY_SYS_NAME" :src="sysBaseConfig.SNOWY_SYS_LOGO" mode="widthFix">
 			</image>
 			<text class="title">{{sysBaseConfig.SNOWY_SYS_NAME}} {{sysBaseConfig.SNOWY_SYS_VERSION}}</text>
 		</view>
@@ -26,34 +25,15 @@
 		</view>
 	</view>
 </template>
-
 <script setup>
-	import {
-		ref,
-		reactive,
-		onMounted,
-		getCurrentInstance,
-		computed
-	} from 'vue'
-	import {
-		login,
-		getLoginUser,
-		getPicCaptcha
-	} from '@/api/login'
-	import {
-		configSysBaseList
-	} from '@/api/dev/configApi'
-	import {
-		getToken,
-		setToken,
-		removeToken
-	} from '@/utils/auth'
+	import { ref, reactive, onMounted, getCurrentInstance, computed } from 'vue'
+	import { login, getLoginUser, getPicCaptcha } from '@/api/login'
+	import { configSysBaseList } from '@/api/dev/configApi'
+	import { getToken, setToken, removeToken } from '@/utils/auth'
 	import store from '@/store'
 	import smCrypto from '@/utils/smCrypto'
 	import onFeedTap from '@/utils/feedTap.js'
-	const {
-		proxy
-	} = getCurrentInstance()
+	const { proxy } = getCurrentInstance()
 	const logoTap = () => {
 		uni.reLaunch({
 			url: '/pages/config/index'
@@ -115,11 +95,9 @@
 				loginForm.validCode = ""
 			}
 		})
-
 	}
 </script>
-
-<style lang="scss">
+<style lang="scss" scoped>
 	page {
 		background-color: #ffffff;
 	}

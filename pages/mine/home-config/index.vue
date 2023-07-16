@@ -11,45 +11,33 @@
 				</template>
 				<template v-slot:footer>
 					<view>
-						<switch :checked="item.isShow" style="transform:scale(0.7)"
-							@change="(e)=>switchChange(item, e)" />
+						<switch :checked="item.isShow" style="transform:scale(0.7)" @change="(e)=>switchChange(item, e)" />
 					</view>
 				</template>
 			</uni-list-item>
 		</uni-list>
-
 		<!-- 更多操作 @handleOk=""-->
-		<morePopup ref="morePopupRef"></morePopup>
+		<more ref="moreRef"></more>
 	</view>
 </template>
-
 <script setup>
 	import store from '@/store'
-	import {
-		reactive,
-		ref,
-		getCurrentInstance,
-		computed
-	} from "vue"
-
-	import morePopup from './more-popup.vue'
-
+	import { reactive, ref, getCurrentInstance, computed } from "vue"
+	import more from './more.vue'
 	// 快捷用户菜单
 	const homeConfigs = computed(() => {
 		return store.getters.homeConfigs
 	})
-
 	const switchChange = (item, e) => {
 		item.isShow = e.detail.value
 		store.commit("SET_homeConfigs", homeConfigs.value)
 	}
-	const morePopupRef = ref()
+	const moreRef = ref()
 	const moreOpt = (item, index) => {
-		morePopupRef.value.open(homeConfigs.value, index)
+		moreRef.value.open(homeConfigs.value, index)
 	}
 </script>
-
-<style lang="scss">
+<style lang="scss" scoped>
 	.home-config {
 		margin: 15upx;
 	}

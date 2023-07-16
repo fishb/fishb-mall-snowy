@@ -6,20 +6,13 @@
 <script setup>
 	import Item from "./item.vue"
 	import store from '@/store'
-	import {
-		reactive,
-		ref,
-		getCurrentInstance,
-		computed
-	} from "vue";
-	
+	import { reactive, ref, getCurrentInstance, computed } from "vue"
 	// 快捷用户菜单
 	const homeConfigs = computed(() => {
 		return store.getters.homeConfigs
 	})
 </script>
-
-<style lang="scss">
+<style lang="scss" scoped>
 	.home-container {
 		margin: 15upx;
 		border-radius: 5upx;

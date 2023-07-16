@@ -7,8 +7,7 @@
 					{{ curSelData[map.label] }}
 				</view>
 				<!-- 多选 -->
-				<view class="multiple" v-else-if="!!isMultiple && curSelDataKey && curSelDataKey.length > 0"
-					v-for="(item, key, index) in curSelData" :key="index">
+				<view class="multiple" v-else-if="!!isMultiple && curSelDataKey && curSelDataKey.length > 0" v-for="(item, key, index) in curSelData" :key="index">
 					{{ item[map.label] }}
 				</view>
 				<view class="placeholder" v-else>
@@ -18,16 +17,11 @@
 		</view>
 		<uni-popup class="pop" ref="popupRef" type="bottom" background-color="#fff" @maskClick="cancel">
 			<view class="action">
-				<view class="cal" @click="cancel">
-					取消
-				</view>
-				<view class="conf" @click="confirm">
-					确定
-				</view>
+				<view class="cal" @click="cancel"> 取消 </view>
+				<view class="conf" @click="confirm"> 确定 </view>
 			</view>
 			<!-- 已选择 -->
-			<view class="choiced" v-show="!!curSelDataKey && (!isMultiple? true : curSelDataKey.length > 0)"
-				:style="{maxHeight:!isMultiple?'5vh':'20vh', overflowY: 'scroll'}">
+			<view class="choiced" v-show="!!curSelDataKey && (!isMultiple? true : curSelDataKey.length > 0)" :style="{maxHeight:!isMultiple?'5vh':'20vh', overflowY: 'scroll'}">
 				<!-- 单选已选择 -->
 				<view class="single" v-if="!isMultiple">
 					<view class="name" @click="delData(curSelData)">
@@ -50,12 +44,8 @@
 						<!-- 选择icon -->
 						<template v-slot:header>
 							<view>
-								<uni-icons
-									v-show="!isMultiple ? item[map.key] != curSelDataKey: curSelDataKey.indexOf(item[map.key]) == -1"
-									type="circle" :size="25" @click="selData(item, index)"></uni-icons>
-								<uni-icons
-									v-show="!isMultiple ? item[map.key] == curSelDataKey: curSelDataKey.indexOf(item[map.key]) != -1"
-									type="checkbox-filled" :size="25" color="#2979ff" @click="delData(item, index)">
+								<uni-icons v-show="!isMultiple ? item[map.key] != curSelDataKey: curSelDataKey.indexOf(item[map.key]) == -1" type="circle" :size="25" @click="selData(item, index)"></uni-icons>
+								<uni-icons v-show="!isMultiple ? item[map.key] == curSelDataKey: curSelDataKey.indexOf(item[map.key]) != -1" type="checkbox-filled" :size="25" color="#2979ff" @click="delData(item, index)">
 								</uni-icons>
 							</view>
 						</template>
@@ -69,19 +59,10 @@
 		</uni-popup>
 	</view>
 </template>
-
 <script setup>
-	import {
-		reactive,
-		ref,
-		getCurrentInstance,
-		watch,
-		inject
-	} from "vue";
+	import { reactive, ref, getCurrentInstance, watch, inject } from "vue"
 	import XEUtils from 'xe-utils'
-
 	const emits = defineEmits(['update:modelValue', 'queryCurSelData', 'scrollToLower', 'cancel', 'confirm'])
-
 	const props = defineProps({
 		// value: [String, Array],
 		modelValue: [String, Array],
@@ -144,39 +125,34 @@
 			console.error("多选所传modelValue值应为数组")
 		}
 	}
-
 	// 弹出
 	const popupRef = ref()
-
 	// 当前选中的数据key及数据
 	const curSelDataKey = !props.isMultiple ? ref("") : ref([])
 	const curSelData = !props.isMultiple ? ref({}) : ref([])
-
 	watch(() => props.modelValue, (newValue, oldValue) => {
 		initData()
 	}, {
 		deep: false,
 		immediate: false
 	})
-
 	watch(() => props.rangeData, (newValue, oldValue) => {
-		if(!props.isBigData){
+		if (!props.isBigData) {
 			initData()
 		}
 	}, {
 		deep: false,
 		immediate: false
 	})
-	
 	const initData = () => {
 		// 单选curSelData初始化值赋值
 		if (!props.isMultiple) {
 			curSelDataKey.value = props.modelValue ? XEUtils.clone(props.modelValue, true) : ""
-			if(props.isBigData){
+			if (props.isBigData) {
 				emits('queryCurSelData', curSelDataKey.value, (val) => {
 					curSelData.value = val
 				})
-			}else{
+			} else {
 				if (!XEUtils.isEmpty(curSelDataKey.value)) {
 					const curSelDataArr = XEUtils.filterTree(props.rangeData, item => {
 						return curSelDataKey.value === item[props.map.key]
@@ -188,17 +164,15 @@
 					curSelData.value = {}
 				}
 			}
-			
 		}
 		// 多选curSelData初始化值赋值
 		if (!!props.isMultiple) {
 			curSelDataKey.value = props.modelValue ? XEUtils.clone(props.modelValue, true) : []
-			
-			if(props.isBigData){
+			if (props.isBigData) {
 				emits('queryCurSelData', curSelDataKey.value, (val) => {
 					curSelData.value = val
 				})
-			}else{
+			} else {
 				if (!XEUtils.isEmpty(curSelDataKey.value)) {
 					curSelData.value = XEUtils.filterTree(props.rangeData, item => {
 						return curSelDataKey.value.includes(item[props.map.key])
@@ -208,9 +182,7 @@
 				}
 			}
 		}
-
 	}
-
 	// 点击输入框
 	const handleInput = () => {
 		// initData()
@@ -232,7 +204,6 @@
 			}
 		}
 	}
-
 	// 选择数据
 	const selData = (item, index) => {
 		if (!props.isMultiple) {
@@ -249,20 +220,16 @@
 			curSelDataKey.value = ""
 			curSelData.value = {}
 		} else {
-			curSelDataKey.value.splice(curSelDataKey.value.findIndex(curSelDataKeyItem => curSelDataKeyItem === item[
-				props.map.key]), 1);
-			curSelData.value.splice(curSelData.value.findIndex(curSelDataItem => curSelDataItem[props.map.key] ===
-				item[props.map.key]), 1);
+			curSelDataKey.value.splice(curSelDataKey.value.findIndex(curSelDataKeyItem => curSelDataKeyItem === item[props.map.key]), 1);
+			curSelData.value.splice(curSelData.value.findIndex(curSelDataItem => curSelDataItem[props.map.key] === item[props.map.key]), 1);
 		}
 	}
-
 	// 取消
 	const cancel = () => {
 		// 重置数据
 		initData()
 		popupRef.value.close()
 	}
-
 	const confirm = () => {
 		// 更新数据
 		emits('update:modelValue', curSelDataKey.value)
@@ -273,23 +240,24 @@
 		})
 		popupRef.value.close()
 	}
-	const scrolltolower = () =>{
+	const scrolltolower = () => {
 		emits('scrollToLower')
 	}
 	defineExpose({
 		initData
 	})
 </script>
-
-<style lang="scss">
+<style lang="scss" scoped>
 	.snowy-sel-picker {
 		.input-disabled {
 			pointer-events: none;
 			background-color: rgb(247, 246, 246);
+
 			.input-value-disabled {
 				color: rgb(192, 192, 192);
 			}
 		}
+
 		.input {
 			.input-value {
 				font-size: 25upx;

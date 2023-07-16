@@ -1,5 +1,4 @@
 <template>
-	<!-- :mask-click="false" -->
 	<uni-popup ref="popupRef" type="bottom" safeArea>
 		<view class="container">
 			<uni-list :border="false">
@@ -13,23 +12,11 @@
 		</view>
 	</uni-popup>
 </template>
-
 <script setup>
-	import {
-		reactive,
-		ref,
-		getCurrentInstance
-	} from "vue";
-	import {
-		fileDelete,
-		fileDownload
-	} from '@/api/dev/fileApi.js'
-	import modal from '@/plugins/modal.js'
-	
+	import { reactive, ref, getCurrentInstance } from "vue"
+	import { fileDelete, fileDownload } from '@/api/dev/fileApi'
+	import modal from '@/plugins/modal'
 	const emits = defineEmits(['handleOk'])
-
-	// 删除弹出ref
-	const delPopRef = ref()
 	// 弹出ref
 	const popupRef = ref()
 	// 打开
@@ -47,9 +34,7 @@
 		fileDownload(record.value.id).then(response => {
 			uni.openDocument({
 				filePath: response.tempFilePath,
-				success: () => {
-					
-				}
+				success: () => {}
 			});
 		})
 		// #endif
@@ -73,7 +58,7 @@
 		open
 	})
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 	.container {
 		margin: 15upx;
 		border-radius: 5upx;

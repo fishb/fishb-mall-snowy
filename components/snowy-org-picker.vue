@@ -7,8 +7,7 @@
 					{{ curSelOrg.name }}
 				</view>
 				<!-- 多选 -->
-				<view class="multiple" v-else-if="!!isMultiple && curSelOrgId && curSelOrgId.length > 0"
-					v-for="(item, key, index) in curSelOrg" :key="index">
+				<view class="multiple" v-else-if="!!isMultiple && curSelOrgId && curSelOrgId.length > 0" v-for="(item, key, index) in curSelOrg" :key="index">
 					{{ item.name }}
 				</view>
 				<view class="placeholder" v-else>
@@ -18,24 +17,17 @@
 		</view>
 		<uni-popup class="pop" ref="popupRef" type="bottom" background-color="#fff" @maskClick="cancel">
 			<view class="action">
-				<view class="cal" @click="cancel">
-					取消
-				</view>
-				<view class="conf" @click="confirm">
-					确定
-				</view>
+				<view class="cal" @click="cancel"> 取消 </view>
+				<view class="conf" @click="confirm"> 确定 </view>
 			</view>
-
 			<!-- 面包屑 -->
 			<view class="crumb">
-				<text v-for="(item, index) in allClickSelOrg" :key="index" @click="clickOrgCru(item, index)"
-					:class="index === (allClickSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
+				<text v-for="(item, index) in allClickSelOrg" :key="index" @click="clickOrgCru(item, index)" :class="index === (allClickSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
 					{{ item.name + (index === (allClickSelOrg.length-1) ? '' : ' | ') }}
 				</text>
 			</view>
 			<!-- 已选择 -->
-			<view class="choiced" v-show="!!curSelOrgId && (!isMultiple? true : curSelOrgId.length > 0)"
-				:style="{maxHeight:!isMultiple?'5vh':'20vh', overflowY: 'scroll'}">
+			<view class="choiced" v-show="!!curSelOrgId && (!isMultiple? true : curSelOrgId.length > 0)" :style="{maxHeight:!isMultiple?'5vh':'20vh', overflowY: 'scroll'}">
 				<!-- 单选已选择 -->
 				<view class="single" v-if="!isMultiple">
 					<view class="name" @click="delOrg(curSelOrg)">
@@ -58,12 +50,8 @@
 						<!-- 选择icon -->
 						<template v-slot:header>
 							<view>
-								<uni-icons
-									v-show="!isMultiple ? item.id != curSelOrgId: curSelOrgId.indexOf(item.id) == -1"
-									type="circle" :size="25" @click="selOrg(item, index)"></uni-icons>
-								<uni-icons
-									v-show="!isMultiple ? item.id == curSelOrgId: curSelOrgId.indexOf(item.id) != -1"
-									type="checkbox-filled" :size="25" color="#2979ff" @click="delOrg(item, index)">
+								<uni-icons v-show="!isMultiple ? item.id != curSelOrgId: curSelOrgId.indexOf(item.id) == -1" type="circle" :size="25" @click="selOrg(item, index)"></uni-icons>
+								<uni-icons v-show="!isMultiple ? item.id == curSelOrgId: curSelOrgId.indexOf(item.id) != -1" type="checkbox-filled" :size="25" color="#2979ff" @click="delOrg(item, index)">
 								</uni-icons>
 							</view>
 						</template>
@@ -79,23 +67,13 @@
 					</uni-list-item>
 				</uni-list>
 			</view>
-
 		</uni-popup>
 	</view>
 </template>
-
 <script setup>
-	import {
-		reactive,
-		ref,
-		getCurrentInstance,
-		watch,
-		inject
-	} from "vue";
+	import { reactive, ref, getCurrentInstance, watch, inject } from "vue"
 	import XEUtils from 'xe-utils'
-
 	const emits = defineEmits(['update:modelValue', 'cancel', 'confirm'])
-
 	const props = defineProps({
 		// value: [String, Array],
 		modelValue: [String, Array],
@@ -135,26 +113,21 @@
 			console.error("多选所传modelValue值应为数组")
 		}
 	}
-
 	// 弹出
 	const popupRef = ref()
-
 	// 当前选中的机构id及机构
 	const curSelOrgId = !props.isMultiple ? ref("") : ref([])
 	const curSelOrg = !props.isMultiple ? ref({}) : ref([])
-
 	// 所有点击选中机构【页面数据】
 	const allClickSelOrg = ref([])
 	// 当前点击选中机构【页面数据】
 	const curClickSelOrg = ref([])
-	
 	watch(() => props.modelValue, (newValue, oldValue) => {
 		loadData()
 	}, {
 		deep: false,
 		immediate: false
 	})
-
 	const loadData = () => {
 		props.orgTreeApi().then(res => {
 			if (props.isTopLevel) {
@@ -185,7 +158,6 @@
 					children: res?.data
 				}]
 			}
-
 			// 单选curSelOrg初始化值赋值
 			if (!props.isMultiple) {
 				if (props.modelValue) {
@@ -227,13 +199,11 @@
 		// 重新初始化数据，防止数据更新
 		popupRef.value.open('bottom')
 	}
-
 	// 点击面包屑
 	const clickOrgCru = (item, index) => {
 		curClickSelOrg.value = item.children
 		allClickSelOrg.value.splice(index + 1, allClickSelOrg.value.length - (index + 1))
 	}
-
 	// 选择部门
 	const selOrg = (item, index) => {
 		if (!props.isMultiple) {
@@ -261,14 +231,12 @@
 			allClickSelOrg.value.push(item)
 		}
 	}
-
 	// 取消
 	const cancel = () => {
 		// 重置数据
 		loadData()
 		popupRef.value.close()
 	}
-
 	const confirm = () => {
 		// 更新数据
 		emits('update:modelValue', curSelOrgId.value)
@@ -280,8 +248,7 @@
 		popupRef.value.close()
 	}
 </script>
-
-<style lang="scss">
+<style lang="scss" scoped>
 	.snowy-org-picker {
 		.input {
 			.input-value {

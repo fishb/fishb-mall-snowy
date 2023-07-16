@@ -1,13 +1,11 @@
 <template>
 	<view>
 		<view class="sticky">
-			<uni-search-bar placeholder="请输入文件名称关键词" v-model="searchFormState.searchKey"
-				@confirm="loadData(true)"></uni-search-bar>
+			<uni-search-bar placeholder="请输入文件名称关键词" v-model="searchFormState.searchKey" @confirm="loadData(true)"></uni-search-bar>
 		</view>
 		<view class="file-list">
 			<uni-list>
-				<uni-list-item v-for="(item, index) in fileData" :key="index" :showArrow="false" :clickable="true"
-					@tap="moreTapItem(item, index)">
+				<uni-list-item v-for="(item, index) in fileData" :key="index" :showArrow="false" :clickable="true" @tap="moreTapItem(item, index)">
 					<!-- 自定义 body -->
 					<template v-slot:body>
 						<view class="item">
@@ -34,32 +32,21 @@
 												item.suffix === 'jpng' ||
 												item.suffix === 'ico' ||
 												item.suffix === 'gif'" class="item-row-content-image" :src="item.thumbnail"></image>
-											<image v-else-if="item.suffix === 'doc' || item.suffix === 'docx'"
-												class="item-row-content-image"
-												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/docx.png'">
+											<image v-else-if="item.suffix === 'doc' || item.suffix === 'docx'" class="item-row-content-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/docx.png'">
 											</image>
-											<image v-else-if="item.suffix === 'xls' || item.suffix === 'xlsx'"
-												class="item-row-content-image"
-												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/xlsx.png'">
+											<image v-else-if="item.suffix === 'xls' || item.suffix === 'xlsx'" class="item-row-content-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/xlsx.png'">
 											</image>
-											<image v-else-if="item.suffix === 'zip'" class="item-row-content-image"
-												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/zip.png'">
+											<image v-else-if="item.suffix === 'zip'" class="item-row-content-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/zip.png'">
 											</image>
-											<image v-else-if="item.suffix === 'rar'" class="item-row-content-image"
-												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/rar.png'">
+											<image v-else-if="item.suffix === 'rar'" class="item-row-content-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/rar.png'">
 											</image>
-											<image v-else-if="item.suffix === 'ppt' || item.suffix === 'pptx'"
-												class="item-row-content-image"
-												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/ppt.png'">
+											<image v-else-if="item.suffix === 'ppt' || item.suffix === 'pptx'" class="item-row-content-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/ppt.png'">
 											</image>
-											<image v-else-if="item.suffix === 'txt'" class="item-row-content-image"
-												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/txt.png'">
+											<image v-else-if="item.suffix === 'txt'" class="item-row-content-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/txt.png'">
 											</image>
-											<image v-else-if="item.suffix === 'html'" class="item-row-content-image"
-												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/html.png'">
+											<image v-else-if="item.suffix === 'html'" class="item-row-content-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/html.png'">
 											</image>
-											<image v-else class="item-row-content-image"
-												:src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/file.png'">
+											<image v-else class="item-row-content-image" :src="$store.getters.allEnv[$store.getters.envKey].baseUrl + '/images/fileImg/file.png'">
 											</image>
 										</view>
 									</uni-col>
@@ -95,8 +82,6 @@
 									</uni-col>
 								</uni-row>
 							</view>
-
-
 							<view class="item-row">
 								<uni-row>
 									<uni-col :span="4">
@@ -142,7 +127,6 @@
 				</uni-list-item>
 			</uni-list>
 		</view>
-
 		<!-- 新增悬浮按钮 -->
 		<uni-fab :pattern="{
 				color: '#7A7E83',
@@ -157,27 +141,13 @@
 		<uploadPopup ref="uploadPopupRef" @handleOk="loadData(true)"></uploadPopup>
 	</view>
 </template>
-
 <script setup>
 	import uploadPopup from './upload-popup.vue'
 	import morePopup from './more-popup.vue'
-	import {
-		reactive,
-		ref,
-		getCurrentInstance
-	} from "vue"
-	import {
-		filePage
-	} from '@/api/dev/fileApi'
-	import {
-		onLoad,
-		onShow,
-		onReady,
-		onPullDownRefresh,
-		onReachBottom
-	} from "@dcloudio/uni-app"
+	import { reactive, ref, getCurrentInstance } from "vue"
+	import { filePage } from '@/api/dev/fileApi'
+	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	import XEUtils from 'xe-utils'
-	
 	const searchFormState = reactive({})
 	const parameter = reactive({
 		current: 1,
@@ -192,12 +162,12 @@
 		}
 		Object.assign(parameter, searchFormState)
 		filePage(parameter).then(res => {
-			if (XEUtils.isEmpty(res?.data?.records)){
+			if (XEUtils.isEmpty(res?.data?.records)) {
 				return
 			}
 			fileData.value = fileData.value.concat(res.data.records)
 			parameter.current++
-		}).finally(()=>{
+		}).finally(() => {
 			uni.stopPullDownRefresh()
 		})
 	}
@@ -223,8 +193,7 @@
 		uploadPopupRef.value.open()
 	}
 </script>
-
-<style lang="scss">
+<style lang="scss" scoped>
 	.file-list {
 		margin: 15upx;
 		border-radius: 5upx;
@@ -254,8 +223,6 @@
 					}
 				}
 			}
-
 		}
-
 	}
 </style>

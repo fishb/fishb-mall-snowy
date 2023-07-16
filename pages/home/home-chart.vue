@@ -5,19 +5,12 @@
 		<qiun-data-charts type="line" :opts="opts" :chartData="chartData" />
 	</view>
 </template>
-
 <script setup>
-	import {
-		ref
-	} from "vue";
-
+	import { ref } from "vue"
 	const chartData = ref({})
 	//您可以通过修改 config-ucharts.js 文件中下标为 ['column'] 的节点来配置全局默认参数，如都是默认参数，此处可以不传 opts 。实际应用过程中 opts 只需传入与全局默认参数中不一致的【某一个属性】即可实现同类型的图表显示不同的样式，达到页面简洁的需求。
-
 	const opts = ref({
-		color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4",
-			"#ea7ccc"
-		],
+		color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
 		padding: [15, 15, 0, 5],
 		enableScroll: false,
 		legend: {},
@@ -38,7 +31,6 @@
 			}
 		}
 	})
-
 	const getServerData = () => {
 		//模拟从服务器获取数据时的延时
 		setTimeout(() => {
@@ -46,20 +38,17 @@
 			let res = {
 				categories: ["2018", "2019", "2020", "2021", "2022", "2023"],
 				series: [{
-						name: "目标值",
-						data: [35, 36, 31, 33, 13, 34]
-					},
-					{
-						name: "完成量",
-						data: [18, 27, 21, 24, 6, 28]
-					}
-				]
+					name: "目标值",
+					data: [35, 36, 31, 33, 13, 34]
+				}, {
+					name: "完成量",
+					data: [18, 27, 21, 24, 6, 28]
+				}]
 			};
 			chartData.value = JSON.parse(JSON.stringify(res));
 		}, 500);
 	}
 	getServerData()
 </script>
-
 <style>
 </style>

@@ -12,14 +12,9 @@
 		</view>
 	</uni-popup>
 </template>
-
 <script setup>
 	import store from '@/store'
-	import {
-		reactive,
-		ref,
-		getCurrentInstance
-	} from "vue"
+	import { reactive, ref, getCurrentInstance } from "vue"
 	// 弹出ref
 	const popupRef = ref()
 	// 打开
@@ -32,22 +27,20 @@
 	}
 	// 上移
 	const up = () => {
-		swapArray(configs.value, confIndex.value-1, confIndex.value)
+		swapArray(configs.value, confIndex.value - 1, confIndex.value)
 		store.commit("SET_homeConfigs", configs.value)
 		popupRef.value.close()
 	}
-	
 	// 下移
 	const down = () => {
-		swapArray(configs.value, confIndex.value, confIndex.value+1)
+		swapArray(configs.value, confIndex.value, confIndex.value + 1)
 		store.commit("SET_homeConfigs", configs.value)
 		popupRef.value.close()
 	}
-	
 	//数组元素互换位置
 	const swapArray = (arr, index1, index2) => {
-	  arr[index1] = arr.splice(index2, 1, arr[index1])[0];
-	  return arr;
+		arr[index1] = arr.splice(index2, 1, arr[index1])[0];
+		return arr;
 	}
 	// 取消
 	const cancel = () => {
@@ -57,14 +50,15 @@
 		open
 	})
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 	.container {
 		margin: 15upx;
 		border-radius: 5upx;
 		padding: 5upx;
 		background-color: $uni-white;
+
 		.item {
-			text-align:center;
+			text-align: center;
 		}
 	}
 </style>

@@ -1,9 +1,7 @@
 <template>
 	<view class="container">
-		<uni-forms ref="formRef" :model="formData" label-position="top" :rules="rules" validate-trigger="blur"
-			labelWidth="100px">
-			<uni-segmented-control style="margin-bottom: 20px;" :current="curView" :values="['基础信息', '更多信息']"
-				styleType="button" activeColor="#007aff" @clickItem="(e) => {
+		<uni-forms ref="formRef" :model="formData" label-position="top" :rules="rules" validate-trigger="blur" labelWidth="100px">
+			<uni-segmented-control style="margin-bottom: 20px;" :current="curView" :values="['基础信息', '更多信息']" styleType="button" activeColor="#007aff" @clickItem="(e) => {
 					if (curView != e.currentIndex) {
 						curView = e.currentIndex
 					}
@@ -29,27 +27,19 @@
 					<uni-easyinput v-model="formData.email" placeholder="请输入邮箱"></uni-easyinput>
 				</uni-forms-item>
 				<uni-forms-item label="出生日期" name="email">
-					<uni-datetime-picker type="date" return-type="string" format="YYYY-MM-DD"
-						v-model="formData.birthday" />
+					<uni-datetime-picker type="date" return-type="string" format="YYYY-MM-DD" v-model="formData.birthday" />
 				</uni-forms-item>
 				<uni-forms-item label="选择组织" name="orgId" required :rules="[{ required: true, errorMessage: '请选择组织' }]">
 					<!-- 多选属性:isMultiple="true" -->
 					<snowy-org-picker v-model="formData.orgId" placeholder="请选择组织" @confirm="orgChange" :org-tree-api="selectorApiFunction.orgTreeApi">
 					</snowy-org-picker>
 				</uni-forms-item>
-				<uni-forms-item label="选择职位" name="positionId" required
-					:rules="[{ required: true, errorMessage: '请选择职位' }]">
-					<snowy-sel-picker :map="{key: 'id', label: 'name'}" v-model="formData.positionId"
-						:rangeData="positionData" placeholder="请选择选择职位" :isBigData="true" @queryCurSelData="positionQueryCurSelData" @scrollToLower="positionScrollToLower"></snowy-sel-picker>
+				<uni-forms-item label="选择职位" name="positionId" required :rules="[{ required: true, errorMessage: '请选择职位' }]">
+					<snowy-sel-picker :map="{key: 'id', label: 'name'}" v-model="formData.positionId" :rangeData="positionData" placeholder="请选择选择职位" :isBigData="true" @queryCurSelData="positionQueryCurSelData" @scrollToLower="positionScrollToLower"></snowy-sel-picker>
 				</uni-forms-item>
 				<uni-forms-item label="选择主管" name="directorId">
 					<!-- 多选属性:isMultiple="true" ref="directorRef" :autoInitData="false" -->
-					<snowy-user-picker 
-						v-model="formData.directorId" 
-						placeholder="请选择主管" 
-						:org-tree-api="selectorApiFunction.orgTreeApi"
-						:user-page-api="selectorApiFunction.userPageApi"
-						:checked-user-list-api="selectorApiFunction.checkedUserListApi">
+					<snowy-user-picker v-model="formData.directorId" placeholder="请选择主管" :org-tree-api="selectorApiFunction.orgTreeApi" :user-page-api="selectorApiFunction.userPageApi" :checked-user-list-api="selectorApiFunction.checkedUserListApi">
 					</snowy-user-picker>
 				</uni-forms-item>
 				<uni-forms-item label="员工编号" name="empNo">
@@ -59,20 +49,17 @@
 					<uni-easyinput v-model="formData.positionLevel" placeholder="请输入职位级别"></uni-easyinput>
 				</uni-forms-item>
 				<uni-forms-item label="入职日期" name="entryDate">
-					<uni-datetime-picker type="date" return-type="string" format="YYYY-MM-DD"
-						v-model="formData.entryDate" />
+					<uni-datetime-picker type="date" return-type="string" format="YYYY-MM-DD" v-model="formData.entryDate" />
 				</uni-forms-item>
 				<!-- required :rules="[{ required: true, errorMessage: '请添加任职信息' }]" -->
 				<uni-forms-item label="任职信息" name="positionJson">
 					<formPosition v-model="formData.positionJson" ref="positionJsonRef"></formPosition>
 				</uni-forms-item>
 			</view>
-
 			<view v-show="curView === 1">
 				<uni-forms-item label="民族" name="nation">
 					<!-- :isMultiple="true" -->
-					<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.nation"
-						:rangeData="nationOptions" placeholder="请选择民族"></snowy-sel-picker>
+					<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.nation" :rangeData="nationOptions" placeholder="请选择民族"></snowy-sel-picker>
 				</uni-forms-item>
 				<uni-forms-item label="籍贯" name="nativePlace">
 					<uni-easyinput v-model="formData.nativePlace" placeholder="请输入籍贯"></uni-easyinput>
@@ -86,16 +73,14 @@
 				</uni-forms-item>
 				<uni-forms-item label="证件类型" name="idCardType">
 					<!-- :isMultiple="true" -->
-					<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.idCardType"
-						:rangeData="idcardTypeOptions" placeholder="请选择证件类型"></snowy-sel-picker>
+					<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.idCardType" :rangeData="idcardTypeOptions" placeholder="请选择证件类型"></snowy-sel-picker>
 				</uni-forms-item>
 				<uni-forms-item label="证件号码" name="idCardNumber">
 					<uni-easyinput v-model="formData.idCardNumber" placeholder="请输入证件号码"></uni-easyinput>
 				</uni-forms-item>
 				<uni-forms-item label="文化程度" name="cultureLevel">
 					<!-- :isMultiple="true" -->
-					<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.cultureLevel"
-						:rangeData="cultureLevelOptions" placeholder="请选择文化程度"></snowy-sel-picker>
+					<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.cultureLevel" :rangeData="cultureLevelOptions" placeholder="请选择文化程度"></snowy-sel-picker>
 				</uni-forms-item>
 				<uni-forms-item label="政治面貌" name="politicalOutlook">
 					<uni-easyinput v-model="formData.politicalOutlook" placeholder="请输入政治面貌"></uni-easyinput>
@@ -130,42 +115,20 @@
 				</uni-forms-item>
 			</view>
 		</uni-forms>
-
 		<button class="btn-sub" type="primary" @click="submit">提交</button>
 	</view>
 </template>
-
 <script setup>
-	import {
-		nextTick,
-		reactive,
-		ref
-	} from "vue"
-	import tool from '@/plugins/tool.js'
-	import {
-		userDetail,
-		userPositionSelector,
-		submitForm,
-		userSelector,
-		userOrgTreeSelector
-	} from '@/api/biz/bizUserApi.js'
-	import {
-		getPositionListByIdList,
-		userCenterGetUserListByIdList
-	} from '@/api/sys/userCenterApi.js'
+	import { nextTick, reactive, ref } from "vue"
+	import tool from '@/plugins/tool'
+	import { userDetail, userPositionSelector, submitForm, userSelector, userOrgTreeSelector } from '@/api/biz/bizUserApi'
+	import { getPositionListByIdList, userCenterGetUserListByIdList } from '@/api/sys/userCenterApi'
 	import SnowyOrgPicker from '@/components/snowy-org-picker.vue'
 	import SnowyUserPicker from '@/components/snowy-user-picker.vue'
 	import SnowySelPicker from '@/components/snowy-sel-picker.vue'
 	import formPosition from '@/pages/biz/user/form-position.vue'
-	import {
-		onLoad,
-		onShow,
-		onReady,
-		onPullDownRefresh,
-		onReachBottom
-	} from "@dcloudio/uni-app"
+	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	import XEUtils from "xe-utils"
-	
 	const curView = ref(0)
 	const formRef = ref()
 	// 表单数据
@@ -203,9 +166,7 @@
 	const cultureLevelOptions = tool.dictList('CULTURE_LEVEL')
 	// 职位
 	const positionJsonRef = ref()
-	
 	// const directorRef = ref()
-	
 	// 传递用户选择器需要的API
 	const selectorApiFunction = {
 		orgTreeApi: (param) => {
@@ -224,13 +185,11 @@
 			})
 		}
 	}
-	
 	// 职位参数
 	const positionParam = reactive({
 		current: 1,
 		size: 10
 	})
-	
 	// 职位分页加载
 	const loadPositionSelector = (isReset) => {
 		if (isReset) {
@@ -238,17 +197,16 @@
 			positionData.value = []
 		}
 		userPositionSelector(positionParam).then(res => {
-			if (XEUtils.isEmpty(res?.data?.records)){
+			if (XEUtils.isEmpty(res?.data?.records)) {
 				return
 			}
-			positionData.value =  positionData.value.concat(res.data.records)
+			positionData.value = positionData.value.concat(res.data.records)
 			positionParam.current++
 		})
 	}
-	
 	// 加載
 	onLoad((option) => {
-		if(!option.id){
+		if (!option.id) {
 			return
 		}
 		userDetail({
@@ -256,7 +214,7 @@
 		}).then(res => {
 			formData.value = res?.data
 			// 職位
-			if(!formData.value.orgId){
+			if (!formData.value.orgId) {
 				return
 			}
 			positionParam.orgId = formData.value.orgId
@@ -278,20 +236,18 @@
 	}
 	// 根据职位id进行查询
 	const positionQueryCurSelData = (curSelDataKey, callback) => {
-		if(!XEUtils.isEmpty(curSelDataKey)){
+		if (!XEUtils.isEmpty(curSelDataKey)) {
 			getPositionListByIdList({
 				idList: [curSelDataKey]
 			}).then(res => {
 				callback(res.data[0])
 			})
 		}
-		
 	}
 	// 职位下拉触发
 	const positionScrollToLower = () => {
 		loadPositionSelector()
 	}
-	
 	const submit = () => {
 		// 子表单数据给父表单数据赋值，并校验子表单数据
 		positionJsonRef.value.formListEmitAndValidate().then(result => {
@@ -313,13 +269,13 @@
 		})
 	}
 </script>
-
 <style lang="scss" scoped>
 	.container {
 		margin: 15upx;
 		border-radius: 5upx;
 		padding: 25upx;
 		background-color: $uni-white;
+
 		.btn-sub {
 			background-color: $uni-primary;
 		}

@@ -1,26 +1,11 @@
 import store from '@/store'
-import {
-	getToken
-} from '@/utils/auth'
-import {
-	errorCodeMap,
-	reloadCodes
-} from '@/utils/errorCode'
-import {
-	tansParams
-} from '@/utils/common'
+import { getToken } from '@/utils/auth'
+import { errorCodeMap, reloadCodes } from '@/utils/errorCode'
+import { tansParams } from '@/utils/common'
 import modal from '@/plugins/modal'
 import config from '@/config'
-import {
-	prefixUrl
-} from "@/utils/apiAdaptive"
-
-const {
-	TIMEOUT,
-	TOKEN_NAME,
-	TOKEN_PREFIX
-} = config
-
+import { prefixUrl } from "@/utils/apiAdaptive"
+const { TIMEOUT, TOKEN_NAME, TOKEN_PREFIX } = config
 const upload = config => {
 	// 适配URL路径
 	config.url = prefixUrl(config.url)
@@ -41,8 +26,7 @@ const upload = config => {
 		modal.loading('努力加载中')
 		uni.uploadFile({
 			timeout: config.timeout || TIMEOUT,
-			url: config.actionUrl || ((config.baseUrl || store.getters.allEnv[store.getters.envKey]
-				.baseUrl) + config.url),
+			url: config.actionUrl || ((config.baseUrl || store.getters.allEnv[store.getters.envKey].baseUrl) + config.url),
 			file: config.file,
 			filePath: config.filePath,
 			name: config.name || 'file',
@@ -91,5 +75,4 @@ const upload = config => {
 		})
 	})
 }
-
 export default upload

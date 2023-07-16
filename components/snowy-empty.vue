@@ -3,7 +3,6 @@
 		<image :src="imgUrl" mode="aspectFit"></image>
 	</view>
 </template>
-
 <script setup>
 	const props = defineProps({
 		imgUrl: {
@@ -13,7 +12,6 @@
 		}
 	})
 </script>
-
 <style lang="scss" scoped>
 	.empty-box {
 		height: 800upx;

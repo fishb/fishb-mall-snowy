@@ -3,13 +3,12 @@
 	<uni-swiper-dot :info="data" :current="current" field="content">
 		<swiper :current="swiperDotIndex" :autoplay="true" :interval="3000" :duration="1000" @change="changeSwiper">
 			<swiper-item v-for="(item, index) in data" :key="index">
-				<view  @click="clickBannerItem(item)" style="padding: 15upx;">
+				<view @click="clickBannerItem(item)" style="padding: 15upx;">
 					<image style="width:100%; border-radius: 5upx;" :src="item.image" mode="widthFix" :draggable="false" />
 				</view>
 			</swiper-item>
 		</swiper>
 	</uni-swiper-dot>
-
 	<!-- 宫格组件 -->
 	<view v-for="(userMenu, i) in userMobileMenus" :index="i" :key="userMenu.id" style="background-color: #ffffff; margin: 15upx;">
 		<uni-section :title="userMenu.name">
@@ -21,18 +20,14 @@
 			</template>
 			<template v-slot:right>
 				<!-- 伪面包屑 -->
-				<text v-for="(item,index) in allSelData[userMenu.id]" :key="index"
-					:style=" { marginLeft: '5px', color: index === (allSelData[userMenu.id].length-1) ?'#8799a3':'#1890FF'}"
-					@click="clickText(item,index, userMenu.id)">
+				<text v-for="(item,index) in allSelData[userMenu.id]" :key="index" :style=" { marginLeft: '5px', color: index === (allSelData[userMenu.id].length-1) ?'#8799a3':'#1890FF'}" @click="clickText(item,index, userMenu.id)">
 					{{item.name + (index === (allSelData[userMenu.id].length-1) ? '' : ' | ') }}
 				</text>
 			</template>
 		</uni-section>
-
 		<view class="grid-body">
 			<uni-grid :column="4" :showBorder="false">
-				<uni-grid-item v-for="(item, j) in handleData(userMenu.id, userMenu.children)" :index="j"
-					:key="handleKey(item,j)" @tap="gridItemClick(userMenu.id, item, j)">
+				<uni-grid-item v-for="(item, j) in handleData(userMenu.id, userMenu.children)" :index="j" :key="handleKey(item,j)" @tap="gridItemClick(userMenu.id, item, j)">
 					<view class="grid-item-box">
 						<snowy-icon :backgroundColor="item.color" custom-prefix="snowy" :type="item.icon" size="20" color="#FFFFFF"></snowy-icon>
 						<text class="text">{{item.title}}</text>
@@ -40,43 +35,28 @@
 				</uni-grid-item>
 			</uni-grid>
 		</view>
-
 	</view>
-
 </template>
-
 <script setup>
 	import store from '@/store'
 	import XEUtils from 'xe-utils'
 	import config from '@/config'
 	import SnowyIcon from '@/components/snowy-icon.vue'
-
-	import {
-		reactive,
-		ref,
-		getCurrentInstance
-	} from "vue";
-	const {
-		proxy
-	} = getCurrentInstance()
-
+	import { reactive, ref, getCurrentInstance } from "vue"
+	const { proxy } = getCurrentInstance()
 	const current = ref(0)
 	const swiperDotIndex = ref(0)
 	const data = reactive([{
-			image: `${store.getters.allEnv[store.getters.envKey].baseUrl}/images/swiper/swiper1.jpg`
-		},
-		{
-			image: `${store.getters.allEnv[store.getters.envKey].baseUrl}/images/swiper/swiper2.jpg`
-		}
-	])
+		image: `${store.getters.allEnv[store.getters.envKey].baseUrl}/images/swiper/swiper1.jpg`
+	}, {
+		image: `${store.getters.allEnv[store.getters.envKey].baseUrl}/images/swiper/swiper2.jpg`
+	}])
 	const changeSwiper = (e) => {
 		current.value = e.detail.current
 	}
-
 	const clickBannerItem = (item) => {
 		console.log(item)
 	}
-
 	const userMobileMenus = store.getters.userMobileMenus
 	// 当前选中的数据
 	let selData = reactive({})
@@ -116,20 +96,18 @@
 			uni.navigateTo({
 				url: item.path,
 				fail(error) {
-					proxy.$modal.alert('请将【' + item.title + '】的移动端路由地址(' + item.path +
-						')与uniapp的page.json的path路径对应！')
+					proxy.$modal.alert('请将【' + item.title + '】的移动端路由地址(' + item.path + ')与uniapp的page.json的path路径对应！')
 					console.error(error)
 				}
 			})
-		}else if (item.menuType == 'IFRAME') {
+		} else if (item.menuType == 'IFRAME') {
 			uni.navigateTo({
 				url: `/pages/common/webview/index?url=${item.path}`,
 			})
-		}else if (item.menuType == 'LINK') {
+		} else if (item.menuType == 'LINK') {
 			// #ifdef H5
 			self.location.href = item.path
 			// #endif
-			
 			// #ifndef H5
 			uni.navigateTo({
 				url: `/pages/common/webview/index?url=${item.path}`,
@@ -138,12 +116,13 @@
 		}
 	}
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 	.text {
 		text-align: center;
 		font-size: 26rpx;
 		margin-top: 10rpx;
 	}
+
 	.grid-item-box {
 		flex: 1;
 		/* #ifndef APP-NVUE */

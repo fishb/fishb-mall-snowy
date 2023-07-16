@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-
 // 获取字典分页
 export function dictPage() {
 	return request({
@@ -8,7 +7,6 @@ export function dictPage() {
 		data: data
 	})
 }
-
 // 获取字典列表
 export function dictList(data) {
 	return request({
@@ -17,7 +15,6 @@ export function dictList(data) {
 		data: data
 	})
 }
-
 // 获取字典树
 export function dictTree(data) {
 	return request({
@@ -26,7 +23,6 @@ export function dictTree(data) {
 		data: data
 	})
 }
-
 // 提交表单 add为false时为编辑，默认为新增
 export function submitForm(data, add = true) {
 	return request({
@@ -35,7 +31,6 @@ export function submitForm(data, add = true) {
 		data: data
 	})
 }
-
 // 删除字典
 export function dictDelete(data) {
 	return request({
@@ -44,7 +39,6 @@ export function dictDelete(data) {
 		data: data
 	})
 }
-
 // 获取字典详情
 export function dictDetail(data) {
 	return request({

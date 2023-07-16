@@ -1,8 +1,7 @@
 <template>
 	<uni-popup ref="popupRef" type="bottom" safeArea>
 		<view class="container">
-			<uni-segmented-control style="margin-bottom: 20px;" :current="curView" :values="['动态', '本地', '阿里云', '腾讯']"
-				styleType="button" activeColor="#007aff" @clickItem="(e) => {
+			<uni-segmented-control style="margin-bottom: 20px;" :current="curView" :values="['动态', '本地', '阿里云', '腾讯']" styleType="button" activeColor="#007aff" @clickItem="(e) => {
 					if (curView != e.currentIndex) {
 						curView = e.currentIndex
 					}
@@ -32,9 +31,7 @@
 	</uni-popup>
 </template>
 <script setup>
-	import {
-		ref
-	} from "vue"
+	import { ref } from "vue"
 	import SnowyFilePicker from '@/components/snowy-file-picker/index.vue'
 	const emits = defineEmits(['handleOk'])
 	const curView = ref(0)
@@ -43,7 +40,6 @@
 		popupRef.value.open("bottom")
 		emits('handleOk')
 	}
-
 	// 表单中使用文件上传示例
 	// const formRef = ref()
 	// const formData = ref({
@@ -61,8 +57,7 @@
 		open
 	})
 </script>
-
-<style lang="scss">
+<style lang="scss" scoped>
 	.container {
 		margin: 15upx;
 		border-radius: 5upx;

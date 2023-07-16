@@ -1,7 +1,6 @@
 <template>
 	<view class="crumb">
-		<text class="crumb-text" v-for="(item, index) in allSelOrg" :key="index" @click="clickOrgCru(item, index)"
-			:class="index === (allSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
+		<text class="crumb-text" v-for="(item, index) in allSelOrg" :key="index" @click="clickOrgCru(item, index)" :class="index === (allSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
 			{{ item.name + (index === (allSelOrg.length-1) ? '' : ' | ') }}
 		</text>
 	</view>
@@ -10,7 +9,7 @@
 			<uni-list-item v-for="(item, index) in curSelOrg" :key="index">
 				<!-- 名称 -->
 				<template v-slot:body>
-					<text class="org-list-name" @click="morePopupRef.open(item)">{{item.name}}</text>
+					<text class="org-list-name" @click="moreRef.open(item)">{{item.name}}</text>
 				</template>
 				<!-- 右侧icon -->
 				<template v-slot:footer>
@@ -30,43 +29,25 @@
 			iconColor: '#fff'
 		}" horizontal="right" vertical="bottom" direction="horizontal" @fabClick="add"></uni-fab>
 	<!-- 更多操作 -->
-	<morePopup ref="morePopupRef" @handleOk="loadData()"></morePopup>
+	<more ref="moreRef" @handleOk="loadData()"></more>
 </template>
-
 <script setup>
-	import {
-		orgTree
-	} from '@/api/biz/bizOrgApi'
+	import { orgTree } from '@/api/biz/bizOrgApi'
 	import SnowyEmpty from "@/components/snowy-empty.vue"
-	import {
-		reactive,
-		ref,
-		getCurrentInstance
-	} from "vue";
-	import {
-		onLoad,
-		onShow,
-		onReady,
-		onPullDownRefresh,
-		onReachBottom
-	} from "@dcloudio/uni-app"
-
-	import morePopup from '@/pages/biz/org/more-popup.vue'
-
-	const morePopupRef = ref()
-
+	import { reactive, ref, getCurrentInstance } from "vue"
+	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
+	import more from '@/pages/biz/org/more.vue'
+	const moreRef = ref()
 	// 所有选择的机构
 	const allSelOrg = ref([])
 	// 当前选择的机构
 	const curSelOrg = ref([])
-
 	// 展示
 	onShow(() => {
 		uni.$once('formBack', (data) => {
 			loadData()
 		})
 	})
-
 	const loadData = () => {
 		orgTree().then(res => {
 			curSelOrg.value = res?.data || []
@@ -78,19 +59,16 @@
 		})
 	}
 	loadData()
-
 	const clickOrgCru = (item, index) => {
 		curSelOrg.value = item.children
 		allSelOrg.value.splice(index + 1, allSelOrg.value.length - (index + 1))
 	}
-
 	const clickOrg = (item, index) => {
 		if (item.children) {
 			curSelOrg.value = item.children
 			allSelOrg.value.push(item)
 		}
 	}
-
 	// 新增悬浮按钮
 	const add = () => {
 		uni.navigateTo({
@@ -98,7 +76,7 @@
 		})
 	}
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 	.crumb {
 		margin: 15upx;
 		border-radius: 5upx;

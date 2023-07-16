@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 import cryptoJs from 'sm-crypto'
-
 // B端账号密码登录
 export function login(data) {
 	return request({
@@ -12,7 +11,6 @@ export function login(data) {
 		data: data
 	})
 }
-
 // 获取用户信息
 export function getLoginUser() {
 	return request({
@@ -20,7 +18,6 @@ export function getLoginUser() {
 		method: 'get'
 	})
 }
-
 // 退出方法
 export function logout() {
 	return request({
@@ -28,7 +25,6 @@ export function logout() {
 		method: 'get'
 	})
 }
-
 // 获取验证码
 export function getPicCaptcha() {
 	return request({
