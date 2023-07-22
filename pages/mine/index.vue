@@ -71,9 +71,10 @@
 <script setup>
 	import SnowyIcon from '@/components/snowy-icon.vue'
 	import store from '@/store/index'
-	import storage from '@/utils/storage'
 	import { computed } from "vue"
 	import modal from '@/plugins/modal'
+	import config from '@/config'
+	import tab from '@/plugins/tab'
 	const name = store.getters.userInfo.name
 	const version = store.getters.sysBaseConfig.SNOWY_SYS_VERSION
 	const avatar = computed(() => {
@@ -121,15 +122,12 @@
 		modal.confirm('确定注销并退出系统吗？').then(() => {
 			// 退出
 			store.dispatch('LogOut').then(() => {
-				// 跳转登录页面
-				uni.reLaunch({
-					url: '/pages/login'
-				})
+				tab.reLaunch(config.NO_TOKEN_BACK_URL)
 			})
 		})
 	}
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 	@mixin circular {
 		width: 120upx;
 		height: 120upx;

@@ -48,9 +48,9 @@
 		moreRef.value.open(record)
 	}
 	// 所有选择的机构
-	let allSelOrg = ref([])
+	const allSelOrg = ref([])
 	// 当前选择的机构
-	let curSelOrg = ref([])
+	const curSelOrg = ref([])
 	orgTree().then(res => {
 		curSelOrg.value = res.data
 		allSelOrg.value.push({
@@ -60,12 +60,12 @@
 		})
 	})
 	// 用户相关逻辑
-	let searchFormState = reactive({})
-	let parameter = reactive({
+	const searchFormState = reactive({})
+	const parameter = reactive({
 		current: 1,
 		size: 10
 	})
-	let userData = ref([])
+	const userData = ref([])
 	// 加载数据
 	const loadData = (isReset) => {
 		if (isReset) {

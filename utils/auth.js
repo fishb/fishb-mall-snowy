@@ -1,7 +1,10 @@
 import store from '@/store'
 import config from '@/config'
 import XEUtils from 'xe-utils'
-import modal from '@/plugins/modal.js'
+import modal from '@/plugins/modal'
+// #ifdef H5
+import { pathAddRedirectUrl } from '@/utils/common'
+// #endif
 const TokenKey = 'App-Token'
 export function getToken() {
 	return uni.getStorageSync(TokenKey)
@@ -20,9 +23,16 @@ export function checkPermission(path) {
 			return true
 		} else {
 			modal.alert("页面【" + path + "】需要进行登录，才能进行访问！")
+			// #ifdef H5
+			uni.reLaunch({
+				url: pathAddRedirectUrl(config.NO_TOKEN_BACK_URL, path)
+			})
+			// #endif
+			// #ifndef H5
 			uni.reLaunch({
 				url: config.NO_TOKEN_BACK_URL
 			})
+			// #endif
 			return false
 		}
 	} else {
