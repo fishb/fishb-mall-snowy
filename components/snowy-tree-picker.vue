@@ -1,7 +1,7 @@
 <template>
-	<view class="snowy-sel-picker">
-		<view class="input" @click="handleInput" :class="{ 'input-disabled': props.disabled }">
-			<view class="input-value" :class="{ 'input-value-border': props.border, 'input-value-disabled': props.disabled }">
+	<view class="snowy-data-picker">
+		<view class="input" @click="handleInput">
+			<view class="input-value" :class="{ 'input-value-border': props.border }">
 				<!-- 单选 -->
 				<view v-if="!isMultiple && curSelDataKey && curSelDataKey !== ''">
 					{{ curSelData[map.label] }}
@@ -20,27 +20,33 @@
 				<view class="cal" @click="cancel"> 取消 </view>
 				<view class="conf" @click="confirm"> 确定 </view>
 			</view>
+			<!-- 面包屑 -->
+			<view class="crumb">
+				<text v-for="(item, index) in allClickSelData" :key="index" @click="clickDataCru(item, index)" :class="index === (allClickSelData.length-1) ? 'uni-secondary-color' : 'uni-primary'">
+					{{ item[map.label] + (index === (allClickSelData.length-1) ? '' : ' | ') }}
+				</text>
+			</view>
 			<!-- 已选择 -->
 			<view class="choiced" v-show="!!curSelDataKey && (!isMultiple? true : curSelDataKey.length > 0)" :style="{maxHeight:!isMultiple?'5vh':'20vh', overflowY: 'scroll'}">
 				<!-- 单选已选择 -->
 				<view class="single" v-if="!isMultiple">
-					<view class="name" @click="delData(curSelData)">
+					<view class="label" @click="delData(curSelData)">
 						{{ curSelData[map.label] }}
 					</view>
 					<uni-icons type="trash-filled" @click="delData(curSelData)" color="#e43d33" size="20"></uni-icons>
 				</view>
 				<!-- 多选已选择 -->
-				<view class="multiple" v-if="!!isMultiple" v-for="(item, index) in curSelData" :key="index">
-					<view class="name" @click="delData(item)">
+				<view class="multiple" v-if="!!isMultiple" v-for="(item, index) in curSelData">
+					<view class="label" @click="delData(item)">
 						{{ item[map.label] }}
 					</view>
 					<uni-icons type="trash-filled" @click="delData(item)" color="#e43d33" size="20"></uni-icons>
 				</view>
 			</view>
-			<!-- 面板数据 -->
-			<scroll-view class="data" :scroll-y="true" @scrolltolower="scrolltolower">
+			<!-- 数据 -->
+			<view class="data">
 				<uni-list>
-					<uni-list-item v-for="(item, index) in rangeData" :key="index">
+					<uni-list-item v-for="(item, index) in curClickSelData" :key="index">
 						<!-- 选择icon -->
 						<template v-slot:header>
 							<view>
@@ -51,20 +57,25 @@
 						</template>
 						<!-- 名称 -->
 						<template v-slot:body>
-							<text class="name" @click="selOrDelData(item, index)">{{item[map.label]}}</text>
+							<text class="label" @click="clickData(item, index)">{{ item[map.label] }}</text>
+						</template>
+						<!-- 右侧icon -->
+						<template v-slot:footer>
+							<uni-icons type="right" @click="clickData(item, index)" v-if="$utils.isEmpty(item[map.children]) ? false : true">
+							</uni-icons>
 						</template>
 					</uni-list-item>
 				</uni-list>
-			</scroll-view>
+			</view>
 		</uni-popup>
 	</view>
 </template>
 <script setup>
 	import { reactive, ref, getCurrentInstance, watch, inject } from "vue"
 	import XEUtils from 'xe-utils'
-	const emits = defineEmits(['update:modelValue', 'queryCurSelData', 'scrollToLower', 'cancel', 'confirm'])
+	const emits = defineEmits(['update:modelValue', 'queryTreeData', 'cancel', 'confirm'])
 	const props = defineProps({
-		modelValue: [String, Array],
+		modelValue: [Number, String, Array],
 		border: {
 			type: Boolean,
 			default: true,
@@ -80,45 +91,25 @@
 			default: "请选择",
 			required: false
 		},
+		isTopLevel: {
+			type: Boolean,
+			default: false,
+			required: false
+		},
 		map: {
 			type: Object,
 			default: {
 				key: "key",
+				parentKey: "parentKey",
+				children: "children",
 				label: "label"
 			},
 			required: false
 		},
-		rangeData: {
-			type: Array,
-			default: [],
-			required: false
-		},
-		disabled: {
-			type: Boolean,
-			default: false,
-			required: false
-		},
-		// 是否开启大数据模式，如果开启大数据模式，
-		// 那么就要实现queryCurSelData方法，并提供相应的回调（通过服务端获取已选择的数据）
-		// 与此同时要实现scrollToLower方法（用于分页加载）
-		isBigData: {
-			type: Boolean,
-			default: false,
-			required: false
-		},
 	})
-	// 数据类型校验
-	// if (props.value) {
-	// 	if (!props.isMultiple && typeof props.value !== "string") {
-	// 		console.error("单选所传value值应为字符串")
-	// 	}
-	// 	if (!!props.isMultiple && !Array.isArray(props.value)) {
-	// 		console.error("多选所传value值应为数组")
-	// 	}
-	// }
 	if (props.modelValue) {
-		if (!props.isMultiple && typeof props.modelValue !== "string") {
-			console.error("单选所传modelValue值应为字符串")
+		if (!props.isMultiple && (typeof props.modelValue !== "string" || typeof props.modelValue != "number")) {
+			console.error("单选所传modelValue值应为字符串或数字")
 		}
 		if (!!props.isMultiple && !Array.isArray(props.modelValue)) {
 			console.error("多选所传modelValue值应为数组")
@@ -129,31 +120,55 @@
 	// 当前选中的数据key及数据
 	const curSelDataKey = !props.isMultiple ? ref("") : ref([])
 	const curSelData = !props.isMultiple ? ref({}) : ref([])
+	// 所有点击选中数据【页面数据】
+	const allClickSelData = ref([])
+	// 当前点击选中数据【页面数据】
+	const curClickSelData = ref([])
 	watch(() => props.modelValue, (newValue, oldValue) => {
-		initData()
+		loadData()
 	}, {
 		deep: false,
 		immediate: false
 	})
-	watch(() => props.rangeData, (newValue, oldValue) => {
-		if (!props.isBigData) {
-			initData()
-		}
-	}, {
-		deep: false,
-		immediate: false
-	})
-	const initData = () => {
-		// 单选curSelData初始化值赋值
-		if (!props.isMultiple) {
-			curSelDataKey.value = props.modelValue ? XEUtils.clone(props.modelValue, true) : ""
-			if (props.isBigData) {
-				emits('queryCurSelData', curSelDataKey.value, (val) => {
-					curSelData.value = val
-				})
+	const loadData = () => {
+		emits('queryTreeData', null, (treeData) => {
+			if (props.isTopLevel) {
+				// 含有顶级
+				curClickSelData.value = [{
+					[props.map.key]: '0',
+					[props.map.parentKey]: '-1',
+					[props.map.label]: '顶级',
+					[props.map.children]: treeData
+				}]
+				allClickSelData.value = [{
+					[props.map.key]: '-1',
+					[props.map.label]: '全部',
+					[props.map.children]: [{
+						[props.map.key]: '0',
+						[props.map.parentKey]: '-1',
+						[props.map.label]: '顶级',
+						[props.map.children]: treeData
+					}]
+				}]
 			} else {
-				if (!XEUtils.isEmpty(curSelDataKey.value)) {
-					const curSelDataArr = XEUtils.filterTree(props.rangeData, item => {
+				// 不含有顶级
+				curClickSelData.value = treeData || []
+				allClickSelData.value = [{
+					[props.map.key]: '0',
+					[props.map.parentKey]: '-1',
+					[props.map.label]: '全部',
+					[props.map.children]: treeData
+				}]
+			}
+			// 单选curSelData初始化值赋值
+			if (!props.isMultiple) {
+				if (props.modelValue) {
+					curSelDataKey.value = XEUtils.clone(props.modelValue, true)
+				} else {
+					curSelDataKey.value = ""
+				}
+				if (curSelDataKey.value) {
+					const curSelDataArr = XEUtils.filterTree(allClickSelData.value, item => {
 						return curSelDataKey.value === item[props.map.key]
 					})
 					if (curSelDataArr && curSelDataArr.length === 1) {
@@ -163,45 +178,33 @@
 					curSelData.value = {}
 				}
 			}
-		}
-		// 多选curSelData初始化值赋值
-		if (!!props.isMultiple) {
-			curSelDataKey.value = props.modelValue ? XEUtils.clone(props.modelValue, true) : []
-			if (props.isBigData) {
-				emits('queryCurSelData', curSelDataKey.value, (val) => {
-					curSelData.value = val
-				})
-			} else {
-				if (!XEUtils.isEmpty(curSelDataKey.value)) {
-					curSelData.value = XEUtils.filterTree(props.rangeData, item => {
+			// 多选curSelData初始化值赋值
+			if (!!props.isMultiple) {
+				if (props.modelValue && props.modelValue.length > 0) {
+					curSelDataKey.value = XEUtils.clone(props.modelValue, true)
+				} else {
+					curSelDataKey.value = []
+				}
+				if (curSelDataKey.value && curSelDataKey.value.length > 0) {
+					curSelData.value = XEUtils.filterTree(allClickSelData.value, item => {
 						return curSelDataKey.value.includes(item[props.map.key])
 					})
 				} else {
 					curSelData.value = []
 				}
 			}
-		}
+		})
 	}
+	loadData()
 	// 点击输入框
 	const handleInput = () => {
-		// initData()
+		// 重新初始化数据，防止数据更新
 		popupRef.value.open('bottom')
 	}
-	// 选择或删除数据
-	const selOrDelData = (item, index) => {
-		if (!props.isMultiple) {
-			if (item[props.map.key] != curSelDataKey.value) {
-				selData(item, index)
-			} else {
-				delData(item, index)
-			}
-		} else {
-			if (!curSelDataKey.value.includes(item[props.map.key])) {
-				selData(item, index)
-			} else {
-				delData(item, index)
-			}
-		}
+	// 点击面包屑
+	const clickDataCru = (item, index) => {
+		curClickSelData.value = item[props.map.children]
+		allClickSelData.value.splice(index + 1, allClickSelData.value.length - (index + 1))
 	}
 	// 选择数据
 	const selData = (item, index) => {
@@ -223,10 +226,18 @@
 			curSelData.value.splice(curSelData.value.findIndex(curSelDataItem => curSelDataItem[props.map.key] === item[props.map.key]), 1);
 		}
 	}
+	// 点击数据
+	const clickData = (item, index) => {
+		if (XEUtils.isEmpty(item[props.map.children])) {
+			return
+		}
+		curClickSelData.value = item[props.map.children]
+		allClickSelData.value.push(item)
+	}
 	// 取消
 	const cancel = () => {
 		// 重置数据
-		initData()
+		loadData()
 		popupRef.value.close()
 	}
 	const confirm = () => {
@@ -239,24 +250,9 @@
 		})
 		popupRef.value.close()
 	}
-	const scrolltolower = () => {
-		emits('scrollToLower')
-	}
-	defineExpose({
-		initData
-	})
 </script>
 <style lang="scss" scoped>
-	.snowy-sel-picker {
-		.input-disabled {
-			pointer-events: none;
-			background-color: rgb(247, 246, 246);
-
-			.input-value-disabled {
-				color: rgb(192, 192, 192);
-			}
-		}
-
+	.snowy-data-picker {
 		.input {
 			.input-value {
 				font-size: 25upx;
@@ -296,12 +292,20 @@
 				}
 			}
 
+			.crumb {
+				margin: 30upx;
+				border-radius: 5upx;
+				white-space: nowrap;
+				overflow-x: scroll;
+				background-color: white;
+			}
+
 			.choiced {
 				.single {
 					margin: 5px 30upx;
 					display: inline-block;
 
-					.name {
+					.label {
 						display: inline-block;
 						vertical-align: top;
 						color: $uni-main-color;
@@ -312,7 +316,7 @@
 					margin: 10upx 0 10upx 30upx;
 					display: inline-block;
 
-					.name {
+					.label {
 						display: inline-block;
 						vertical-align: top;
 						color: $uni-main-color;
@@ -325,7 +329,7 @@
 				height: 40vh;
 				overflow-y: scroll;
 
-				.name {
+				.label {
 					flex: 1;
 					font-size: 30upx;
 					margin: 2upx 20upx;

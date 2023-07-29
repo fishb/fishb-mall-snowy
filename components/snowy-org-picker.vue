@@ -75,7 +75,6 @@
 	import XEUtils from 'xe-utils'
 	const emits = defineEmits(['update:modelValue', 'cancel', 'confirm'])
 	const props = defineProps({
-		// value: [String, Array],
 		modelValue: [String, Array],
 		border: {
 			type: Boolean,
