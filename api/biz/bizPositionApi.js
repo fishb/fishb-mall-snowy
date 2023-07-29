@@ -39,3 +39,11 @@ export function positionDetail(data) {
 		data: data
 	})
 }
+// 获取机构树选择器
+export function positionOrgTreeSelector(data) {
+	return request({
+		url: '/biz/position/orgTreeSelector',
+		method: 'get',
+		data: data
+	})
+}

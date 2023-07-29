@@ -1,6 +1,6 @@
 <template>
-	<view class="empty-box">
-		<image :src="imgUrl" mode="aspectFit"></image>
+	<view class="empty-box" :style="{ height: boxHeight }">
+		<image :style="{ height: imageHeight }" :src="imgUrl" mode="aspectFit"></image>
 	</view>
 </template>
 <script setup>
@@ -9,6 +9,16 @@
 			type: String,
 			required: false,
 			default: "/static/empty.svg",
+		},
+		boxHeight: {
+			type: String,
+			required: false,
+			default: "800upx",
+		},
+		imageHeight: {
+			type: String,
+			required: false,
+			default: "100vw",
 		}
 	})
 </script>

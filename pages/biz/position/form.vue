@@ -2,7 +2,6 @@
 	<view class="container">
 		<uni-forms ref="formRef" :model="formData" label-position="top" labelWidth="75px">
 			<uni-forms-item label="所属机构" name="orgId" required :rules="[{ required: true, errorMessage: '请选择所属机构' }]">
-				<!-- :isTopLevel="true" -->
 				<snowy-org-picker v-model="formData.orgId" placeholder="请选择所属机构" :org-tree-api="selectorApiFunction.orgTreeApi">
 				</snowy-org-picker>
 			</uni-forms-item>
@@ -25,16 +24,15 @@
 	import SnowySelPicker from '@/components/snowy-sel-picker.vue'
 	import SnowyUserPicker from '@/components/snowy-user-picker.vue'
 	import tool from '@/plugins/tool'
-	import { positionDetail, submitForm } from '@/api/biz/bizPositionApi'
+	import { positionDetail, positionOrgTreeSelector, submitForm } from '@/api/biz/bizPositionApi'
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
-	import { orgTree } from '@/api/biz/bizOrgApi'
 	const formRef = ref()
 	let formData = ref({
 		sortCode: 99
 	})
 	const selectorApiFunction = {
 		orgTreeApi: (param) => {
-			return orgTree(param).then((res) => {
+			return positionOrgTreeSelector(param).then((res) => {
 				return Promise.resolve(res)
 			})
 		}
@@ -45,9 +43,7 @@
 		if (!option.id) {
 			return
 		}
-		positionDetail({
-			id: option.id
-		}).then(res => {
+		positionDetail({ id: option.id }).then(res => {
 			formData.value = res?.data
 		})
 	})

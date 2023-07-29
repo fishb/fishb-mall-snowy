@@ -2,7 +2,7 @@
 	<view class="container">
 		<uni-forms ref="formRef" :model="formData" label-position="top" labelWidth="75px">
 			<uni-forms-item label="上级机构" name="parentId" required :rules="[{ required: true, errorMessage: '请选择上级机构' }]">
-				<snowy-org-picker v-model="formData.parentId" :isTopLevel="true" placeholder="请选择上级机构" :org-tree-api="selectorApiFunction.orgTreeApi">
+				<snowy-org-picker v-model="formData.parentId" :isTopLevel="true" placeholder="请选择上级机构" :org-tree-api="selectorApiFunction.orgTreeSelectorApi">
 				</snowy-org-picker>
 			</uni-forms-item>
 			<uni-forms-item label="机构名称" name="name" required :rules="[{ required: true, errorMessage: '请输入机构名称' }]">
@@ -28,7 +28,7 @@
 	import SnowySelPicker from '@/components/snowy-sel-picker.vue'
 	import SnowyUserPicker from '@/components/snowy-user-picker.vue'
 	import tool from '@/plugins/tool'
-	import { orgTree, orgTreeSelector, orgUserSelector, orgDetail, submitForm } from '@/api/biz/bizOrgApi'
+	import { orgTreeSelector, orgUserSelector, orgDetail, submitForm } from '@/api/biz/bizOrgApi'
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	import { userCenterGetUserListByIdList } from '@/api/sys/userCenterApi'
 	const formRef = ref()
@@ -37,11 +37,6 @@
 	})
 	const orgCategoryOptions = tool.dictList('ORG_CATEGORY')
 	const selectorApiFunction = {
-		orgTreeApi: (param) => {
-			return orgTree(param).then((res) => {
-				return Promise.resolve(res)
-			})
-		},
 		orgTreeSelectorApi: (param) => {
 			return orgTreeSelector(param).then((res) => {
 				return Promise.resolve(res)
@@ -63,9 +58,7 @@
 		if (!option.id) {
 			return
 		}
-		orgDetail({
-			id: option.id
-		}).then(res => {
+		orgDetail({ id: option.id }).then(res => {
 			formData.value = res?.data
 		})
 	})
@@ -82,7 +75,7 @@
 		})
 	}
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 	.container {
 		margin: 15upx;
 		border-radius: 5upx;
