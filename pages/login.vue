@@ -30,12 +30,12 @@
 	import { getPicCaptcha } from '@/api/login'
 	import store from '@/store'
 	import onFeedTap from '@/utils/feedTap'
-  import XEUtils from 'xe-utils'
-  import tab from '@/plugins/tab'
-  import modal from '@/plugins/modal'
+	import XEUtils from 'xe-utils'
+	import tab from '@/plugins/tab'
+	import modal from '@/plugins/modal'
 	const { proxy } = getCurrentInstance()
 	const logoTap = () => {
-    tab.reLaunch('/pages/config/index')
+		tab.reLaunch('/pages/config/index')
 	}
 	const sysBaseConfig = computed(() => {
 		return store.getters.sysBaseConfig
@@ -78,16 +78,16 @@
 				store.dispatch('GetUserInfo'),
 				store.dispatch('GetDictTypeTreeData'),
 			]).then((result) => {
-        // #ifdef H5
-        const { searchQuery } = XEUtils.parseUrl(location.href)
-        if(searchQuery.redirect){
-          tab.reLaunch(searchQuery.redirect)
-        }else{
-          // #endif
-          tab.reLaunch('/pages/home/index')
-          // #ifdef H5
-        }
-        // #endif
+				// #ifdef H5
+				const { searchQuery } = XEUtils.parseUrl(location.href)
+				if (searchQuery.redirect) {
+					tab.reLaunch(searchQuery.redirect)
+				} else {
+					// #endif
+					tab.reLaunch('/pages/home/index')
+					// #ifdef H5
+				}
+				// #endif
 			}).catch(err => {
 				onFeedTap()
 				if (sysBaseConfig.value.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN) {
