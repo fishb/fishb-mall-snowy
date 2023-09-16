@@ -85,18 +85,6 @@
 			}
 		}]
 	}, {
-		"root": "pages/dev",
-		"pages": [{
-			"path": "file/index",
-			"style": {
-				"navigationBarTitleText": "文件管理",
-				"enablePullDownRefresh": false,
-				//#ifdef H5
-				"navigationStyle": "custom"
-				//#endif
-			}
-		}]
-	}, {
 		"root": "pages/biz/org",
 		"pages": [{
 			"path": "index",
@@ -233,6 +221,13 @@
 			"selectedIconPath": "static/images/tabbar/mine_.png",
 			"text": "我的"
 		}]
+	},
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"tui-(.*)": "@/components/thorui/thorui/tui-$1/tui-$1.vue",
+			"snowy-(.*)": "@/components/snowy/snowy-$1/snowy-$1.vue"
+		}
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
