@@ -3,6 +3,7 @@
  * @param {String} name
  */
 export const get_file_ext = (name) => {
+	console.log(name)
 	const last_len = name.lastIndexOf('.')
 	const len = name.length
 	return {
@@ -10,7 +11,6 @@ export const get_file_ext = (name) => {
 		ext: name.substring(last_len + 1, len)
 	}
 }
-
 /**
  * 获取扩展名
  * @param {Array} fileExtname
@@ -24,14 +24,13 @@ export const get_extname = (fileExtname) => {
 	}
 	return []
 }
-
 /**
  * 获取文件和检测是否可选
  */
 export const get_files_and_is_max = (res, _extname) => {
 	let filePaths = []
 	let files = []
-	if(!_extname || _extname.length === 0){
+	if (!_extname || _extname.length === 0) {
 		return {
 			filePaths,
 			files
@@ -52,14 +51,11 @@ export const get_files_and_is_max = (res, _extname) => {
 			duration: 5000
 		})
 	}
-
 	return {
 		filePaths,
 		files
 	}
 }
-
-
 /**
  * 获取图片信息
  * @param {Object} filepath
@@ -107,3 +103,13 @@ export const get_file_data = async (files, type = 'image') => {
 	}
 	return filedata
 }
+/**
+ * 文字提示
+ */
+export const toast = (text) => {
+	text && uni.showToast({
+		title: text,
+		icon: "none"
+	})
+}
+

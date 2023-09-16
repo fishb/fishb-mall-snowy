@@ -1,7 +1,6 @@
 <template>
 	<view class="container-icon" :style="{ backgroundColor: backgroundColor }">
-		<uni-icons v-bind="$attrs">
-		</uni-icons>
+		<uv-icon v-bind="$attrs"></uv-icon>
 	</view>
 </template>
 <script setup>
