@@ -1,45 +1,36 @@
 <template>
 	<view>
-		<view class="sticky">
-			<uni-segmented-control :current="curView" :values="segmentedList" styleType="button" activeColor="#007aff" @clickItem="(e) => {
-					if (curView != e.currentIndex) {
-						curView = e.currentIndex
-						loadData(true)
-					}
-				}">
-			</uni-segmented-control>
-		</view>
+		<tui-tabs :top="0" :isFixed="true" :tabs="segmentedList" :currentTab="curView" @change="(e) => {
+				if (curView != e.index) {
+					curView = e.index
+					loadData(true)
+				}
+			}"></tui-tabs>
 		<view class="msg-list">
-			<uni-list>
-				<uni-list-item v-for="(item, index) in msgData" :key="index" :showArrow="false" :clickable="true" :rightText="item.createTime" @click="clickMsg(item, index)">
-					<template v-slot:body>
-						<view class="msg-item">
-							<uni-row>
-								<uni-col :span="24">
-									<view class="msg-title">
-										{{item.subject}}
-									</view>
-								</uni-col>
-								<uni-col :span="24">
-									<view class="msg-content">
-										<rich-text :nodes="item.content"></rich-text>
-									</view>
-								</uni-col>
-								<uni-col :span="24">
-									<view class="msg-footer">
-										{{item.createTime}}
-									</view>
-								</uni-col>
-							</uni-row>
+			<view class="item" v-for="(item, index) in msgData" :key="index" :index="index" @tap="clickMsg(item, index)">
+				<uv-row>
+					<uv-col span="11">
+						<view class="item-title snowy-bold snowy-ellipsis" :class="!!item.read ? 'item-grey': ''">{{item.subject}}</view>
+					</uv-col>
+					<uv-col span="1">
+						<view class="snowy-flex-end">
+							<uv-badge v-show="!item.read" :isDot="true" type="error"></uv-badge>
 						</view>
-					</template>
-					<template v-slot:footer>
-						<uni-icons v-show="!item.read" type="smallcircle-filled" size="10" color="#e43d33"></uni-icons>
-					</template>
-				</uni-list-item>
-			</uni-list>
-			<snowy-empty v-if="$utils.isEmpty(msgData)" />
+					</uv-col>
+				</uv-row>
+				<uv-row customStyle="margin-top: 15rpx">
+					<uv-col span="12">
+						<view class="item-sub-title snowy-ellipsis">{{item.createTime}}</view>
+					</uv-col>
+				</uv-row>
+				<uv-row customStyle="margin-top: 15rpx">
+					<uv-col span="12">
+						<view class="item-sub-title snowy-ellipsis">{{item.content}}</view>
+					</uv-col>
+				</uv-row>
+			</view>
 		</view>
+		<snowy-empty v-show="$utils.isEmpty(msgData)" :fixed="true" />
 	</view>
 </template>
 <script setup>
@@ -48,13 +39,14 @@
 	import XEUtils from 'xe-utils'
 	import { userLoginUnreadMessagePage } from '@/api/sys/userCenterApi'
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
-	import SnowyEmpty from "@/components/snowy-empty.vue"
 	const curView = ref(0)
 	const segmentedList = ref([])
 	const messageCategoryList = tool.dictList('MESSAGE_CATEGORY')
 	if (!XEUtils.isEmpty(messageCategoryList)) {
 		messageCategoryList.forEach(item => {
-			segmentedList.value.push(item.text)
+			segmentedList.value.push({
+				name: item.text
+			})
 		})
 	}
 	const searchFormState = reactive({})
@@ -100,30 +92,30 @@
 </script>
 <style lang="scss" scoped>
 	.msg-list {
-		margin: 15upx;
-		border-radius: 5upx;
-
-		.msg-item {
-			width: 100vw;
-
-			.msg-title {
-				color: #3a3a3a;
-				margin: 20upx 0;
-				font-size: 30upx;
-				font-weight: bold;
-			}
-
-			.msg-content {
-				color: #909399;
-				font-size: 26upx;
-			}
-
-			.msg-footer {
-				margin-top: 20upx;
-				color: #909399;
-				font-size: 26upx;
-				text-align: right;
-			}
+		margin-top: 85rpx;
+	}
+	.item {
+		background: #ffffff;
+		margin: 15rpx 0;
+		padding: 40rpx 25rpx;
+		box-shadow: 0 1px 2px #ccc;
+		border-radius: 15rpx;
+	
+		.item-title {
+			font-size: 28rpx;
 		}
+	
+		.item-sub-title {
+			color: #999;
+			font-size: 25rpx;
+		}
+	}
+	
+	.item-grey {
+		color: #999;
+	}
+	
+	.item:hover {
+		box-shadow: 1upx 5upx 5upx #5677fc;
 	}
 </style>

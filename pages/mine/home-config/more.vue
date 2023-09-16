@@ -1,41 +1,42 @@
 <template>
-	<uni-popup ref="popupRef" type="bottom" safeArea>
+	<uv-popup ref="popRef" mode="bottom" bg-color="null" z-index="99">
 		<view class="container">
-			<uni-list :border="false">
-				<uni-list-item v-if="confIndex != 0" title="上移" class="item" :clickable="true" @click="up">
-				</uni-list-item>
-				<uni-list-item v-if="confIndex != configs.length-1" title="下移" class="item" :clickable="true" @click="down">
-				</uni-list-item>
-				<uni-list-item title="取消" class="item" :clickable="true" @click="cancel">
-				</uni-list-item>
-			</uni-list>
+			<tui-list-view unlined="all" background-color="transparent">
+				<tui-list-cell v-if="confIndex != 0" :hover="true" :arrow="false" @click="up" :radius="10" >
+					<view class="item"> 上移 </view>
+				</tui-list-cell>
+				<tui-list-cell v-if="confIndex != configs.length-1" :hover="true" :arrow="false" @click="down" :radius="10" :margin-top="2">
+					<view class="item"> 下移 </view>
+				</tui-list-cell>
+				<tui-list-cell :hover="true" :arrow="false" @click="cancel" :margin-top="10" :radius="10">
+					<view class="item"> 取消 </view>
+				</tui-list-cell>
+			</tui-list-view>
 		</view>
-	</uni-popup>
+	</uv-popup>
 </template>
 <script setup>
 	import store from '@/store'
 	import { reactive, ref, getCurrentInstance } from "vue"
-	// 弹出ref
-	const popupRef = ref()
-	// 打开
+	const popRef = ref()
 	const configs = ref([])
 	const confIndex = ref()
 	const open = (data, index) => {
 		configs.value = data
 		confIndex.value = index
-		popupRef.value.open("bottom")
+		popRef.value.open()
 	}
 	// 上移
 	const up = () => {
 		swapArray(configs.value, confIndex.value - 1, confIndex.value)
 		store.commit("SET_homeConfigs", configs.value)
-		popupRef.value.close()
+		popRef.value.close()
 	}
 	// 下移
 	const down = () => {
 		swapArray(configs.value, confIndex.value, confIndex.value + 1)
 		store.commit("SET_homeConfigs", configs.value)
-		popupRef.value.close()
+		popRef.value.close()
 	}
 	//数组元素互换位置
 	const swapArray = (arr, index1, index2) => {
@@ -44,7 +45,7 @@
 	}
 	// 取消
 	const cancel = () => {
-		popupRef.value.close()
+		popRef.value.close()
 	}
 	defineExpose({
 		open
@@ -52,11 +53,8 @@
 </script>
 <style lang="scss" scoped>
 	.container {
-		margin: 15upx;
-		border-radius: 5upx;
 		padding: 5upx;
-		background-color: $uni-white;
-
+		background-color: transparent;
 		.item {
 			text-align: center;
 		}

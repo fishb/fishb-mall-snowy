@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uni-section :title="`图表（示例）`" type="square"></uni-section>
+		<tui-section padding="20rpx 50rpx" title="图表（示例）" is-line line-cap="square" :line-right="20" background="#fff" :size="28"></tui-section>
 		<qiun-data-charts type="column" :opts="opts" :chartData="chartData" />
 		<qiun-data-charts type="line" :opts="opts" :chartData="chartData" />
 	</view>

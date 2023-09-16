@@ -1,31 +1,41 @@
 <template>
 	<!-- 搜索 -->
-	<uni-search-bar v-model="searchFormState.searchKey" @confirm="loadData(true)"></uni-search-bar>
-	<!-- 自定义面包屑 -->
-	<view class="crumb">
+	<snowy-search placeholder="请输入流程名称" v-model="searchFormState.searchKey" @confirm="loadData(true)" @clear="loadData(true)"></snowy-search>
+	<!-- 面包屑 -->
+	<view class="crumb snowy-shadow">
 		<text v-for="(item, index) in allSelOrg" :key="index" class="text-center" @click="clickOrgCru(item, index)" :class="index === (allSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
 			{{ item.name + (index === (allSelOrg.length-1) ? '' : ' | ') }}
 		</text>
 	</view>
-	<view class="user-list">
-		<uni-list>
-			<!-- 机构 -->
-			<uni-list-item v-for="(item, index) in curSelOrg" :key="index" :title="item.name" :showArrow="true" :clickable="true" @click="clickOrg(item, index)"></uni-list-item>
-			<!-- 人员 -->
-			<uni-list-chat v-for="(item, index) in userData" :key="index" :title="item.name" :avatar="item.avatar" :note="item.orgName + ' | '+ item.positionName +' | '+item.genderName" :time="item.entryDate" :clickable="true" @click="moreClick(item)">
-			</uni-list-chat>
-		</uni-list>
-		<snowy-empty v-if="$utils.isEmpty(userData)" />
+	<!-- 组织 -->
+	<view class="org-list snowy-shadow">
+		<tui-list-view unlined="all">
+			<tui-list-cell v-for="(item, index) in curSelOrg" :key="index" :line-left="0" :hover="item.children? true : false" :arrow="item.children? true : false" @click="clickOrg(item, index)">
+				<view class="item">
+					<image v-if="item.category === 'COMPANY'" class="item-img" src="/static/svg/org/company.svg" mode="widthFix"></image>
+					<image v-if="item.category === 'DEPT'" class="item-img" src="/static/svg/org/department.svg" mode="widthFix"></image>
+					<view class="item-left">{{item.name}}</view>
+					<view class="item-right"></view>
+				</view>
+			</tui-list-cell>
+		</tui-list-view>
 	</view>
-	<!-- 新增悬浮按钮 -->
-	<uni-fab v-if="hasPerm('mobileBizUserAdd')" :pattern="{
-			color: '#7A7E83',
-			backgroundColor: '#fff',
-			selectedColor: '#007AFF',
-			buttonColor: '#007AFF',
-			iconColor: '#fff'
-		}" horizontal="right" vertical="bottom" direction="horizontal" @fabClick="add"></uni-fab>
-	<!-- 更多操作 -->
+	<!-- 用户 -->
+	<view class="user-list snowy-shadow">
+		<tui-list-view unlined="all">
+			<tui-list-cell v-for="(item, index) in userData" :key="index" :line-left="0" :hover="true" :arrow="false" @click="moreClick(item)">
+				<view class="item">
+					<image class="item-img" :src="item.avatar" mode="widthFix"></image>
+					<view class="item-left">{{item.name}}</view>
+					<view class="item-right">{{item.orgName + ' | '+ item.positionName +' | '+item.genderName}}</view>
+				</view>
+			</tui-list-cell>
+		</tui-list-view>
+		<snowy-empty v-show="$utils.isEmpty(userData)" />
+	</view>
+	<!-- 新增 -->
+	<snowy-float-btn v-if="hasPerm('mobileBizUserAdd')" @click="add"></snowy-float-btn>
+	<!-- 更多 -->
 	<more ref="moreRef" @handleOk="loadData(true)"></more>
 </template>
 <script setup>
@@ -35,7 +45,6 @@
 	import { reactive, ref, getCurrentInstance } from "vue"
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	import XEUtils from 'xe-utils'
-	import SnowyEmpty from "@/components/snowy-empty.vue"
 	// 新增悬浮按钮
 	const add = () => {
 		uni.navigateTo({
@@ -115,7 +124,7 @@
 </script>
 <style lang="scss" scoped>
 	.crumb {
-		margin: 15upx;
+		margin-top: 15upx;
 		border-radius: 5upx;
 		white-space: nowrap;
 		overflow-x: scroll;
@@ -129,8 +138,44 @@
 		}
 	}
 
+	.org-list {
+		margin: 20rpx 0;
+		padding: 5rpx 0;
+		background-color: white;
+	}
+
 	.user-list {
-		margin: 15upx;
-		border-radius: 5upx;
+		margin: 20rpx 0;
+		padding: 5rpx 0;
+		background-color: white;
+	}
+
+	.item {
+		width: 100%;
+		display: flex;
+		align-items: center;
+
+		.item-img {
+			width: 70rpx;
+			height: 70rpx;
+			border-radius: 50%;
+			display: block;
+			margin-right: 5rpx;
+			flex-shrink: 0;
+		}
+
+		.item-left {
+			padding-left: 20rpx;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.item-right {
+			margin-left: auto;
+			margin-right: 34rpx;
+			font-size: 26rpx;
+			color: #999;
+		}
 	}
 </style>

@@ -1,15 +1,94 @@
 <template>
-	<view class="info-container">
-		<uni-list>
-			<uni-list-item showExtraIcon="true" :extraIcon="{type: 'auth-filled'}" title="账户" :rightText="userInfo.account"></uni-list-item>
-			<uni-list-item showExtraIcon="true" :extraIcon="{type: 'person-filled'}" title="姓名" :rightText="userInfo.name"></uni-list-item>
-			<uni-list-item showExtraIcon="true" :extraIcon="{type: 'phone-filled'}" title="手机" :rightText="userInfo.phone"></uni-list-item>
-			<uni-list-item showExtraIcon="true" :extraIcon="{type: 'vip-filled'}" title="昵称" :rightText="userInfo.nickname"></uni-list-item>
-			<uni-list-item showExtraIcon="true" :extraIcon="{type: 'staff-filled'}" title="性别" :rightText="userInfo.gender">
-			</uni-list-item>
-			<uni-list-item showExtraIcon="true" :extraIcon="{type: 'calendar-filled'}" title="生日" :rightText="userInfo.birthday"></uni-list-item>
-			<uni-list-item showExtraIcon="true" :extraIcon="{type: 'email-filled'}" title="邮箱" :rightText="userInfo.email"></uni-list-item>
-		</uni-list>
+	<view class="item">
+		<uv-row>
+			<uv-col span="1">
+				<uv-icon size="18" name="tags-fill" color="#5677fc"></uv-icon>
+			</uv-col>
+			<uv-col span="5">
+				<view class="item-left">账户</view>
+			</uv-col>
+			<uv-col span="6" textAlign="right">
+				<view class="item-right snowy-bold snowy-ellipsis"> {{ userInfo.account }} </view>
+			</uv-col>
+		</uv-row>
+	</view>
+	<view class="item">
+		<uv-row>
+			<uv-col span="1">
+				<uv-icon size="18" name="tags-fill" color="#5677fc"></uv-icon>
+			</uv-col>
+			<uv-col span="5">
+				<view class="item-left">姓名</view>
+			</uv-col>
+			<uv-col span="6" textAlign="right">
+				<view class="item-right snowy-bold snowy-ellipsis"> {{ userInfo.name }} </view>
+			</uv-col>
+		</uv-row>
+	</view>
+	<view class="item">
+		<uv-row>
+			<uv-col span="1">
+				<uv-icon size="18" name="tags-fill" color="#5677fc"></uv-icon>
+			</uv-col>
+			<uv-col span="5">
+				<view class="item-left">手机</view>
+			</uv-col>
+			<uv-col span="6" textAlign="right">
+				<view class="item-right snowy-bold snowy-ellipsis"> {{ userInfo.phone }} </view>
+			</uv-col>
+		</uv-row>
+	</view>
+	<view class="item">
+		<uv-row>
+			<uv-col span="1">
+				<uv-icon size="18" name="tags-fill" color="#5677fc"></uv-icon>
+			</uv-col>
+			<uv-col span="5">
+				<view class="item-left">昵称</view>
+			</uv-col>
+			<uv-col span="6" textAlign="right">
+				<view class="item-right snowy-bold snowy-ellipsis"> {{ userInfo.nickname }} </view>
+			</uv-col>
+		</uv-row>
+	</view>
+	<view class="item">
+		<uv-row>
+			<uv-col span="1">
+				<uv-icon size="18" name="tags-fill" color="#5677fc"></uv-icon>
+			</uv-col>
+			<uv-col span="5">
+				<view class="item-left">性别</view>
+			</uv-col>
+			<uv-col span="6" textAlign="right">
+				<view class="item-right snowy-bold snowy-ellipsis"> {{ userInfo.gender }} </view>
+			</uv-col>
+		</uv-row>
+	</view>
+	<view class="item">
+		<uv-row>
+			<uv-col span="1">
+				<uv-icon size="18" name="tags-fill" color="#5677fc"></uv-icon>
+			</uv-col>
+			<uv-col span="5">
+				<view class="item-left">生日</view>
+			</uv-col>
+			<uv-col span="6" textAlign="right">
+				<view class="item-right snowy-bold snowy-ellipsis"> {{ userInfo.birthday }} </view>
+			</uv-col>
+		</uv-row>
+	</view>
+	<view class="item">
+		<uv-row>
+			<uv-col span="1">
+				<uv-icon size="18" name="tags-fill" color="#5677fc"></uv-icon>
+			</uv-col>
+			<uv-col span="5">
+				<view class="item-left">邮箱</view>
+			</uv-col>
+			<uv-col span="6" textAlign="right">
+				<view class="item-right snowy-bold snowy-ellipsis"> {{ userInfo.email }} </view>
+			</uv-col>
+		</uv-row>
 	</view>
 </template>
 <script setup>
@@ -20,12 +99,24 @@
 	})
 </script>
 <style lang="scss" scoped>
-	page {
-		padding: 15upx;
-	}
-
 	.info-container {
 		background-color: #ffffff;
 		border-radius: 5upx;
+	}
+
+	.item {
+		background: #ffffff;
+		margin-bottom: 15rpx;
+		padding: 25rpx;
+		border-radius: 15rpx;
+
+		.item-left {
+			color: #999;
+			font-size: 26rpx;
+		}
+
+		.item-right {
+			font-size: 26rpx;
+		}
 	}
 </style>

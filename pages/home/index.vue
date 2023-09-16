@@ -12,9 +12,7 @@
 		return store.getters.homeConfigs
 	})
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 	.home-container {
-		margin: 15upx;
-		border-radius: 5upx;
 	}
 </style>

@@ -1,45 +1,64 @@
 <template>
-	<uni-popup ref="formDialogRef" type="bottom" safeArea>
+	<uv-popup ref="popRef" mode="bottom" bg-color="null" z-index="99">
 		<view class="container">
-			<uni-forms ref="formRef" :model="formData" label-position="top" labelWidth="75px">
-				<uni-forms-item label="时间" name="scheduleTime" :required="true" :rules="[{ required: true, errorMessage: '请选择时间' }]">
-					<picker mode="time" :value="formData.scheduleTime" @change="(e)=>{formData.scheduleTime = e.detail.value}">
+			<view class="close">
+				<icon type="clear" :size="20" color="#5677fc" @click="close"></icon>
+			</view>
+			<uv-form ref="formRef" :model="formData" :rules="rules" label-position="top" labelWidth="auto" :labelStyle="{marginBottom: '25rpx', fontSize: '27rpx', color: '#606266'}">
+				<uv-form-item label="时间" prop="scheduleTime" :required="true">
+					<picker style="width: 100%;" mode="time" :value="formData.scheduleTime" @change="(e)=>{formData.scheduleTime = e.detail.value}">
 						<view class="uni-input input-value-border">
 							{{formData.scheduleTime?formData.scheduleTime:"请选择时间"}}
 						</view>
 					</picker>
-				</uni-forms-item>
-				<uni-forms-item label="日程描述" name="scheduleContent" :required="true" :rules="[{ required: true, errorMessage: '请输入日程描述' }]">
-					<uni-easyinput type="textarea" v-model="formData.scheduleContent" placeholder="请输入日程描述"></uni-easyinput>
-				</uni-forms-item>
-			</uni-forms>
-			<button class="btn-sub" type="primary" @click="submit">确定</button>
+				</uv-form-item>
+				<uv-form-item label="日程描述" prop="scheduleContent" :required="true">
+					<uv-input type="textarea" v-model="formData.scheduleContent" placeholder="请输入日程描述"></uv-input>
+				</uv-form-item>
+			</uv-form>
+			<tui-button height="90rpx" type="primary" @click="submit">确认</tui-button>
 		</view>
-	</uni-popup>
+	</uv-popup>
 </template>
 <script setup>
-	import { ref } from "vue"
+	import { ref, reactive } from "vue"
 	import { indexScheduleAdd } from '@/api/sys/indexApi'
-	const formDialogRef = ref()
+	const popRef = ref()
 	const formRef = ref()
-	// 表单数据
-	const formData = ref({})
+	const formData = ref({
+		scheduleTime: '',
+		scheduleContent: ''
+	})
+	const rules = reactive({
+		scheduleTime: [{
+			type: 'string',
+			required: true,
+			message: '请选择时间',
+		}],
+		scheduleContent: [{
+			type: 'string',
+			required: true,
+			message: '请输入日程描述',
+		}],
+	})
 	const emit = defineEmits({
 		ok: null
 	})
 	const onOpen = (scheduleDate) => {
 		formData.value.scheduleDate = scheduleDate
-		formDialogRef.value.open()
+		popRef.value.open()
 	}
 	const submit = () => {
 		formRef.value.validate().then(res => {
 			indexScheduleAdd(formData.value).then(res => {
 				emit('ok', res)
-				formDialogRef.value.close()
-				// 重置表单数据
+				popRef.value.close()
 				formData.value = {}
 			})
 		})
+	}
+	const close = () => {
+		popRef.value.close()
 	}
 	defineExpose({
 		onOpen
@@ -53,9 +72,14 @@
 		/* #ifndef H5 */
 		margin: 15upx;
 		/* #endif */
-		border-radius: 5upx;
-		padding: 25upx;
-		background-color: $uni-white;
+		border-radius: 10rpx;
+		padding: 20rpx;
+		background-color: white;
+		
+		.close {
+			display: flex;
+			justify-content: flex-end;
+		}
 
 		.uni-input {
 			height: 50rpx;

@@ -7,15 +7,15 @@
 		</view>
 		<view class="login-form-content">
 			<view class="input-item">
-				<uni-icons class="icon" type="person" size="20" color="#999"></uni-icons>
+				<uv-icon class="icon" name="account-fill" size="20" color="#999"></uv-icon>
 				<input v-model="loginForm.account" class="input" type="text" placeholder="请输入账号" maxlength="30" />
 			</view>
 			<view class="input-item">
-				<uni-icons class="icon" type="locked" size="20" color="#999"></uni-icons>
+				<uv-icon class="icon" name="lock-fill" size="20" color="#999"></uv-icon>
 				<input v-model="loginForm.password" type="password" class="input" placeholder="请输入密码" maxlength="20" />
 			</view>
 			<view class="input-item" v-if="sysBaseConfig.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN === 'true'">
-				<uni-icons class="icon" type="map" size="20" color="#999"></uni-icons>
+				<uv-icon class="icon" name="empty-permission" size="20" color="#999"></uv-icon>
 				<input v-model="loginForm.validCode" type="text" class="input" placeholder="请输入验证码" maxlength="4" />
 				<image :src="validCodeBase64" @click="loginCaptcha" class="login-code-img"></image>
 			</view>

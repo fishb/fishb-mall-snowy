@@ -1,34 +1,58 @@
 <template>
-	<view class="container">
-		<uni-forms ref="formRef" :model="formData" label-position="top" labelWidth="75px">
-			<uni-forms-item label="所属机构" name="orgId" required :rules="[{ required: true, errorMessage: '请选择所属机构' }]">
-				<snowy-org-picker v-model="formData.orgId" placeholder="请选择所属机构" :org-tree-api="selectorApiFunction.orgTreeApi">
+	<view class="container snowy-shadow">
+		<uv-form ref="formRef" :model="formData" :rules="rules" label-position="top" labelWidth="auto" :labelStyle="{marginBottom: '25rpx', fontSize: '27rpx', color: '#606266'}">
+			<uv-form-item label="所属机构" prop="orgId" required>
+				<snowy-org-picker v-model="formData.orgId" placeholder="请选择所属机构" :org-tree-api="selectorApiFunction.orgTreeApi" @validateField="formRef.validateField('orgId')">
 				</snowy-org-picker>
-			</uni-forms-item>
-			<uni-forms-item label="岗位名称" name="name" required :rules="[{ required: true, errorMessage: '请输入岗位名称' }]">
-				<uni-easyinput v-model="formData.name" placeholder="请输入岗位名称"></uni-easyinput>
-			</uni-forms-item>
-			<uni-forms-item label="岗位分类" name="category" required :rules="[{ required: true, errorMessage: '请选择岗位分类' }]">
-				<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.category" :rangeData="positionCategoryOptions" placeholder="请选择岗位分类"></snowy-sel-picker>
-			</uni-forms-item>
-			<uni-forms-item label="排序" name="sortCode" required :rules="[{ required: true, errorMessage: '请选择排序' }]">
-				<uni-number-box v-model="formData.sortCode" background="#2979FF" color="#fff" :step="1" :max="100"></uni-number-box>
-			</uni-forms-item>
-		</uni-forms>
-		<button class="btn-sub" type="primary" @click="submit">提交</button>
+			</uv-form-item>
+			<uv-form-item label="岗位名称" prop="name" required>
+				<uv-input v-model="formData.name" placeholder="请输入岗位名称" fontSize="27rpx"></uv-input>
+			</uv-form-item>
+			<uv-form-item label="岗位分类" prop="category" required>
+				<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.category" :rangeData="positionCategoryOptions" placeholder="请选择岗位分类" @validateField="formRef.validateField('category')"></snowy-sel-picker>
+			</uv-form-item>
+			<uv-form-item label="排序" prop="sortCode" required>
+				<uv-number-box v-model="formData.sortCode" button-size="30" color="#ffffff" bgColor="#5677fc" iconStyle="color: #fff" :step="1" :max="100"></uv-number-box>
+			</uv-form-item>
+		</uv-form>
+		<tui-button margin="50rpx 0" :preventClick="true" :shadow="true" @click="submit">提交</tui-button>
 	</view>
 </template>
 <script setup>
 	import { nextTick, reactive, ref } from "vue"
-	import SnowyOrgPicker from '@/components/snowy-org-picker.vue'
-	import SnowySelPicker from '@/components/snowy-sel-picker.vue'
-	import SnowyUserPicker from '@/components/snowy-user-picker.vue'
 	import tool from '@/plugins/tool'
 	import { positionDetail, positionOrgTreeSelector, submitForm } from '@/api/biz/bizPositionApi'
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	const formRef = ref()
-	let formData = ref({
+	const formData = ref({
+		orgId: '',
+		name: '',
+		category: '',
 		sortCode: 99
+	})
+	const rules = reactive({
+		orgId: [{
+			type: 'string',
+			required: true,
+			message: '请选择所属机构',
+		}],
+		name: [{
+			type: 'string',
+			required: true,
+			message: '请输入岗位名称',
+			trigger: ['blur', 'change']
+		}],
+		category: [{
+			type: 'string',
+			required: true,
+			message: '请选择岗位分类',
+		}],
+		sortCode: [{
+			type: 'number',
+			required: true,
+			message: '请输入排序',
+			trigger: ['blur', 'change']
+		}],
 	})
 	const selectorApiFunction = {
 		orgTreeApi: (param) => {
@@ -62,13 +86,6 @@
 </script>
 <style lang="scss" scoped>
 	.container {
-		margin: 15upx;
-		border-radius: 5upx;
-		padding: 25upx;
-		background-color: $uni-white;
-
-		.btn-sub {
-			background-color: $uni-primary;
-		}
+		padding: 30rpx;
 	}
 </style>

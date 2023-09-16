@@ -1,33 +1,36 @@
 <template>
-	<view class="edit-container">
-		<uni-forms ref="formRef" :model="formData" :rules="rules" validate-trigger="blur" label-position="top" labelWidth="75px">
-			<uni-forms-item label="姓名" name="name" required :rules="[{ required: true, errorMessage: '请输入账号' }]">
-				<uni-easyinput v-model="formData.name" placeholder="请输入姓名"></uni-easyinput>
-			</uni-forms-item>
-			<uni-forms-item label="手机" name="phone">
-				<uni-easyinput v-model="formData.phone" placeholder="请输入手机"></uni-easyinput>
-			</uni-forms-item>
-			<uni-forms-item label="昵称" name="nickname">
-				<uni-easyinput v-model="formData.nickname" placeholder="请输入昵称"></uni-easyinput>
-			</uni-forms-item>
-			<uni-forms-item label="性别" name="gender">
-				<uni-data-checkbox v-model="formData.gender" :localdata="genderOptions" />
-			</uni-forms-item>
-			<uni-forms-item label="生日" name="birthday">
-				<uni-datetime-picker type="date" return-type="string" format="YYYY-MM-DD" v-model="formData.birthday" />
-			</uni-forms-item>
-			<uni-forms-item label="邮箱" name="email">
-				<uni-easyinput v-model="formData.email" placeholder="请输入邮箱"></uni-easyinput>
-			</uni-forms-item>
-		</uni-forms>
-		<button class="btn-sub" type="primary" @click="submit">提交</button>
+	<view class="edit-container snowy-shadow">
+		<uv-form ref="formRef" :model="formData" :rules="rules" label-position="top" labelWidth="auto" :labelStyle="{marginBottom: '25rpx', fontSize: '27rpx', color: '#606266'}">
+			<uv-form-item label="姓名" prop="name" required>
+				<uv-input v-model="formData.name" placeholder="请输入姓名"></uv-input>
+			</uv-form-item>
+			<uv-form-item label="手机" prop="phone">
+				<uv-input v-model="formData.phone" placeholder="请输入手机"></uv-input>
+			</uv-form-item>
+			<uv-form-item label="昵称" prop="nickname">
+				<uv-input v-model="formData.nickname" placeholder="请输入昵称"></uv-input>
+			</uv-form-item>
+			<uv-form-item label="性别" prop="gender">
+				<uv-radio-group v-model="formData.gender">
+					<uv-radio :customStyle="{marginRight: '50rpx'}" v-for="(item, index) in genderOptions" :key="index" :label="item.text" :name="item.value">
+					</uv-radio>
+				</uv-radio-group>
+			</uv-form-item>
+			<uv-form-item label="生日" prop="birthday">
+				<snowy-calendar v-model="formData.birthday" placeholder="请选择出生日期"></snowy-calendar>
+			</uv-form-item>
+			<uv-form-item label="邮箱" prop="email">
+				<uv-input v-model="formData.email" placeholder="请输入邮箱"></uv-input>
+			</uv-form-item>
+		</uv-form>
+		<tui-button margin="50rpx 0" :preventClick="true" :shadow="true" @click="submit">提交</tui-button>
 	</view>
 </template>
 <script setup>
 	import { userUpdateUserInfo } from '@/api/sys/userCenterApi'
 	import { reactive, ref } from "vue"
 	import { onLoad, onReady } from '@dcloudio/uni-app'
-	import store from '@/store/index'
+	import store from '@/store/index.js'
 	import tool from '@/plugins/tool'
 	import modal from '@/plugins/modal'
 	import XEUtils from 'xe-utils'
@@ -36,18 +39,22 @@
 	const formRef = ref()
 	const formData = ref(XEUtils.clone(store.getters.userInfo, true))
 	const rules = reactive({
-		phone: {
-			rules: [{
-				pattern: /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/,
-				errorMessage: '请填写符合要求的11位手机号'
-			}]
-		},
-		email: {
-			rules: [{
-				pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
-				errorMessage: '请填写正确的邮箱号',
-			}, ]
-		},
+		name: [{
+			type: 'string',
+			required: true,
+			message: '请输入姓名',
+			trigger: ['blur', 'change']
+		}],
+		phone: [{
+			pattern: /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/,
+			message: '请填写符合要求的11位手机号',
+			trigger: ['blur', 'change']
+		}],
+		email: [{
+			pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
+			message: '请填写正确的邮箱号',
+			trigger: ['blur', 'change']
+		}],
 	})
 	// 性别
 	const genderOptions = tool.dictList('GENDER')
@@ -64,13 +71,6 @@
 </script>
 <style lang="scss" scoped>
 	.edit-container {
-		margin: 15upx;
-		border-radius: 5upx;
-		padding: 25upx;
-		background-color: $uni-white;
-
-		.btn-sub {
-			background-color: $uni-primary;
-		}
+		padding: 30rpx;
 	}
 </style>

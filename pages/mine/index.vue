@@ -1,87 +1,96 @@
 <template>
-	<view class="mine-container" :style="{height: `${windowHeight}px`}">
-		<!-- 顶部个人信息 -->
-		<view class="header-section">
-			<view class="avatar-section">
-				<view class="icon" v-if="!avatar">
-					<uni-icons type="person" size="30" color="#808080"></uni-icons>
+	<view class="header snowy-shadow">
+		<uv-row>
+			<uv-col span="2.5">
+				<image class="avatar" v-if="userInfo?.avatar" :src="userInfo?.avatar" mode="aspectFit"></image>
+			</uv-col>
+			<uv-col span="4">
+				<view class="header-left">{{userInfo?.name}}</view>
+			</uv-col>
+			<uv-col span="5" textAlign="right" @tap="handleToInfo">
+				<view class="header-right">个人信息</view>
+			</uv-col>
+			<uv-col span="0.5" @tap="handleToInfo">
+				<uv-icon name="arrow-right" color="white" size="15"></uv-icon>
+			</uv-col>
+		</uv-row>
+	</view>
+	<view class="grid snowy-shadow">
+		<uv-grid :border="false" :col="4">
+			<uv-grid-item @tap="handleToHomeConfig">
+				<view class="grid-item-box">
+					<snowy-icon backgroundColor="#ff9900" name="home-fill" size="20" color="#FFFFFF"></snowy-icon>
+					<text class="text">首页设置</text>
 				</view>
-				<image class="avatar" v-if="avatar" @click="handleToAvatar" :src="avatar" mode="aspectFit"></image>
-				<view v-if="!name" @click="handleToLogin" class="login-tip"> 点击登录 </view>
-				<view class="user-info" @click="handleToInfo" v-if="name">
-					<view class="title">
-						{{name}}
-					</view>
+			</uv-grid-item>
+			<uv-grid-item @tap="handleToHomeConfig">
+				<view class="grid-item-box">
+					<snowy-icon backgroundColor="#ff9900" name="home-fill" size="20" color="#FFFFFF"></snowy-icon>
+					<text class="text">首页设置</text>
 				</view>
-			</view>
-			<view class="avatar-title" @click="handleToInfo">
-				<text>个人信息</text>
-				<uni-icons type="forward" size="20" color="#ffffff"></uni-icons>
-			</view>
-		</view>
-		<view class="content-section">
-			<uni-grid :column="4" :showBorder="false">
-				<uni-grid-item @tap="handleToHomeConfig">
-					<view class="grid-item-box">
-						<snowy-icon backgroundColor="#2979ff" type="home-filled" size="20" color="#FFFFFF">
-						</snowy-icon>
-						<text class="text">首页设置</text>
-					</view>
-				</uni-grid-item>
-				<uni-grid-item @tap="handleBuilding">
-					<view class="grid-item-box">
-						<snowy-icon backgroundColor="#fa3534" type="flag-filled" size="20" color="#FFFFFF">
-						</snowy-icon>
-						<text class="text">建设中</text>
-					</view>
-				</uni-grid-item>
-				<uni-grid-item @tap="handleBuilding">
-					<view class="grid-item-box">
-						<snowy-icon backgroundColor="#ff9900" type="flag-filled" size="20" color="#FFFFFF">
-						</snowy-icon>
-						<text class="text">建设中</text>
-					</view>
-				</uni-grid-item>
-				<uni-grid-item @tap="handleBuilding">
-					<view class="grid-item-box">
-						<snowy-icon backgroundColor="#19be6b" type="flag-filled" size="20" color="#FFFFFF">
-						</snowy-icon>
-						<text class="text">建设中</text>
-					</view>
-				</uni-grid-item>
-			</uni-grid>
-		</view>
-		<view class="content-list">
-			<uni-list>
-				<uni-list-item :show-extra-icon="true" showArrow title="编辑资料" @click="handleToEditInfo" clickable :extra-icon="{
-						color: '#2979ff',
-						size: '20',
-						type: 'person'
-					}" />
-				<uni-list-item :show-extra-icon="true" showArrow title="修改密码" @click="handleToPwd" clickable :extra-icon="{
-							color: '#2979ff',
-							size: '20',
-							type: 'locked'
-						}" />
-			</uni-list>
-		</view>
-		<button type="primary" class="btn-logout" @click="handleLogout">退出登录</button>
+			</uv-grid-item>
+			<uv-grid-item @tap="handleToHomeConfig">
+				<view class="grid-item-box">
+					<snowy-icon backgroundColor="#ff9900" name="home-fill" size="20" color="#FFFFFF"></snowy-icon>
+					<text class="text">首页设置</text>
+				</view>
+			</uv-grid-item>
+			<uv-grid-item @tap="handleToHomeConfig">
+				<view class="grid-item-box">
+					<snowy-icon backgroundColor="#ff9900" name="home-fill" size="20" color="#FFFFFF"></snowy-icon>
+					<text class="text">首页设置</text>
+				</view>
+			</uv-grid-item>
+		</uv-grid>
+	</view>
+	<view class="menu snowy-shadow">
+		<uv-row @click="handleToEditInfo">
+			<uv-col span="1">
+				<uv-icon name="account-fill" color="#2979ff" size="20"></uv-icon>
+			</uv-col>
+			<uv-col span="10.5">
+				<view class="menu-left">编辑资料</view>
+			</uv-col>
+			<uv-col span="0.5">
+				<uv-icon name="arrow-right" color="#2979ff" size="15"></uv-icon>
+			</uv-col>
+		</uv-row>
+	</view>
+	<view class="menu snowy-shadow">
+		<uv-row @click="handleToPwd">
+			<uv-col span="1">
+				<uv-icon name="lock-fill" color="#fa3534" size="20"></uv-icon>
+			</uv-col>
+			<uv-col span="10.5">
+				<view class="menu-left">修改密码</view>
+			</uv-col>
+			<uv-col span="0.5">
+				<uv-icon name="arrow-right" color="#2979ff" size="15"></uv-icon>
+			</uv-col>
+		</uv-row>
+	</view>
+	<view class="menu snowy-shadow">
+		<uv-row @click="handleLogout">
+			<uv-col span="1">
+				<uv-icon name="warning-fill" color="#ff9900" size="20"></uv-icon>
+			</uv-col>
+			<uv-col span="10.5">
+				<view class="menu-left">退出登录</view>
+			</uv-col>
+			<uv-col span="0.5">
+				<uv-icon name="arrow-right" color="#2979ff" size="15"></uv-icon>
+			</uv-col>
+		</uv-row>
 	</view>
 </template>
 <script setup>
-	import SnowyIcon from '@/components/snowy-icon.vue'
 	import store from '@/store/index'
 	import { computed } from "vue"
 	import modal from '@/plugins/modal'
 	import config from '@/config'
 	import tab from '@/plugins/tab'
-	const name = store.getters.userInfo.name
-	const version = store.getters.sysBaseConfig.SNOWY_SYS_VERSION
-	const avatar = computed(() => {
-		return store.getters.userInfo.avatar
-	})
-	const windowHeight = computed(() => {
-		return uni.getSystemInfoSync().windowHeight - 50
+	const userInfo = computed(() => {
+		return store.getters.userInfo
 	})
 	const handleToInfo = () => {
 		uni.navigateTo({
@@ -98,24 +107,9 @@
 			url: '/pages/mine/pwd/index'
 		})
 	}
-	const handleToAvatar = () => {
-		uni.showToast({
-			title: '模块建设中'
-		})
-	}
-	const handleToLogin = () => {
-		uni.reLaunch({
-			url: '/pages/login'
-		})
-	}
 	const handleToHomeConfig = () => {
 		uni.navigateTo({
 			url: '/pages/mine/home-config/index'
-		})
-	}
-	const handleBuilding = () => {
-		uni.showToast({
-			title: '模块建设中'
 		})
 	}
 	const handleLogout = () => {
@@ -138,80 +132,65 @@
 		background-color: #ffffff;
 	}
 
-	.mine-container {
-		width: 100%;
-		height: 100%;
+	.header {
+		background: #5677fc;
+		margin-bottom: 15rpx;
+		padding: 90rpx 25rpx;
+		border-radius: 15rpx;
 
-		.header-section {
-			margin: 15upx;
-			border-radius: 5upx;
-			padding: 60upx 30upx;
-			background-color: $uni-primary;
+		.avatar {
+			@include circular;
+			border: 4upx solid #eaeaea;
+		}
+
+		.header-left {
 			color: white;
-			display: flex;
-			justify-content: space-between;
-
-			.avatar-section {
-				display: flex;
-				align-items: center;
-
-				.icon {
-					@include circular;
-				}
-
-				.avatar {
-					@include circular;
-					border: 4upx solid #eaeaea;
-				}
-
-				.user-info {
-					font-size: 18upx;
-					margin-left: 15upx;
-
-					.title {
-						font-size: 40upx;
-						line-height: 40upx;
-					}
-				}
-			}
-
-			.avatar-title {
-				display: flex;
-				align-items: center;
-			}
+			font-size: 40upx;
+			line-height: 40upx;
 		}
 
-		.content-section {
-			background-color: #ffffff;
-			position: relative;
-			margin: 15upx;
-			top: 0;
+		.header-right {
+			color: white;
+			font-size: 28rpx;
+		}
+	}
 
-			.grid-item-box {
-				flex: 1;
-				/* #ifndef APP-NVUE */
-				display: flex;
-				/* #endif */
-				flex-direction: column;
-				align-items: center;
-				justify-content: center;
-				padding: 15px 0;
+	.grid {
+		background: white;
+		margin-bottom: 15rpx;
+		padding: 10rpx 10rpx;
+		border-radius: 15rpx;
+	}
 
-				.text {
-					text-align: center;
-					font-size: 26rpx;
-					margin-top: 15rpx;
-				}
-			}
+	.menu {
+		background: #ffffff;
+		margin-bottom: 15rpx;
+		padding: 25rpx;
+		border-radius: 15rpx;
+
+		.menu-left {
+			font-size: 30rpx;
 		}
 
-		.content-list {
-			margin: 15upx;
+		.menu-right {
+			font-size: 28rpx;
 		}
+	}
 
-		.btn-logout {
-			margin: 50upx 15upx;
-			background-color: $uni-primary;
+	.grid-item-box {
+		flex: 1;
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 15px 0;
+
+		.text {
+			text-align: center;
+			font-size: 26rpx;
+			margin-top: 15rpx;
 		}
 	}
 </style>
