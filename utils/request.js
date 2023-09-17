@@ -3,9 +3,14 @@ import { getToken } from '@/utils/auth'
 import { errorCodeMap, reloadCodes } from '@/utils/errorCode'
 import { tansParams } from '@/utils/common'
 import modal from '@/plugins/modal'
+import tab from '@/plugins/tab'
 import config from '@/config'
 import { prefixUrl } from "@/utils/apiAdaptive"
-const { TIMEOUT, TOKEN_NAME, TOKEN_PREFIX } = config
+// #ifdef H5
+import { pathAddRedirectUrl } from '@/utils/common'
+import { getH5RouteByUrl } from '@/utils/common'
+// #endif
+const { TIMEOUT, TOKEN_NAME, TOKEN_PREFIX, NO_TOKEN_BACK_URL } = config
 const request = config => {
 	// 适配URL路径
 	config.url = prefixUrl(config.url)
@@ -37,9 +42,12 @@ const request = config => {
 			if (reloadCodes.includes(code)) {
 				modal.confirm(msg || '登录状态已过期，您可以清除缓存，重新进行登录?').then(() => {
 					store.commit('CLEAR_cache')
-					uni.reLaunch({
-						url: '/pages/login'
-					})
+					// #ifdef H5
+					tab.reLaunch(pathAddRedirectUrl(NO_TOKEN_BACK_URL, getH5RouteByUrl()))
+					// #endif
+					// #ifndef H5
+					tab.reLaunch(NO_TOKEN_BACK_URL)
+					// #endif
 				})
 				reject('无效的会话，或者会话已过期，请重新登录。')
 			} else if (code !== 200) {

@@ -1,29 +1,24 @@
-<script>
+<script setup>
+	import { onShow } from "@dcloudio/uni-app"
 	import store from '@/store'
-	import { getToken, checkPermission } from '@/utils/auth'
-	import config from '@/config'
-	import { configSysBaseList } from '@/api/dev/configApi'
-	export default {
-		onLaunch: function() {
-			store.dispatch('GetSysBaseConfig')
-			//#ifdef H5
-			checkPermission(location.pathname)
-			//#endif
-		},
-		onShow: function() {
-			// #ifdef APP-PLUS
-			if (plus.runtime.launcher == 'shortcut') {
-				var cmd = JSON.parse(plus.runtime.arguments);
-				var type = cmd && cmd.type;
-				if (type && type == "sweep") {
-					// 执行要操作的逻辑
-				}
-				plus.runtime.arguments = null;
+	// #ifdef H5
+	import { getH5RouteByUrl } from '@/utils/common'
+	import { checkPermission } from '@/utils/auth'
+	checkPermission(getH5RouteByUrl())
+	//#endif
+	store.dispatch('GetSysBaseConfig')
+	onShow(() => {
+		// #ifdef APP-PLUS
+		if (plus.runtime.launcher == 'shortcut') {
+			const cmd = JSON.parse(plus.runtime.arguments);
+			const type = cmd && cmd.type;
+			if (type && type == "sweep") {
+				// 执行要操作的逻辑
 			}
-			//#endif
-		},
-		onHide: function() {}
-	}
+			plus.runtime.arguments = null;
+		}
+		//#endif
+	})
 </script>
 <style lang="scss">
 	@import '@/static/scss/index.scss';

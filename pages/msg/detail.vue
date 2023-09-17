@@ -1,64 +1,42 @@
 <template>
-	<view>
-		<view class="container">
-			<view class="item-row">
-				<uni-row>
-					<uni-col :span="4">
-						<view class="item-row-title">主题</view>
-					</uni-col>
-					<uni-col :span="20">
-						<view class="item-row-content">
-							{{ record?.subject }}
-						</view>
-					</uni-col>
-				</uni-row>
-			</view>
-			<view class="item-row">
-				<uni-row>
-					<uni-col :span="4">
-						<view class="item-row-title">发送时间</view>
-					</uni-col>
-					<uni-col :span="20">
-						<view class="item-row-content">
-							{{ record?.createTime }}
-						</view>
-					</uni-col>
-				</uni-row>
-			</view>
-			<view class="item-row">
-				<uni-row>
-					<uni-col :span="4">
-						<view class="item-row-title">内容</view>
-					</uni-col>
-					<uni-col :span="20">
-						<view class="item-row-content">
-							{{ record?.content }}
-						</view>
-					</uni-col>
-				</uni-row>
-			</view>
+	<view class="container">
+		<view class="item">
+			<uv-row>
+				<uv-col span="12">
+					<view class="item-title snowy-bold">{{ record?.subject }}</view>
+				</uv-col>
+			</uv-row>
+			<uv-row customStyle="margin-top: 20rpx">
+				<uv-col span="12">
+					<view class="item-time">{{ record?.createTime }}</view>
+				</uv-col>
+			</uv-row>
+			<uv-row customStyle="margin-top: 20rpx">
+				<uv-col span="12">
+					<view class="item-content">{{ record?.content }}</view>
+				</uv-col>
+			</uv-row>
 		</view>
-		<view class="container">
-			<uni-row>
-				<uni-col :span="24">
-					<view class="item-row-title">查收情况</view>
-				</uni-col>
-			</uni-row>
-			<view class="table-list">
-				<uni-table border stripe emptyText="暂无更多数据">
-					<uni-tr>
-						<uni-th align="center">姓名</uni-th>
-						<uni-th align="center">是否已读</uni-th>
-					</uni-tr>
-					<uni-tr v-for="(item, index) in receiveInfoList" :key="index">
-						<uni-td align="center">{{ item.receiveUserName }}</uni-td>
-						<uni-td align="center">
-							<uni-tag v-if="!!item.read" text="已读" />
-							<uni-tag v-if="!item.read" text="未读" type="primary" />
-						</uni-td>
-					</uni-tr>
-				</uni-table>
-			</view>
+		<view class="item" v-for="(item, index) in receiveInfoList" :key="index">
+			<uv-row>
+				<uv-col span="6">
+					<view>姓名</view>
+				</uv-col>
+				<uv-col span="6" textAlign="right">
+					<view>{{ item.receiveUserName }}</view>
+				</uv-col>
+			</uv-row>
+			<uv-row customStyle="margin-top: 20rpx">
+				<uv-col span="6">
+					<view>是否已读</view>
+				</uv-col>
+				<uv-col span="6">
+					<view class="snowy-flex-end">
+						<uni-tag v-if="!!item.read" text="已读" />
+						<uni-tag v-if="!item.read" text="未读" type="primary" />
+					</view>
+				</uv-col>
+			</uv-row>
 		</view>
 	</view>
 </template>
@@ -84,32 +62,26 @@
 	})
 </script>
 <style lang="scss" scoped>
-	.container {
-		margin: 15upx;
-		border-radius: 5upx;
-		padding: 25upx;
-		background-color: $uni-white;
-	}
+	.container {}
 
 	.item {
-		width: 100vw;
-	}
+		background: #ffffff;
+		margin-bottom: 25rpx;
+		padding: 25rpx;
+		box-shadow: 0 1rpx 1rpx #ccc;
+		border-radius: 10rpx;
 
-	.item-row {
-		margin: 20upx 10upx;
-	}
+		.item-title {
+			font-size: 28rpx;
+		}
 
-	.item-row-title {
-		font-size: 25upx;
-		color: #999;
-	}
+		.item-time {
+			font-size: 26rpx;
+			color: #999;
+		}
 
-	.item-row-content {
-		font-size: 25upx;
-		text-align: right;
-	}
-
-	.table-list {
-		margin-top: 30upx;
+		.item-content {
+			font-size: 27rpx;
+		}
 	}
 </style>

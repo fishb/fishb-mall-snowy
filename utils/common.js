@@ -1,3 +1,8 @@
+import XEUtils from 'xe-utils'
+import config from '@/config'
+// #ifdef H5
+import manifest from '@/manifest.json'
+// #endif
 /**
  * 参数处理
  * @param params 参数
@@ -23,3 +28,37 @@ export function tansParams(params) {
 	}
 	return result
 }
+// #ifdef H5
+/**
+ * 为path添加重定向url（主要用于在web条件下，登录之后跳转至固定页面）
+ * @param {Object} path
+ * @param {Object} redirectUrl
+ */
+export function pathAddRedirectUrl(path, redirectUrl) {
+	const { search, searchQuery } = XEUtils.parseUrl(location.href)
+	if (XEUtils.isEmpty(redirectUrl) || redirectUrl == config.NO_TOKEN_BACK_URL || search.indexOf('redirect=')  != -1 ) {
+		return path += `${search}`
+	}
+	path += `?redirect=${redirectUrl}`
+	if (!XEUtils.isEmpty(searchQuery)) {
+		path += `&${XEUtils.serialize(searchQuery)}`
+	}
+	return path
+}
+
+/**
+ * h5条件下通过url获取路由地址
+ */
+export function getH5RouteByUrl(){
+	const { hashKey, pathname } = XEUtils.parseUrl(location.href)
+	if (!XEUtils.isEmpty(hashKey)) {
+		return hashKey
+	}
+	if (manifest.h5.router.base.length > 0) {
+		return pathname.substring(manifest.h5.router.base.length - 1)
+	} else {
+		return pathname
+	}
+	
+}
+// #endif

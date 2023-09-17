@@ -1,22 +1,29 @@
 page {
 	background-color: #f1f1f1;
-	font-size: 28upx;
-	// color: #333333;
+	font-size: 27rpx;
 	font-family: Helvetica Neue, Helvetica, sans-serif;
+	box-sizing: border-box;
+	padding: 10rpx;
 }
 
-.sticky {
-	/* #ifndef APP-PLUS-NVUE */
-	// display: flex;
-	position: -webkit-sticky;
-	/* #endif */
-	position: sticky;
-	top: var(--window-top);
-	z-index: 10;
-	flex-direction: row;
-	margin: 0 15upx;
-	padding: 10upx;
-	background-color: #F4F5F6;
-	// border-bottom-style: solid;
-	// border-bottom-color: #E2E2E2;
+.snowy-shadow {
+	background-color: white;
+	box-shadow: 0 1px 1px #ccc;
+	border-radius: 10upx;
+}
+
+
+.snowy-ellipsis {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.snowy-bold {
+	font-weight: bold;
+}
+
+.snowy-flex-end {
+	display: flex;
+	justify-content: flex-end;
 }

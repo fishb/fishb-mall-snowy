@@ -1,36 +1,37 @@
 <template>
-	<uni-popup ref="popupRef" type="bottom" safeArea>
+	<uv-popup ref="popRef" mode="bottom" bg-color="null" z-index="99">
 		<view class="container">
-			<uni-list :border="false">
-				<uni-list-item v-if="hasPerm('mobileBizUserEdit')" title="编辑" class="item" :clickable="true" @click="edit">
-				</uni-list-item>
-				<uni-list-item v-if="hasPerm('mobileBizUserDelete')" title="刪除" class="item" :clickable="true" @click="del">
-				</uni-list-item>
-				<uni-list-item title="取消" class="item" :clickable="true" @click="cancel">
-				</uni-list-item>
-			</uni-list>
+			<tui-list-view unlined="all" background-color="transparent">
+				<tui-list-cell v-if="hasPerm('mobileBizUserEdit')" :hover="true" :arrow="false" @click="edit" :radius="10" >
+					<view class="item"> 编辑 </view>
+				</tui-list-cell>
+				<tui-list-cell v-if="hasPerm('mobileBizUserDelete')" :hover="true" :arrow="false" @click="del" :radius="10" :margin-top="2">
+					<view class="item"> 刪除 </view>
+				</tui-list-cell>
+				<tui-list-cell :hover="true" :arrow="false" @click="cancel" :margin-top="10" :radius="10">
+					<view class="item"> 取消 </view>
+				</tui-list-cell>
+			</tui-list-view>
 		</view>
-	</uni-popup>
+	</uv-popup>
 </template>
 <script setup>
-	import { reactive, ref, getCurrentInstance } from "vue"
+	import { reactive, ref, getCurrentInstance } from "vue";
 	import { userDelete } from '@/api/biz/bizUserApi'
 	import modal from '@/plugins/modal'
 	const emits = defineEmits(['handleOk'])
-	// 弹出ref
-	const popupRef = ref()
-	// 打开
-	let record = ref({})
+	const popRef = ref()
+	const record = ref({})
 	const open = (data) => {
 		record.value = data
-		popupRef.value.open("bottom")
+		popRef.value.open()
 	}
 	// 编辑
 	const edit = () => {
 		uni.navigateTo({
 			url: '/pages/biz/user/form?id=' + record.value.id
 		})
-		popupRef.value.close()
+		popRef.value.close()
 	}
 	// 删除
 	const del = () => {
@@ -39,25 +40,22 @@
 				id: record.value.id
 			}]).then(res => {
 				emits('handleOk')
-				popupRef.value.close()
+				popRef.value.close()
 			})
 		})
 	}
 	// 取消
 	const cancel = () => {
-		popupRef.value.close()
+		popRef.value.close()
 	}
 	defineExpose({
 		open
 	})
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 	.container {
-		margin: 15upx;
-		border-radius: 5upx;
 		padding: 5upx;
-		background-color: $uni-white;
-
+		background-color: transparent;
 		.item {
 			text-align: center;
 		}

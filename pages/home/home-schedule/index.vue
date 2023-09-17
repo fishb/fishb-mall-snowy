@@ -1,22 +1,26 @@
 <template>
 	<view>
-		<uni-section :title="`日程`" type="square"></uni-section>
-		<uni-calendar :insert="true" :lunar="true" @change="change" :showMonth="false" />
-		<view class="add-schedule" @tap="add"> 新增 </view>
-		<uni-list :border="false">
-			<uni-list-item :show-extra-icon="true" :extra-icon="{
-					color: '#2979ff',
-					size: '20',
-					type: 'notification-filled'
-				}" :title="schedule.scheduleContent" :key="schedule.id" v-for="schedule in scheduleList">
-				<template v-slot:footer>
-					<view style="align-items: center;">
-						{{schedule.scheduleTime}}
-						<uni-icons @click="del(schedule)" type="trash-filled" color="#e43d33" size="20"></uni-icons>
+		<tui-section padding="20rpx 50rpx" title="日程" is-line line-cap="square" :line-right="20" background="#fff" :size="28"></tui-section>
+		<uv-calendars :insert="true" :lunar="true" @change="change" :showMonth="false" />
+		<view class="add-schedule snowy-bold" @tap="add"> 新增 </view>
+		<view class="item" v-for="schedule in scheduleList" :key="schedule.id">
+			<uv-row>
+				<uv-col span="1">
+					<uv-icon size="18" name="clock-fill" color="#5677fc" @click="del(schedule)"></uv-icon>
+				</uv-col>
+				<uv-col span="8">
+					<view class="item-left snowy-bold snowy-ellipsis">{{schedule.scheduleContent}}</view>
+				</uv-col>
+				<uv-col span="2" textAlign="right">
+					<view class="item-right snowy-bold snowy-ellipsis"> {{schedule.scheduleTime}} </view>
+				</uv-col>
+				<uv-col span="1">
+					<view class="snowy-flex-end">
+						<uv-icon size="18" name="trash-fill" color="#e43d33" @click="del(schedule)"></uv-icon>
 					</view>
-				</template>
-			</uni-list-item>
-		</uni-list>
+				</uv-col>
+			</uv-row>
+		</view>
 		<add-pop ref="addPopRef" @ok="seleScheduleList()"></add-pop>
 	</view>
 </template>
@@ -56,8 +60,21 @@
 	.add-schedule {
 		cursor: pointer;
 		margin: 25upx;
-		color: $uni-primary;
+		color: #5677fc;
 		text-align: right;
 		font-size: 30upx;
+	}
+
+	.item {
+		padding: 25rpx;
+
+		.item-left {
+			font-size: 26rpx;
+		}
+
+		.item-right {
+			color: #999;
+			font-size: 26rpx;
+		}
 	}
 </style>

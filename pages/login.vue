@@ -7,15 +7,15 @@
 		</view>
 		<view class="login-form-content">
 			<view class="input-item">
-				<uni-icons class="icon" type="person" size="20" color="#999"></uni-icons>
+				<uv-icon class="icon" name="account-fill" size="20" color="#999"></uv-icon>
 				<input v-model="loginForm.account" class="input" type="text" placeholder="请输入账号" maxlength="30" />
 			</view>
 			<view class="input-item">
-				<uni-icons class="icon" type="locked" size="20" color="#999"></uni-icons>
+				<uv-icon class="icon" name="lock-fill" size="20" color="#999"></uv-icon>
 				<input v-model="loginForm.password" type="password" class="input" placeholder="请输入密码" maxlength="20" />
 			</view>
 			<view class="input-item" v-if="sysBaseConfig.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN === 'true'">
-				<uni-icons class="icon" type="map" size="20" color="#999"></uni-icons>
+				<uv-icon class="icon" name="empty-permission" size="20" color="#999"></uv-icon>
 				<input v-model="loginForm.validCode" type="text" class="input" placeholder="请输入验证码" maxlength="4" />
 				<image :src="validCodeBase64" @click="loginCaptcha" class="login-code-img"></image>
 			</view>
@@ -26,18 +26,16 @@
 	</view>
 </template>
 <script setup>
-	import { ref, reactive, onMounted, getCurrentInstance, computed } from 'vue'
-	import { login, getLoginUser, getPicCaptcha } from '@/api/login'
-	import { configSysBaseList } from '@/api/dev/configApi'
-	import { getToken, setToken, removeToken } from '@/utils/auth'
+	import { ref, reactive, getCurrentInstance, computed } from 'vue'
+	import { getPicCaptcha } from '@/api/login'
 	import store from '@/store'
-	import smCrypto from '@/utils/smCrypto'
-	import onFeedTap from '@/utils/feedTap.js'
+	import onFeedTap from '@/utils/feedTap'
+	import XEUtils from 'xe-utils'
+	import tab from '@/plugins/tab'
+	import modal from '@/plugins/modal'
 	const { proxy } = getCurrentInstance()
 	const logoTap = () => {
-		uni.reLaunch({
-			url: '/pages/config/index'
-		})
+		tab.reLaunch('/pages/config/index')
 	}
 	const sysBaseConfig = computed(() => {
 		return store.getters.sysBaseConfig
@@ -62,11 +60,11 @@
 	// 登录方法
 	const handleLogin = async () => {
 		if (loginForm.account === "") {
-			proxy.$modal.msgError("请输入账号")
+			modal.msgError("请输入账号")
 		} else if (loginForm.password === "") {
-			proxy.$modal.msgError("请输入密码")
+			modal.msgError("请输入密码")
 		} else if (loginForm.validCode === "" && sysBaseConfig.value.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN === 'true') {
-			proxy.$modal.msgError("请输入验证码")
+			modal.msgError("请输入验证码")
 		} else {
 			pwdLogin()
 		}
@@ -80,7 +78,16 @@
 				store.dispatch('GetUserInfo'),
 				store.dispatch('GetDictTypeTreeData'),
 			]).then((result) => {
-				proxy.$tab.reLaunch('/pages/home/index')
+				// #ifdef H5
+				const { searchQuery } = XEUtils.parseUrl(location.href)
+				if (searchQuery.redirect) {
+					tab.reLaunch(searchQuery.redirect)
+				} else {
+					// #endif
+					tab.reLaunch('/pages/home/index')
+					// #ifdef H5
+				}
+				// #endif
 			}).catch(err => {
 				onFeedTap()
 				if (sysBaseConfig.value.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN) {

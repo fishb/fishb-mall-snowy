@@ -1,29 +1,28 @@
 <template>
-	<view v-for="(item, index) in dataList" :key="index">
-		<button class="uni-btn" type="warn" @click="del(index)" :plain="true">删除任职</button>
-		<uni-forms :key="index" :ref="`formRef${ index }`" :model="item" label-position="left" validate-trigger="submit" labelWidth="50px">
-			<uni-forms-item label="机构" name="orgId" required :rules="[{ required: true, errorMessage: '请选择机构' }]">
-				<!-- 多选属性:isMultiple="true" -->
-				<snowy-org-picker v-model="item.orgId" placeholder="请选择机构" @confirm="(data)=>{orgChange(data,index)}" :org-tree-api="selectorApiFunction.orgTreeApi">
-				</snowy-org-picker>
-			</uni-forms-item>
-			<uni-forms-item label="职位" name="positionId" required :rules="[{ required: true, errorMessage: '请选择职位' }]">
-				<!--   -->
-				<snowy-sel-picker :ref="`positionRef${ index }`" :map="{key: 'id', label: 'name'}" v-model="item.positionId" :rangeData="positionDataList[index]" placeholder="请选择选择职位" :isBigData="true" @scrollToLower="positionScrollToLower(index)" @queryCurSelData="positionQueryCurSelData"></snowy-sel-picker>
-			</uni-forms-item>
-			<uni-forms-item label="主管" name="directorId">
-				<!-- 多选属性:isMultiple="true"  :autoInitData="false" -->
-				<snowy-user-picker :ref="`directorRef${ index }`" v-model="item.directorId" placeholder="请选择主管" :org-tree-api="selectorApiFunction.orgTreeApi" :user-page-api="selectorApiFunction.userPageApi" :checked-user-list-api="selectorApiFunction.checkedUserListApi">
-				</snowy-user-picker>
-			</uni-forms-item>
-		</uni-forms>
+	<view style="width: 100%;">
+		<view v-for="(item, index) in dataList" :key="index">
+			<tui-button margin="0 0 50rpx 0" :preventClick="true" type="danger" @click="del(index)">删除任职</tui-button>
+			<uv-form :key="index" :ref="`formRef${ index }`" :model="item" :rules="rules" label-position="top" labelWidth="auto">
+				<uv-form-item label="机构" prop="orgId" required>
+					<!-- 多选属性:isMultiple="true" -->
+					<snowy-org-picker v-model="item.orgId" placeholder="请选择机构" @confirm="(data)=>{orgChange(data,index)}" :org-tree-api="selectorApiFunction.orgTreeApi" @validateField="$refs[`formRef${ index }`][0].validateField('orgId')">
+					</snowy-org-picker>
+				</uv-form-item>
+				<uv-form-item label="职位" prop="positionId" required>
+					<snowy-sel-picker :ref="`positionRef${ index }`" :map="{key: 'id', label: 'name'}" v-model="item.positionId" :rangeData="positionDataList[index]" placeholder="请选择选择职位" :isBigData="true" @scrollToLower="positionScrollToLower(index)" @queryCurSelData="positionQueryCurSelData" @validateField="$refs[`formRef${ index }`][0].validateField('positionId')"></snowy-sel-picker>
+				</uv-form-item>
+				<uv-form-item label="主管" prop="directorId">
+					<!-- 多选属性:isMultiple="true"  :autoInitData="false" -->
+					<snowy-user-picker :ref="`directorRef${ index }`" v-model="item.directorId" placeholder="请选择主管" :org-tree-api="selectorApiFunction.orgTreeApi" :user-page-api="selectorApiFunction.userPageApi" :checked-user-list-api="selectorApiFunction.checkedUserListApi">
+					</snowy-user-picker>
+				</uv-form-item>
+			</uv-form>
+		</view>
+		<tui-button ssmargin="50rpx 0 0 0" :preventClick="true" type="primary" @click="add">增加任职</tui-button>
 	</view>
-	<button class="uni-btn" type="primary" @click="add" :plain="true">增加任职</button>
+	
 </template>
 <script setup>
-	import SnowyOrgPicker from '@/components/snowy-org-picker.vue'
-	import SnowyUserPicker from '@/components/snowy-user-picker.vue'
-	import SnowySelPicker from '@/components/snowy-sel-picker.vue'
 	import { userPositionSelector, userSelector, userOrgTreeSelector } from '@/api/biz/bizUserApi'
 	import { getPositionListByIdList, userCenterGetUserListByIdList } from '@/api/sys/userCenterApi'
 	import XEUtils from 'xe-utils'
@@ -37,6 +36,18 @@
 			default: '',
 			required: false
 		},
+	})
+	const rules = reactive({
+		orgId: [{
+			type: 'string',
+			required: true,
+			message: '请选择机构',
+		}],
+		positionId: [{
+			type: 'string',
+			required: true,
+			message: '请选择职位',
+		}],
 	})
 	// 数据列表
 	const dataList = ref([])

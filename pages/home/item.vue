@@ -5,11 +5,11 @@
 			<home-swiper></home-swiper>
 		</view>
 		<!-- 图表 插件地址：https://ext.dcloud.net.cn/plugin?id=271 官方地址：https://www.ucharts.cn/v2/#/demo/index-->
-		<view class="item" v-if="['chart',].includes(code) && isShow">
+		<view class="item snowy-shadow" v-if="['chart',].includes(code) && isShow">
 			<home-chart></home-chart>
 		</view>
 		<!-- 日程 -->
-		<view class="item" v-if="['schedule',].includes(code) && isShow">
+		<view class="item snowy-shadow" v-if="['schedule',].includes(code) && isShow">
 			<home-schedule></home-schedule>
 		</view>
 	</view>
@@ -34,7 +34,7 @@
 <style lang="scss" scoped>
 	.item {
 		background-color: #ffffff;
-		margin: 15upx 0;
-		padding: 30upx 15upx;
+		margin: 15rpx 0;
+		padding: 10rpx 0;
 	}
 </style>

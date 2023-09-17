@@ -1,72 +1,58 @@
 <template>
 	<view>
-		<view class="search-container">
-			<uni-row>
-				<view class="main">
-					<uni-col :span="22">
-						<uni-search-bar placeholder="请输入环境标题" v-model="searchName" cancelButton="none"></uni-search-bar>
-					</uni-col>
-					<uni-col :span="2">
-						<view class="reset" @click="resetEnv">
-							<text> 重置\n环境 </text>
-						</view>
-					</uni-col>
-				</view>
-			</uni-row>
-		</view>
-		<uni-card :border="false" v-for="(item, key) in filterEnv(allEnv)" :key="key" :index="key">
-			<radio-group @change="envChange">
-				<label>
-					<uni-row>
-						<uni-col :span="3">
-							<radio :value="key" :checked="key === envKey" />
-						</uni-col>
-						<uni-col :span="21">
-							<view>{{item.name}}</view>
-						</uni-col>
-					</uni-row>
-				</label>
-			</radio-group>
-			<view @tap="$refs.morePopupRef.open({key:key, ...item})">
-				<uni-row>
-					<uni-col :span="6">
-						<view>key：</view>
-					</uni-col>
-					<uni-col :span="18">
-						<view>{{key}}</view>
-					</uni-col>
-					<uni-col :span="6">
-						<view>baseUrl：</view>
-					</uni-col>
-					<uni-col :span="18">
-						<view>{{item.baseUrl}}</view>
-					</uni-col>
-					<uni-col :span="6">
-						<view>tenant：</view>
-					</uni-col>
-					<uni-col :span="18">
-						<view>{{item.tenantDomain}}</view>
-					</uni-col>
-				</uni-row>
+		<snowy-search v-model="searchName" :enableSenior="true">
+			<view @click="resetEnv">
+				<text> 重置\n环境 </text>
 			</view>
-		</uni-card>
-		<button class="conf-btn-login" type="primary" @click="loginBtn">确认</button>
-		<!-- 新增悬浮按钮 -->
-		<uni-fab :pattern="{
-				color: '#7A7E83',
-				backgroundColor: '#fff',
-				selectedColor: '#007AFF',
-				buttonColor: '#007AFF',
-				iconColor: '#fff'
-			}" horizontal="right" vertical="bottom" direction="horizontal" @fabClick="add"></uni-fab>
-		<!-- 更多操作 -->
-		<morePopup ref="morePopupRef"></morePopup>
+		</snowy-search>
+		<view class="item" v-for="(item, key) in filterEnv(allEnv)" :key="key" :index="key">
+			<view @tap="switchEnv(key)" class="item">
+				<uv-row>
+					<uv-col span="6">
+						<uv-icon v-if="key === envKey" size="20" name="integral-fill" color="#007AFF"></uv-icon>
+						<uv-icon v-else size="20" name="integral"></uv-icon>
+					</uv-col>
+					<uv-col span="6" textAlign="right">
+						<view class="item-right snowy-bold snowy-ellipsis"> {{item.name}} </view>
+					</uv-col>
+				</uv-row>
+			</view>
+			<view @tap="$refs.moreRef.open({key:key, ...item})" class="item">
+				<uv-row customStyle="margin-top: 15rpx">
+					<uv-col span="6">
+						<view class="item-left">key：</view>
+					</uv-col>
+					<uv-col span="6" textAlign="right">
+						<view class="item-right snowy-bold snowy-ellipsis"> {{ key }} </view>
+					</uv-col>
+				</uv-row>
+				<uv-row customStyle="margin-top: 15rpx">
+					<uv-col span="6">
+						<view class="item-left">baseUrl：</view>
+					</uv-col>
+					<uv-col span="6" textAlign="right">
+						<view class="item-right snowy-bold snowy-ellipsis"> {{item.baseUrl}} </view>
+					</uv-col>
+				</uv-row>
+				<uv-row customStyle="margin-top: 15rpx">
+					<uv-col span="6">
+						<view class="item-left">tenant：</view>
+					</uv-col>
+					<uv-col span="6" textAlign="right">
+						<view class="item-right snowy-bold snowy-ellipsis"> {{item.tenantDomain}} </view>
+					</uv-col>
+				</uv-row>
+			</view>
+		</view>
+		<tui-button margin="50rpx 0" :preventClick="true" :shadow="true" @click="loginBtn">确认</tui-button>
+		<snowy-float-btn @click="add"></snowy-float-btn>
+		<more ref="moreRef"></more>
 	</view>
 </template>
 <script setup>
 	import { ref, reactive, onMounted, getCurrentInstance, computed } from 'vue'
 	import store from '@/store'
-	import morePopup from './more-popup.vue'
+	import more from './more.vue'
 	import XEUtils from "xe-utils"
 	import env from '@/env'
 	const searchName = ref('')
@@ -92,9 +78,9 @@
 		store.commit('SET_allEnv', env.DEFAULT_ALL_ENV)
 	}
 	// 切换
-	const envChange = (evt) => {
+	const switchEnv = (key) => {
 		// 设置当前环境key
-		store.commit('SET_envKey', evt.detail.value)
+		store.commit('SET_envKey', key)
 	}
 	const loginBtn = () => {
 		uni.reLaunch({
@@ -109,26 +95,24 @@
 	}
 </script>
 <style lang="scss" scoped>
-	page {
-		background-color: #ffffff;
-	}
+	.item {
+		background: #ffffff;
+		margin: 20rpx 0;
+		padding: 25rpx;
+		box-shadow: 0 1px 2px #ccc;
+		border-radius: 15rpx;
 
-	.search-container {
-		margin: 15upx;
+		.item-left {
+			color: #999;
+			font-size: 26rpx;
+		}
 
-		.main {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-
-			.reset {
-				color: #2979ff;
-			}
+		.item-right {
+			font-size: 26rpx;
 		}
 	}
 
-	.conf-btn-login {
-		margin: 50upx 25upx;
-		background-color: $uni-primary;
+	.item:hover {
+		box-shadow: 1upx 5upx 5upx #5677fc;
 	}
 </style>

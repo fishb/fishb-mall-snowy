@@ -1,43 +1,34 @@
 <template>
-	<view class="crumb">
-		<text class="crumb-text" v-for="(item, index) in allSelOrg" :key="index" @click="clickOrgCru(item, index)" :class="index === (allSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
+	<view class="crumb snowy-shadow">
+		<text class="text" v-for="(item, index) in allSelOrg" :key="index" @click="clickOrgCru(item, index)" :class="index === (allSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
 			{{ item.name + (index === (allSelOrg.length-1) ? '' : ' | ') }}
 		</text>
 	</view>
-	<view class="org-list">
-		<uni-list>
-			<uni-list-item v-for="(item, index) in curSelOrg" :key="index">
-				<!-- 名称 -->
-				<template v-slot:body>
-					<text class="org-list-name" @click="moreRef.open(item)">{{item.name}}</text>
+	<view class="list snowy-shadow">
+		<tui-list-view unlined="all">
+			<tui-swipe-action v-for="(item, index) in curSelOrg" :key="index" :actions="actions" :params="item" @click="handlerButton">
+				<template v-slot:content>
+					<tui-list-cell :line-left="0" :hover="item.children? true : false" :arrow="item.children? true : false" @click="clickOrg(item, index)">
+						<view class="item">
+							<image v-show="item.category === 'COMPANY'" class="item-img" src="/static/svg/org/company.svg" mode="widthFix"></image>
+							<image v-show="item.category === 'DEPT'" class="item-img" src="/static/svg/org/department.svg" mode="widthFix"></image>
+							<view class="item-left">{{item.name}}</view>
+							<view class="item-right"></view>
+						</view>
+					</tui-list-cell>
 				</template>
-				<!-- 右侧icon -->
-				<template v-slot:footer>
-					<uni-icons v-if="item.children? true : false" type="right" @click="clickOrg(item, index)">
-					</uni-icons>
-				</template>
-			</uni-list-item>
-		</uni-list>
-		<snowy-empty v-if="$utils.isEmpty(curSelOrg)" />
+			</tui-swipe-action>
+		</tui-list-view>
+		<snowy-empty v-show="$utils.isEmpty(curSelOrg)"/>
 	</view>
-	<!-- 新增悬浮按钮 -->
-	<uni-fab v-if="hasPerm('mobileBizOrgAdd')" :pattern="{
-			color: '#7A7E83',
-			backgroundColor: '#fff',
-			selectedColor: '#007AFF',
-			buttonColor: '#007AFF',
-			iconColor: '#fff'
-		}" horizontal="right" vertical="bottom" direction="horizontal" @fabClick="add"></uni-fab>
-	<!-- 更多操作 -->
-	<more ref="moreRef" @handleOk="loadData()"></more>
+	<snowy-float-btn v-if="hasPerm('mobileBizOrgAdd')" @click="add"></snowy-float-btn>
 </template>
 <script setup>
-	import { orgTree } from '@/api/biz/bizOrgApi'
-	import SnowyEmpty from "@/components/snowy-empty.vue"
-	import { reactive, ref, getCurrentInstance } from "vue"
-	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
-	import more from '@/pages/biz/org/more.vue'
-	const moreRef = ref()
+	import { orgTree, orgDelete } from '@/api/biz/bizOrgApi'
+	import { reactive, ref, getCurrentInstance, nextTick } from "vue";
+	import { onLoad, onShow, onReady, onPullDownRefresh } from "@dcloudio/uni-app"
+	import { hasPerm } from '@/plugins/permission'
+	import modal from '@/plugins/modal'
 	// 所有选择的机构
 	const allSelOrg = ref([])
 	// 当前选择的机构
@@ -75,29 +66,87 @@
 			url: '/pages/biz/org/form'
 		})
 	}
+	const actions = []
+	if (hasPerm(['mobileBizOrgEdit'])) {
+		actions.push({
+			name: '修改',
+			color: '#fff',
+			fontsize: 30,
+			width: 70,
+			background: '#5677fc'
+		})
+	}
+	if (hasPerm(['mobileBizOrgDelete'])) {
+		actions.push({
+			name: '删除',
+			color: '#fff',
+			fontsize: 30,
+			width: 70,
+			background: '#FD3B31'
+		})
+	}
+	const handlerButton = ({ index, item }) => {
+		if ('修改' === actions[index]?.name) {
+			return uni.navigateTo({
+				url: '/pages/biz/org/form?id=' + item.id
+			})
+		}
+		if ('删除' === actions[index]?.name) {
+			return modal.confirm(`是否确认删除【${ item.name }】机构？`).then(() => {
+				orgDelete([{
+					id: item.id
+				}]).then(res => {
+					loadData()
+				})
+			})
+		}
+	}
 </script>
 <style lang="scss" scoped>
 	.crumb {
-		margin: 15upx;
-		border-radius: 5upx;
 		white-space: nowrap;
 		overflow-x: scroll;
-		background-color: white;
-		padding: 20upx;
+		padding: 20rpx;
 
-		.crumb-text {
+		.text {
 			display: inline-block;
-			margin-left: 5px;
+			margin-left: 5rpx;
 			text-align: center;
 		}
 	}
 
-	.org-list {
-		margin: 15upx;
-		border-radius: 5upx;
+	.list {
+		margin: 15rpx 0;
+		background-color: white;
+		padding: 5rpx 0;
 
-		.org-list-name {
-			flex: 1;
+		.item {
+			width: 100%;
+			display: flex;
+			align-items: center;
+
+			.item-img {
+				width: 70rpx;
+				height: 70rpx;
+				border-radius: 50%;
+				display: block;
+				margin-right: 5rpx;
+				flex-shrink: 0;
+			}
+
+			.item-left {
+				padding-left: 20rpx;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.item-right {
+				margin-left: auto;
+				margin-right: 34rpx;
+				font-size: 26rpx;
+				color: #999;
+			}
 		}
 	}
 </style>

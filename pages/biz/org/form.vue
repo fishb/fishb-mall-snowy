@@ -1,47 +1,72 @@
 <template>
-	<view class="container">
-		<uni-forms ref="formRef" :model="formData" label-position="top" labelWidth="75px">
-			<uni-forms-item label="上级机构" name="parentId" required :rules="[{ required: true, errorMessage: '请选择上级机构' }]">
-				<snowy-org-picker v-model="formData.parentId" :isTopLevel="true" placeholder="请选择上级机构" :org-tree-api="selectorApiFunction.orgTreeApi">
+	<view class="container snowy-shadow">
+		<uv-form ref="formRef" :model="formData" :rules="rules" label-position="top" labelWidth="auto" :labelStyle="{marginBottom: '25rpx', fontSize: '27rpx', color: '#606266'}">
+			<uv-form-item label="上级机构" prop="parentId" required>
+				<snowy-org-picker v-model="formData.parentId" :isTopLevel="true" placeholder="请选择上级机构" :org-tree-api="selectorApiFunction.orgTreeSelectorApi">
 				</snowy-org-picker>
-			</uni-forms-item>
-			<uni-forms-item label="机构名称" name="name" required :rules="[{ required: true, errorMessage: '请输入机构名称' }]">
-				<uni-easyinput v-model="formData.name" placeholder="请输入机构名称"></uni-easyinput>
-			</uni-forms-item>
-			<uni-forms-item label="机构分类" name="category" required :rules="[{ required: true, errorMessage: '请选择机构分类' }]">
-				<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.category" :rangeData="orgCategoryOptions" placeholder="请选择机构分类"></snowy-sel-picker>
-			</uni-forms-item>
-			<uni-forms-item label="排序" name="sortCode" required :rules="[{ required: true, errorMessage: '请选择排序' }]">
-				<uni-number-box v-model="formData.sortCode" background="#2979FF" color="#fff" :step="1" :max="100"></uni-number-box>
-			</uni-forms-item>
-			<uni-forms-item label="指定主管" name="directorId">
+			</uv-form-item>
+			<uv-form-item label="机构名称" prop="name" required>
+				<uv-input v-model="formData.name" placeholder="请输入机构名称" fontSize="27rpx"></uv-input>
+			</uv-form-item>
+			<uv-form-item label="机构分类" prop="category" required>
+				<uv-radio-group v-model="formData.category">
+					<uv-radio :customStyle="{marginRight: '50rpx'}" v-for="(item, index) in orgCategoryOptions" :key="index" :label="item.text" :name="item.value">
+					</uv-radio>
+				</uv-radio-group>
+			</uv-form-item>
+			<uv-form-item label="排序" prop="sortCode" required>
+				<uv-number-box v-model="formData.sortCode" button-size="30" :step="1" :max="100"></uv-number-box>
+			</uv-form-item>
+			<uv-form-item label="指定主管" prop="directorId">
 				<snowy-user-picker v-model="formData.directorId" placeholder="请选择主管" :org-tree-api="selectorApiFunction.orgTreeSelectorApi" :user-page-api="selectorApiFunction.userPageApi" :checked-user-list-api="selectorApiFunction.checkedUserListApi">
 				</snowy-user-picker>
-			</uni-forms-item>
-		</uni-forms>
-		<button class="btn-sub" type="primary" @click="submit">提交</button>
+			</uv-form-item>
+		</uv-form>
+		<tui-button margin="50rpx 0" :preventClick="true" :shadow="true" @click="submit">提交</tui-button>
 	</view>
 </template>
 <script setup>
 	import { nextTick, reactive, ref } from "vue"
-	import SnowyOrgPicker from '@/components/snowy-org-picker.vue'
-	import SnowySelPicker from '@/components/snowy-sel-picker.vue'
-	import SnowyUserPicker from '@/components/snowy-user-picker.vue'
 	import tool from '@/plugins/tool'
-	import { orgTree, orgTreeSelector, orgUserSelector, orgDetail, submitForm } from '@/api/biz/bizOrgApi'
+	import { orgTreeSelector, orgUserSelector, orgDetail, submitForm } from '@/api/biz/bizOrgApi'
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	import { userCenterGetUserListByIdList } from '@/api/sys/userCenterApi'
 	const formRef = ref()
-	let formData = ref({
-		sortCode: 99
+	const formData = ref({
+		parentId: '',
+		name: '',
+		category: '',
+		sortCode: 99,
+		directorId: ''
+	})
+	const rules = reactive({
+		parentId: [{
+			type: 'string',
+			required: true,
+			message: '请选择上级机构',
+			trigger: ['blur', 'change']
+		}],
+		name: [{
+			type: 'string',
+			required: true,
+			message: '请输入机构名称',
+			trigger: ['blur', 'change']
+		}],
+		category: [{
+			type: 'string',
+			required: true,
+			message: '请选择机构分类',
+			trigger: ['blur', 'change']
+		}],
+		sortCode: [{
+			type: 'number',
+			required: true,
+			message: '请输入排序',
+			trigger: ['blur', 'change']
+		}],
 	})
 	const orgCategoryOptions = tool.dictList('ORG_CATEGORY')
 	const selectorApiFunction = {
-		orgTreeApi: (param) => {
-			return orgTree(param).then((res) => {
-				return Promise.resolve(res)
-			})
-		},
 		orgTreeSelectorApi: (param) => {
 			return orgTreeSelector(param).then((res) => {
 				return Promise.resolve(res)
@@ -63,9 +88,7 @@
 		if (!option.id) {
 			return
 		}
-		orgDetail({
-			id: option.id
-		}).then(res => {
+		orgDetail({ id: option.id }).then(res => {
 			formData.value = res?.data
 		})
 	})
@@ -82,15 +105,8 @@
 		})
 	}
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 	.container {
-		margin: 15upx;
-		border-radius: 5upx;
-		padding: 25upx;
-		background-color: $uni-white;
-
-		.btn-sub {
-			background-color: $uni-primary;
-		}
+		padding: 30rpx;
 	}
 </style>
