@@ -10,8 +10,8 @@
 				<template v-slot:content>
 					<tui-list-cell :line-left="0" :hover="item.children? true : false" :arrow="item.children? true : false" @click="clickOrg(item, index)">
 						<view class="item">
-							<image v-show="item.category === 'COMPANY'" class="item-img" src="/static/svg/org/company.svg" mode="widthFix"></image>
-							<image v-show="item.category === 'DEPT'" class="item-img" src="/static/svg/org/department.svg" mode="widthFix"></image>
+							<image v-if="item.category === 'COMPANY'" class="item-img" src="/static/svg/org/company.svg" mode="widthFix"></image>
+							<image v-if="item.category === 'DEPT'" class="item-img" src="/static/svg/org/department.svg" mode="widthFix"></image>
 							<view class="item-left">{{item.name}}</view>
 							<view class="item-right"></view>
 						</view>
