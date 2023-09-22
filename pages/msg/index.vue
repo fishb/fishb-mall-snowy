@@ -13,8 +13,8 @@
 						<view class="item-title snowy-bold snowy-ellipsis" :class="!!item.read ? 'item-grey': ''">{{item.subject}}</view>
 					</uv-col>
 					<uv-col span="1">
-						<view class="snowy-flex-end">
-							<uv-badge v-show="!item.read" :isDot="true" type="error"></uv-badge>
+						<view class="snowy-flex-end" v-show="!item.read">
+							<uv-badge :isDot="true" type="error"></uv-badge>
 						</view>
 					</uv-col>
 				</uv-row>
