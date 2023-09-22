@@ -49,18 +49,22 @@
 					<view class="item" :class="{ 'item-sel': !isMultiple ? item[map.key] == curSelDataKey: curSelDataKey.indexOf(item[map.key]) != -1 }" v-for="(item, index) in rangeData" :key="index" :index="index" @click="selOrDelData(item, index)">
 						<uv-row>
 							<uv-col :span="1.5">
-								<uv-icon v-show="!isMultiple ? item[map.key] != curSelDataKey: curSelDataKey.indexOf(item[map.key]) == -1" name="checkmark-circle" :size="20" color="#999"></uv-icon>
-								<uv-icon v-show="!isMultiple ? item[map.key] == curSelDataKey: curSelDataKey.indexOf(item[map.key]) != -1" name="checkmark-circle-fill" :size="20" color="#2979ff"></uv-icon>
+								<view v-show="!isMultiple ? item[map.key] != curSelDataKey: curSelDataKey.indexOf(item[map.key]) == -1">
+									<uv-icon name="checkmark-circle" :size="20" color="#999"></uv-icon>
+								</view>
+								<view v-show="!isMultiple ? item[map.key] == curSelDataKey: curSelDataKey.indexOf(item[map.key]) != -1">
+									<uv-icon name="checkmark-circle-fill" :size="20" color="#2979ff"></uv-icon>
+								</view>
 							</uv-col>
-							<uv-col :span="9.5">
+							<uv-col :span="5.5">
 								<view class="item-left">{{item[map.label]}}</view>
 							</uv-col>
-							<uv-col :span="1">
+							<uv-col :span="5">
 								<view class="item-right snowy-bold snowy-ellipsis"> {{item[map.label]}} </view>
 							</uv-col>
 						</uv-row>
 					</view>
-					<snowy-empty :fixed="true" v-if="XEUtils.isEmpty(rangeData)"></snowy-empty>
+					<snowy-empty :fixed="true" v-show="$xeu.isEmpty(rangeData)"></snowy-empty>
 				</scroll-view>
 			</view>
 		</uv-popup>
@@ -68,7 +72,6 @@
 </template>
 <script setup>
 	import { reactive, ref, getCurrentInstance, watch, inject } from "vue"
-	import XEUtils from 'xe-utils'
 	const emits = defineEmits(['update:modelValue', 'queryCurSelData', 'scrollToLower', 'cancel', 'confirm', 'searchConfirm', 'searchClear'])
 	const props = defineProps({
 		modelValue: [String, Array, Number],
@@ -123,14 +126,14 @@
 	const initOrResetData = () => {
 		// 单选curSelData初始化值赋值
 		if (!props.isMultiple) {
-			curSelDataKey.value = props.modelValue ? XEUtils.clone(props.modelValue, true) : ""
+			curSelDataKey.value = props.modelValue ? uni.$xeu.clone(props.modelValue, true) : ""
 			if (props.isBigData) {
 				emits('queryCurSelData', curSelDataKey.value, (val) => {
 					curSelData.value = val
 				})
 			} else {
-				if (!XEUtils.isEmpty(curSelDataKey.value) || XEUtils.isNumber(curSelDataKey.value)) {
-					const curSelDataArr = XEUtils.filterTree(props.rangeData, item => {
+				if (!uni.$xeu.isEmpty(curSelDataKey.value) || uni.$xeu.isNumber(curSelDataKey.value)) {
+					const curSelDataArr = uni.$xeu.filterTree(props.rangeData, item => {
 						return curSelDataKey.value === item[props.map.key]
 					})
 					if (curSelDataArr && curSelDataArr.length === 1) {
@@ -143,14 +146,14 @@
 		}
 		// 多选curSelData初始化值赋值
 		if (!!props.isMultiple) {
-			curSelDataKey.value = props.modelValue ? XEUtils.clone(props.modelValue, true) : []
+			curSelDataKey.value = props.modelValue ? uni.$xeu.clone(props.modelValue, true) : []
 			if (props.isBigData) {
 				emits('queryCurSelData', curSelDataKey.value, (val) => {
 					curSelData.value = val
 				})
 			} else {
-				if (!XEUtils.isEmpty(curSelDataKey.value)) {
-					curSelData.value = XEUtils.filterTree(props.rangeData, item => {
+				if (!uni.$xeu.isEmpty(curSelDataKey.value)) {
+					curSelData.value = uni.$xeu.filterTree(props.rangeData, item => {
 						return curSelDataKey.value.includes(item[props.map.key])
 					})
 				} else {

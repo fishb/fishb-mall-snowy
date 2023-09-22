@@ -3,7 +3,6 @@
  * @param {String} name
  */
 export const get_file_ext = (name) => {
-	console.log(name)
 	const last_len = name.lastIndexOf('.')
 	const len = name.length
 	return {

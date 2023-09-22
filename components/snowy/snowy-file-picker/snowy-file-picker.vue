@@ -24,7 +24,6 @@
 	import { ref, watch, computed } from "vue";
 	import { prefixUrl } from "@/utils/apiAdaptive"
 	import store from '@/store'
-	import XEUtils from 'xe-utils'
 	import { toast } from './utils'
 	const emits = defineEmits(['update:modelValue', 'validateField'])
 	const props = defineProps({
@@ -155,10 +154,10 @@
 	 */
 	const getIdArr = () => {
 		let idArr = []
-		if (XEUtils.isEmpty(props.modelValue)) {
+		if (uni.$xeu.isEmpty(props.modelValue)) {
 			return idArr
 		}
-		if (XEUtils.isString(props.modelValue)) {
+		if (uni.$xeu.isString(props.modelValue)) {
 			if ('jsonStr' === props.paramAndReturnType) {
 				JSON.parse(props.modelValue).forEach(item => {
 					idArr.push(item[props.map.id])
@@ -169,22 +168,22 @@
 						idArr.push(item)
 					}
 					if ('urlStr' === props.paramAndReturnType) {
-						idArr.push(XEUtils.parseUrl(item[props.map.url])?.searchQuery?.id)
+						idArr.push(uni.$xeu.parseUrl(item[props.map.url])?.searchQuery?.id)
 					}
 				})
 			}
 		}
-		if (XEUtils.isArray(props.modelValue)) {
+		if (uni.$xeu.isArray(props.modelValue)) {
 			props.modelValue.forEach(item => {
 				if ('idArr' === props.paramAndReturnType) {
 					idArr.push(item)
 				}
 				if ('urlArr' === props.paramAndReturnType) {
-					idArr.push(XEUtils.parseUrl(item[props.map.url])?.searchQuery?.id)
+					idArr.push(uni.$xeu.parseUrl(item[props.map.url])?.searchQuery?.id)
 				}
 				if ('objArr' === props.paramAndReturnType) {
 					// 优先取url中的id
-					idArr.push(XEUtils.parseUrl(item[props.map.url])?.searchQuery?.id || item[props.map.id])
+					idArr.push(uni.$xeu.parseUrl(item[props.map.url])?.searchQuery?.id || item[props.map.id])
 				}
 			})
 		}
