@@ -7,7 +7,6 @@ import { userLoginMobileMenu } from '@/api/sys/userCenterApi'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { configSysBaseList } from '@/api/dev/configApi'
 import { dictTree } from '@/api/dev/dictApi'
-import XEUtils from 'xe-utils'
 import env from '@/env'
 export default {
 	state: {
