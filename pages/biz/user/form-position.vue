@@ -18,14 +18,13 @@
 				</uv-form-item>
 			</uv-form>
 		</view>
-		<tui-button ssmargin="50rpx 0 0 0" :preventClick="true" type="primary" @click="add">增加任职</tui-button>
+		<tui-button margin="50rpx 0 0 0" :preventClick="true" type="primary" @click="add">增加任职</tui-button>
 	</view>
 	
 </template>
 <script setup>
 	import { userPositionSelector, userSelector, userOrgTreeSelector } from '@/api/biz/bizUserApi'
 	import { getPositionListByIdList, userCenterGetUserListByIdList } from '@/api/sys/userCenterApi'
-	import XEUtils from 'xe-utils'
 	import { nextTick, reactive, ref, watch, getCurrentInstance } from "vue"
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	const { proxy } = getCurrentInstance()
@@ -81,7 +80,7 @@
 	})
 	const initData = () => {
 		if (props.modelValue) {
-			dataList.value = XEUtils.clone(JSON.parse(props.modelValue), true)
+			dataList.value = uni.$xeu.clone(JSON.parse(props.modelValue), true)
 		} else {
 			dataList.value = []
 		}
@@ -113,7 +112,7 @@
 	}
 	// 根据职位id进行查询
 	const positionQueryCurSelData = (curSelDataKey, callback) => {
-		if (!XEUtils.isEmpty(curSelDataKey)) {
+		if (!uni.$xeu.isEmpty(curSelDataKey)) {
 			getPositionListByIdList({
 				idList: [curSelDataKey]
 			}).then(res => {
@@ -129,7 +128,7 @@
 			positionDataList.value[index] = []
 		}
 		userPositionSelector(positionParamList.value[index]).then(res => {
-			if (XEUtils.isEmpty(res?.data?.records)) {
+			if (uni.$xeu.isEmpty(res?.data?.records)) {
 				return
 			}
 			positionDataList.value[index] = positionDataList.value[index].concat(res.data.records)

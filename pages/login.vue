@@ -30,12 +30,9 @@
 	import { getPicCaptcha } from '@/api/login'
 	import store from '@/store'
 	import onFeedTap from '@/utils/feedTap'
-	import XEUtils from 'xe-utils'
-	import tab from '@/plugins/tab'
-	import modal from '@/plugins/modal'
 	const { proxy } = getCurrentInstance()
 	const logoTap = () => {
-		tab.reLaunch('/pages/config/index')
+		uni.$snowy.tab.reLaunch('/pages/config/index')
 	}
 	const sysBaseConfig = computed(() => {
 		return store.getters.sysBaseConfig
@@ -60,11 +57,11 @@
 	// 登录方法
 	const handleLogin = async () => {
 		if (loginForm.account === "") {
-			modal.msgError("请输入账号")
+			uni.$snowy.modal.msgError("请输入账号")
 		} else if (loginForm.password === "") {
-			modal.msgError("请输入密码")
+			uni.$snowy.modal.msgError("请输入密码")
 		} else if (loginForm.validCode === "" && sysBaseConfig.value.SNOWY_SYS_DEFAULT_CAPTCHA_OPEN === 'true') {
-			modal.msgError("请输入验证码")
+			uni.$snowy.modal.msgError("请输入验证码")
 		} else {
 			pwdLogin()
 		}
@@ -79,12 +76,12 @@
 				store.dispatch('GetDictTypeTreeData'),
 			]).then((result) => {
 				// #ifdef H5
-				const { searchQuery } = XEUtils.parseUrl(location.href)
+				const { searchQuery } = uni.$xeu.parseUrl(location.href)
 				if (searchQuery.redirect) {
-					tab.reLaunch(searchQuery.redirect)
+					uni.$snowy.tab.reLaunch(searchQuery.redirect)
 				} else {
 					// #endif
-					tab.reLaunch('/pages/home/index')
+					uni.$snowy.tab.reLaunch('/pages/home/index')
 					// #ifdef H5
 				}
 				// #endif

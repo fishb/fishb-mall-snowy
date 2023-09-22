@@ -20,7 +20,6 @@
 <script setup>
 	import { nextTick, reactive, ref } from "vue"
 	import store from '@/store'
-	import XEUtils from "xe-utils"
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	const formRef = ref()
 	const formData = ref({
@@ -58,7 +57,7 @@
 	})
 	const submit = () => {
 		formRef.value.validate().then(res => {
-			let obj = XEUtils.clone(store.getters.allEnv, true)
+			let obj = uni.$xeu.clone(store.getters.allEnv, true)
 			obj[formData.value.key] = {
 				name: formData.value.name,
 				baseUrl: formData.value.baseUrl,

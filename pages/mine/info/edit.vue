@@ -31,13 +31,10 @@
 	import { reactive, ref } from "vue"
 	import { onLoad, onReady } from '@dcloudio/uni-app'
 	import store from '@/store/index.js'
-	import tool from '@/plugins/tool'
-	import modal from '@/plugins/modal'
-	import XEUtils from 'xe-utils'
 	import storage from '@/utils/storage'
 	import constant from '@/utils/constant'
 	const formRef = ref()
-	const formData = ref(XEUtils.clone(store.getters.userInfo, true))
+	const formData = ref(uni.$xeu.clone(store.getters.userInfo, true))
 	const rules = reactive({
 		name: [{
 			type: 'string',
@@ -57,14 +54,14 @@
 		}],
 	})
 	// 性别
-	const genderOptions = tool.dictList('GENDER')
+	const genderOptions = uni.$snowy.tool.dictList('GENDER')
 	// 提交
 	const submit = () => {
 		formRef.value.validate().then(res => {
 			userUpdateUserInfo(formData.value).then(response => {
 				// 更新缓存
 				store.commit('SET_userInfo', formData.value)
-				modal.msgSuccess('修改成功')
+				uni.$snowy.modal.msgSuccess('修改成功')
 			})
 		})
 	}

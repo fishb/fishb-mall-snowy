@@ -86,9 +86,7 @@
 <script setup>
 	import store from '@/store/index'
 	import { computed } from "vue"
-	import modal from '@/plugins/modal'
 	import config from '@/config'
-	import tab from '@/plugins/tab'
 	const userInfo = computed(() => {
 		return store.getters.userInfo
 	})
@@ -113,10 +111,10 @@
 		})
 	}
 	const handleLogout = () => {
-		modal.confirm('确定注销并退出系统吗？').then(() => {
+		uni.$snowy.modal.confirm('确定注销并退出系统吗？').then(() => {
 			// 退出
 			store.dispatch('LogOut').then(() => {
-				tab.reLaunch(config.NO_TOKEN_BACK_URL)
+				uni.$snowy.tab.reLaunch(config.NO_TOKEN_BACK_URL)
 			})
 		})
 	}

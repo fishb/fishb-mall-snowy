@@ -30,19 +30,17 @@
 				</uv-row>
 			</view>
 		</view>
-		<snowy-empty v-show="$utils.isEmpty(msgData)" :fixed="true" />
+		<snowy-empty v-show="$xeu.isEmpty(msgData)" :fixed="true" />
 	</view>
 </template>
 <script setup>
 	import { nextTick, reactive, ref } from "vue"
-	import tool from '@/plugins/tool'
-	import XEUtils from 'xe-utils'
 	import { userLoginUnreadMessagePage } from '@/api/sys/userCenterApi'
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	const curView = ref(0)
 	const segmentedList = ref([])
-	const messageCategoryList = tool.dictList('MESSAGE_CATEGORY')
-	if (!XEUtils.isEmpty(messageCategoryList)) {
+	const messageCategoryList = uni.$snowy.tool.dictList('MESSAGE_CATEGORY')
+	if (!uni.$xeu.isEmpty(messageCategoryList)) {
 		messageCategoryList.forEach(item => {
 			segmentedList.value.push({
 				name: item.text
@@ -61,10 +59,10 @@
 			parameter.current = 1
 			msgData.value = []
 		}
-		searchFormState.category = XEUtils.isEmpty(messageCategoryList) ? '' : messageCategoryList[curView.value]?.value
+		searchFormState.category = uni.$xeu.isEmpty(messageCategoryList) ? '' : messageCategoryList[curView.value]?.value
 		Object.assign(parameter, searchFormState)
 		userLoginUnreadMessagePage(parameter).then(res => {
-			if (XEUtils.isEmpty(res?.data?.records)) {
+			if (uni.$xeu.isEmpty(res?.data?.records)) {
 				return
 			}
 			msgData.value = msgData.value.concat(res.data.records)

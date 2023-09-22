@@ -2,10 +2,10 @@
 	<uv-popup ref="popRef" mode="bottom" bg-color="null" z-index="99">
 		<view class="container">
 			<tui-list-view unlined="all" background-color="transparent">
-				<tui-list-cell v-if="hasPerm('mobileBizPositionEdit')" :hover="true" :arrow="false" @click="edit" :radius="10" >
+				<tui-list-cell v-if="$snowy.hasPerm('mobileBizPositionEdit')" :hover="true" :arrow="false" @click="edit" :radius="10" >
 					<view class="item"> 编辑 </view>
 				</tui-list-cell>
-				<tui-list-cell v-if="hasPerm('mobileBizPositionDelete')" :hover="true" :arrow="false" @click="del" :radius="10" :margin-top="2">
+				<tui-list-cell v-if="$snowy.hasPerm('mobileBizPositionDelete')" :hover="true" :arrow="false" @click="del" :radius="10" :margin-top="2">
 					<view class="item"> 刪除 </view>
 				</tui-list-cell>
 				<tui-list-cell :hover="true" :arrow="false" @click="cancel" :margin-top="10" :radius="10">
@@ -18,7 +18,6 @@
 <script setup>
 	import { reactive, ref, getCurrentInstance } from "vue";
 	import { positionDelete } from '@/api/biz/bizPositionApi'
-	import modal from '@/plugins/modal'
 	const emits = defineEmits(['handleOk'])
 	const popRef = ref()
 	const record = ref({})
@@ -35,7 +34,7 @@
 	}
 	// 删除
 	const del = () => {
-		modal.confirm(`是否确认删除【${ record.value.name }】职位？`).then(() => {
+		uni.$snowy.modal.confirm(`是否确认删除【${ record.value.name }】职位？`).then(() => {
 			positionDelete([{
 				id: record.value.id
 			}]).then(res => {

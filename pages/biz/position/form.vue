@@ -20,7 +20,6 @@
 </template>
 <script setup>
 	import { nextTick, reactive, ref } from "vue"
-	import tool from '@/plugins/tool'
 	import { positionDetail, positionOrgTreeSelector, submitForm } from '@/api/biz/bizPositionApi'
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	const formRef = ref()
@@ -61,7 +60,7 @@
 			})
 		}
 	}
-	const positionCategoryOptions = tool.dictList('POSITION_CATEGORY')
+	const positionCategoryOptions = uni.$snowy.tool.dictList('POSITION_CATEGORY')
 	// 加載
 	onLoad((option) => {
 		if (!option.id) {

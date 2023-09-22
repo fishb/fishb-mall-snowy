@@ -30,7 +30,6 @@
 </template>
 <script setup>
 	import store from '@/store'
-	import XEUtils from 'xe-utils'
 	import config from '@/config'
 	import { reactive, ref, getCurrentInstance } from "vue"
 	import { prefixUrl } from "@/utils/apiAdaptive"

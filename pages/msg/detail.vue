@@ -32,8 +32,8 @@
 				</uv-col>
 				<uv-col span="6">
 					<view class="snowy-flex-end">
-						<uni-tag v-if="!!item.read" text="已读" />
-						<uni-tag v-if="!item.read" text="未读" type="primary" />
+						<uv-tags v-if="!!item.read" text="已读" type="info"/>
+						<uv-tags v-if="!item.read" text="未读" type="primary" />
 					</view>
 				</uv-col>
 			</uv-row>
@@ -42,8 +42,6 @@
 </template>
 <script setup>
 	import { nextTick, reactive, ref } from "vue"
-	import tool from '@/plugins/tool'
-	import XEUtils from 'xe-utils'
 	import { userLoginUnreadMessageDetail } from '@/api/sys/userCenterApi'
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	const record = ref({})
