@@ -1,23 +1,22 @@
 import App from './App'
 import './interceptor'
-import XEUtils from 'xe-utils'
-import VXEUtils from 'vxe-utils'
 import { createSSRApp } from 'vue'
-import tab from '@/plugins/tab'
-import modal from '@/plugins/modal'
 import store from './store'
-import tool from '@/plugins/tool'
-import { hasPerm } from '@/plugins/permission'
+import uvUI from '@/uni_modules/uv-ui-tools'
+import XEUtils from '@/plugins/xe-utils'
+import snowy from '@/plugins/snowy'
+
 export function createApp() {
 	const app = createSSRApp(App)
-	app.use(VXEUtils, XEUtils, {
-		mounts: ['cookie']
-	})
-	app.config.globalProperties.$tab = tab
-	app.config.globalProperties.$modal = modal
-	app.config.globalProperties.$store = store
-	app.config.globalProperties.$tool = tool
-	app.config.globalProperties.hasPerm = hasPerm
+	app.use(store)
+	app.use(uvUI)
+	
+	app.config.globalProperties.$snowy = snowy
+	app.config.globalProperties.$xeu = XEUtils
+	
+	uni.$snowy = snowy
+	uni.$xeu = XEUtils
+	
 	return {
 		app
 	}
