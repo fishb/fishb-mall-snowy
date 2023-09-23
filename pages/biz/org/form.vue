@@ -43,7 +43,7 @@
 			type: 'string',
 			required: true,
 			message: '请选择上级机构',
-			trigger: ['blur', 'change']
+			trigger: ['change']
 		}],
 		name: [{
 			type: 'string',
@@ -55,7 +55,7 @@
 			type: 'string',
 			required: true,
 			message: '请选择机构分类',
-			trigger: ['blur', 'change']
+			trigger: ['change']
 		}],
 		sortCode: [{
 			type: 'number',

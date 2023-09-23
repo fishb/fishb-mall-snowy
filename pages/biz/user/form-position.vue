@@ -41,11 +41,13 @@
 			type: 'string',
 			required: true,
 			message: '请选择机构',
+			trigger: ['change']
 		}],
 		positionId: [{
 			type: 'string',
 			required: true,
 			message: '请选择职位',
+			trigger: ['change']
 		}],
 	})
 	// 数据列表

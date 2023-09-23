@@ -2,14 +2,14 @@
 	<view class="container snowy-shadow">
 		<uv-form ref="formRef" :model="formData" :rules="rules" label-position="top" labelWidth="auto" :labelStyle="{marginBottom: '25rpx', fontSize: '27rpx', color: '#606266'}">
 			<uv-form-item label="所属机构" prop="orgId" required>
-				<snowy-org-picker v-model="formData.orgId" placeholder="请选择所属机构" :org-tree-api="selectorApiFunction.orgTreeApi" @validateField="formRef.validateField('orgId')">
+				<snowy-org-picker v-model="formData.orgId" placeholder="请选择所属机构" :org-tree-api="selectorApiFunction.orgTreeApi">
 				</snowy-org-picker>
 			</uv-form-item>
 			<uv-form-item label="岗位名称" prop="name" required>
 				<uv-input v-model="formData.name" placeholder="请输入岗位名称" fontSize="27rpx"></uv-input>
 			</uv-form-item>
 			<uv-form-item label="岗位分类" prop="category" required>
-				<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.category" :rangeData="positionCategoryOptions" placeholder="请选择岗位分类" @validateField="formRef.validateField('category')"></snowy-sel-picker>
+				<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.category" :rangeData="positionCategoryOptions" placeholder="请选择岗位分类"></snowy-sel-picker>
 			</uv-form-item>
 			<uv-form-item label="排序" prop="sortCode" required>
 				<uv-number-box v-model="formData.sortCode" button-size="30" color="#ffffff" bgColor="#5677fc" iconStyle="color: #fff" :step="1" :max="100"></uv-number-box>
@@ -34,6 +34,7 @@
 			type: 'string',
 			required: true,
 			message: '请选择所属机构',
+			trigger: ['change']
 		}],
 		name: [{
 			type: 'string',
@@ -45,6 +46,7 @@
 			type: 'string',
 			required: true,
 			message: '请选择岗位分类',
+			trigger: ['change']
 		}],
 		sortCode: [{
 			type: 'number',
