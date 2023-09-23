@@ -78,12 +78,16 @@
 								</view>
 							</uv-col>
 							<uv-col :span="1">
-								<uv-icon v-show="!isMultiple ? item.id != curSelUserId: curSelUserId.indexOf(item.id) == -1" name="checkmark-circle" :size="20"></uv-icon>
-								<uv-icon v-show="!isMultiple ? item.id == curSelUserId: curSelUserId.indexOf(item.id) != -1" name="checkmark-circle-fill" :size="20" color="#2979ff"></uv-icon>
+								<view v-show="!isMultiple ? item.id != curSelUserId: curSelUserId.indexOf(item.id) == -1">
+									<uv-icon name="checkmark-circle" :size="20"></uv-icon>
+								</view>
+								<view v-show="!isMultiple ? item.id == curSelUserId: curSelUserId.indexOf(item.id) != -1">
+									<uv-icon name="checkmark-circle-fill" :size="20" color="#2979ff"></uv-icon>
+								</view>
 							</uv-col>
 						</uv-row>
 					</view>
-					<snowy-empty v-show="XEUtils.isEmpty(userData)"></snowy-empty>
+					<snowy-empty v-show="$xeu.isEmpty(userData)"></snowy-empty>
 				</scroll-view>
 			</view>
 		</uv-popup>
@@ -92,7 +96,6 @@
 
 <script setup>
 	import { reactive, ref, getCurrentInstance, watch, inject } from "vue";
-	import XEUtils from 'xe-utils'
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	const emits = defineEmits(['update:modelValue', 'cancel', 'confirm'])
 	const props = defineProps({
@@ -157,13 +160,13 @@
 	const initOrResetData = () => {
 		// 单选curSelUser初始化值赋值
 		if (!props.isMultiple) {
-			if (!XEUtils.isEmpty(props.modelValue)) {
+			if (!uni.$xeu.isEmpty(props.modelValue)) {
 				props.checkedUserListApi({
 					idList: [props.modelValue]
 				}).then(res => {
-					curSelUser.value = !XEUtils.isEmpty(res?.data) ? res?.data[0] : {}
+					curSelUser.value = !uni.$xeu.isEmpty(res?.data) ? res?.data[0] : {}
 				})
-				curSelUserId.value = XEUtils.clone(props.modelValue, true)
+				curSelUserId.value = uni.$xeu.clone(props.modelValue, true)
 			} else {
 				curSelUser.value = {}
 				curSelUserId.value = ""
@@ -171,13 +174,13 @@
 		}
 		// 多选curSelUser初始化值赋值
 		if (!!props.isMultiple) {
-			if (!XEUtils.isEmpty(props.modelValue)) {
+			if (!uni.$xeu.isEmpty(props.modelValue)) {
 				props.checkedUserListApi({
 					idList: props.modelValue
 				}).then(res => {
-					curSelUser.value = !XEUtils.isEmpty(res?.data) ? res.data : []
+					curSelUser.value = !uni.$xeu.isEmpty(res?.data) ? res.data : []
 				})
-				curSelUserId.value = XEUtils.clone(props.modelValue, true)
+				curSelUserId.value = uni.$xeu.clone(props.modelValue, true)
 			} else {
 				curSelUser.value = []
 				curSelUserId.value = []
@@ -218,7 +221,7 @@
 		Object.assign(parameter, userSelectorParam)
 		Object.assign(parameter, searchFormState)
 		props.userPageApi(parameter).then(res => {
-			if (XEUtils.isEmpty(res?.data?.records)) {
+			if (uni.$xeu.isEmpty(res?.data?.records)) {
 				return
 			}
 			userData.value = userData.value.concat(res.data.records)

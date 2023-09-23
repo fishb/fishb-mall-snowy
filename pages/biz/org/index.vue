@@ -10,8 +10,8 @@
 				<template v-slot:content>
 					<tui-list-cell :line-left="0" :hover="item.children? true : false" :arrow="item.children? true : false" @click="clickOrg(item, index)">
 						<view class="item">
-							<image v-show="item.category === 'COMPANY'" class="item-img" src="/static/svg/org/company.svg" mode="widthFix"></image>
-							<image v-show="item.category === 'DEPT'" class="item-img" src="/static/svg/org/department.svg" mode="widthFix"></image>
+							<image v-if="item.category === 'COMPANY'" class="item-img" src="/static/svg/org/company.svg" mode="widthFix"></image>
+							<image v-if="item.category === 'DEPT'" class="item-img" src="/static/svg/org/department.svg" mode="widthFix"></image>
 							<view class="item-left">{{item.name}}</view>
 							<view class="item-right"></view>
 						</view>
@@ -19,16 +19,14 @@
 				</template>
 			</tui-swipe-action>
 		</tui-list-view>
-		<snowy-empty v-show="$utils.isEmpty(curSelOrg)"/>
+		<snowy-empty v-show="$xeu.isEmpty(curSelOrg)"/>
 	</view>
-	<snowy-float-btn v-if="hasPerm('mobileBizOrgAdd')" @click="add"></snowy-float-btn>
+	<snowy-float-btn v-if="$snowy.hasPerm('mobileBizOrgAdd')" @click="add"></snowy-float-btn>
 </template>
 <script setup>
 	import { orgTree, orgDelete } from '@/api/biz/bizOrgApi'
 	import { reactive, ref, getCurrentInstance, nextTick } from "vue";
 	import { onLoad, onShow, onReady, onPullDownRefresh } from "@dcloudio/uni-app"
-	import { hasPerm } from '@/plugins/permission'
-	import modal from '@/plugins/modal'
 	// 所有选择的机构
 	const allSelOrg = ref([])
 	// 当前选择的机构
@@ -67,7 +65,7 @@
 		})
 	}
 	const actions = []
-	if (hasPerm(['mobileBizOrgEdit'])) {
+	if (uni.$snowy.hasPerm(['mobileBizOrgEdit'])) {
 		actions.push({
 			name: '修改',
 			color: '#fff',
@@ -76,7 +74,7 @@
 			background: '#5677fc'
 		})
 	}
-	if (hasPerm(['mobileBizOrgDelete'])) {
+	if (uni.$snowy.hasPerm(['mobileBizOrgDelete'])) {
 		actions.push({
 			name: '删除',
 			color: '#fff',
@@ -92,7 +90,7 @@
 			})
 		}
 		if ('删除' === actions[index]?.name) {
-			return modal.confirm(`是否确认删除【${ item.name }】机构？`).then(() => {
+			return uni.$snowy.modal.confirm(`是否确认删除【${ item.name }】机构？`).then(() => {
 				orgDelete([{
 					id: item.id
 				}]).then(res => {

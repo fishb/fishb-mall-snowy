@@ -18,7 +18,6 @@
 	import { userUpdatePassword } from "@/api/sys/userCenterApi"
 	import { onReady } from '@dcloudio/uni-app'
 	import { reactive, ref } from 'vue'
-	import modal from "@/plugins/modal";
 	const formRef = ref()
 	const formData = ref({
 		oldPassword: '',
@@ -59,7 +58,7 @@
 				password: user.oldPassword,
 				newPassword: user.newPassword
 			}).then(response => {
-				modal.msgSuccess('修改成功')
+				uni.$snowy.modal.msgSuccess('修改成功')
 			})
 		})
 	}

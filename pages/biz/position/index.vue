@@ -30,13 +30,13 @@
 						<snowy-icon backgroundColor="#18bc37" name="account" size="20" color="#FFFFFF"></snowy-icon>
 					</view>
 					<view class="item-left">{{item.name}}</view>
-					<view class="item-right">{{ $tool.dictTypeData('POSITION_CATEGORY', item.category)}}</view>
+					<view class="item-right">{{ $snowy.tool.dictTypeData('POSITION_CATEGORY', item.category)}}</view>
 				</view>
 			</tui-list-cell>
 		</tui-list-view>
-		<snowy-empty v-show="$utils.isEmpty(positionData)" />
+		<snowy-empty v-show="$xeu.isEmpty(positionData)" />
 	</view>
-	<snowy-float-btn v-if="hasPerm('mobileBizPositionAdd')" @click="add"></snowy-float-btn>
+	<snowy-float-btn v-if="$snowy.hasPerm('mobileBizPositionAdd')" @click="add"></snowy-float-btn>
 	<!-- 更多操作 -->
 	<more ref="moreRef" @handleOk="loadData(true)"></more>
 </template>
@@ -46,8 +46,6 @@
 	import { reactive, ref, getCurrentInstance } from "vue"
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	import more from '@/pages/biz/position/more.vue'
-	import { hasPerm } from '@/plugins/permission'
-	import XEUtils from 'xe-utils'
 	// 所有选择的机构
 	const allSelOrg = ref([])
 	// 当前选择的机构
@@ -74,7 +72,7 @@
 		}
 		Object.assign(parameter, searchFormState)
 		positionPage(parameter).then(res => {
-			if (XEUtils.isEmpty(res?.data?.records)) {
+			if (uni.$xeu.isEmpty(res?.data?.records)) {
 				return
 			}
 			positionData.value = positionData.value.concat(res.data.records)

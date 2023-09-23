@@ -126,12 +126,10 @@
 </template>
 <script setup>
 	import { nextTick, reactive, ref } from "vue"
-	import tool from '@/plugins/tool.js'
 	import { userDetail, userPositionSelector, submitForm, userSelector, userOrgTreeSelector } from '@/api/biz/bizUserApi'
 	import { getPositionListByIdList, userCenterGetUserListByIdList } from '@/api/sys/userCenterApi'
 	import formPosition from '@/pages/biz/user/form-position.vue'
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
-	import XEUtils from "xe-utils"
 	const curView = ref(0)
 	const formRef = ref()
 	// 表单数据
@@ -206,15 +204,15 @@
 		}],
 	})
 	// 性别
-	const genderOptions = tool.dictList('GENDER')
+	const genderOptions = uni.$snowy.tool.dictList('GENDER')
 	// 职位
 	const positionData = ref([])
 	// 民族
-	const nationOptions = tool.dictList('NATION')
+	const nationOptions = uni.$snowy.tool.dictList('NATION')
 	// 身份证件
-	const idcardTypeOptions = tool.dictList('IDCARD_TYPE')
+	const idcardTypeOptions = uni.$snowy.tool.dictList('IDCARD_TYPE')
 	// 文化程度
-	const cultureLevelOptions = tool.dictList('CULTURE_LEVEL')
+	const cultureLevelOptions = uni.$snowy.tool.dictList('CULTURE_LEVEL')
 	// 职位
 	const positionJsonRef = ref()
 	// const directorRef = ref()
@@ -248,7 +246,7 @@
 			positionData.value = []
 		}
 		userPositionSelector(positionParam).then(res => {
-			if (XEUtils.isEmpty(res?.data?.records)) {
+			if (uni.$xeu.isEmpty(res?.data?.records)) {
 				return
 			}
 			positionData.value = positionData.value.concat(res.data.records)
@@ -287,7 +285,7 @@
 	}
 	// 根据职位id进行查询
 	const positionQueryCurSelData = (curSelDataKey, callback) => {
-		if (!XEUtils.isEmpty(curSelDataKey)) {
+		if (!uni.$xeu.isEmpty(curSelDataKey)) {
 			getPositionListByIdList({
 				idList: [curSelDataKey]
 			}).then(res => {

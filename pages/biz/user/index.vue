@@ -31,10 +31,10 @@
 				</view>
 			</tui-list-cell>
 		</tui-list-view>
-		<snowy-empty v-show="$utils.isEmpty(userData)" />
+		<snowy-empty v-show="$xeu.isEmpty(userData)" />
 	</view>
 	<!-- 新增 -->
-	<snowy-float-btn v-if="hasPerm('mobileBizUserAdd')" @click="add"></snowy-float-btn>
+	<snowy-float-btn v-if="$snowy.hasPerm('mobileBizUserAdd')" @click="add"></snowy-float-btn>
 	<!-- 更多 -->
 	<more ref="moreRef" @handleOk="loadData(true)"></more>
 </template>
@@ -44,7 +44,6 @@
 	import { userPage } from '@/api/biz/bizUserApi'
 	import { reactive, ref, getCurrentInstance } from "vue"
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
-	import XEUtils from 'xe-utils'
 	// 新增悬浮按钮
 	const add = () => {
 		uni.navigateTo({
@@ -83,7 +82,7 @@
 		}
 		Object.assign(parameter, searchFormState)
 		userPage(parameter).then(res => {
-			if (XEUtils.isEmpty(res?.data?.records)) {
+			if (uni.$xeu.isEmpty(res?.data?.records)) {
 				return
 			}
 			userData.value = userData.value.concat(res.data.records)

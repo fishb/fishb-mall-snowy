@@ -17,9 +17,7 @@
 </template>
 <script setup>
 	import { reactive, ref, getCurrentInstance } from "vue";
-	import XEUtils from "xe-utils"
 	import store from '@/store'
-	import modal from '@/plugins/modal'
 	const emits = defineEmits(['handleOk'])
 	const popRef = ref()
 	const record = ref({})
@@ -36,8 +34,8 @@
 	}
 	// 删除
 	const del = () => {
-		modal.confirm(`是否确认删除【${ record.value.name }】环境？`).then(() => {
-			let obj = XEUtils.clone(store.getters.allEnv, true)
+		uni.$snowy.modal.confirm(`是否确认删除【${ record.value.name }】环境？`).then(() => {
+			let obj = uni.$xeu.clone(store.getters.allEnv, true)
 			delete obj[record.value.key]
 			store.commit('SET_allEnv', obj)
 			popRef.value.close()

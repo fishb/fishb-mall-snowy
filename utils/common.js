@@ -1,4 +1,3 @@
-import XEUtils from 'xe-utils'
 import config from '@/config'
 // #ifdef H5
 import manifest from '@/manifest.json'
@@ -35,13 +34,13 @@ export function tansParams(params) {
  * @param {Object} redirectUrl
  */
 export function pathAddRedirectUrl(path, redirectUrl) {
-	const { search, searchQuery } = XEUtils.parseUrl(location.href)
-	if (XEUtils.isEmpty(redirectUrl) || redirectUrl == config.NO_TOKEN_BACK_URL || search.indexOf('redirect=')  != -1 ) {
+	const { search, searchQuery } = uni.$xeu.parseUrl(location.href)
+	if (uni.$xeu.isEmpty(redirectUrl) || redirectUrl == config.NO_TOKEN_BACK_URL || search.indexOf('redirect=')  != -1 ) {
 		return path += `${search}`
 	}
 	path += `?redirect=${redirectUrl}`
-	if (!XEUtils.isEmpty(searchQuery)) {
-		path += `&${XEUtils.serialize(searchQuery)}`
+	if (!uni.$xeu.isEmpty(searchQuery)) {
+		path += `&${uni.$xeu.serialize(searchQuery)}`
 	}
 	return path
 }
@@ -50,8 +49,8 @@ export function pathAddRedirectUrl(path, redirectUrl) {
  * h5条件下通过url获取路由地址
  */
 export function getH5RouteByUrl(){
-	const { hashKey, pathname } = XEUtils.parseUrl(location.href)
-	if (!XEUtils.isEmpty(hashKey)) {
+	const { hashKey, pathname } = uni.$xeu.parseUrl(location.href)
+	if (!uni.$xeu.isEmpty(hashKey)) {
 		return hashKey
 	}
 	if (manifest.h5.router.base.length > 0) {

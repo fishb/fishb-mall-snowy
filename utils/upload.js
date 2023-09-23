@@ -2,8 +2,6 @@ import store from '@/store'
 import { getToken } from '@/utils/auth'
 import { errorCodeMap, reloadCodes } from '@/utils/errorCode'
 import { tansParams } from '@/utils/common'
-import modal from '@/plugins/modal'
-import tab from '@/plugins/tab'
 import config from '@/config'
 import { prefixUrl } from "@/utils/apiAdaptive"
 // #ifdef H5
@@ -28,7 +26,7 @@ const upload = config => {
 		config.url = url
 	}
 	return new Promise((resolve, reject) => {
-		modal.loading('努力加载中')
+		uni.$snowy.modal.loading('努力加载中')
 		uni.uploadFile({
 			timeout: config.timeout || TIMEOUT,
 			url: config.actionUrl || ((config.baseUrl || store.getters.allEnv[store.getters.envKey].baseUrl) + config.url),
@@ -45,18 +43,18 @@ const upload = config => {
 				const code = response.data.code || 200
 				const msg = response.data.msg || errorCodeMap[code] || errorCodeMap['default']
 				if (reloadCodes.includes(code)) {
-					modal.confirm(msg || '登录状态已过期，您可以清除缓存，重新进行登录?').then(() => {
+					uni.$snowy.modal.confirm(msg || '登录状态已过期，您可以清除缓存，重新进行登录?').then(() => {
 						store.commit('CLEAR_cache')
 						// #ifdef H5
-						tab.reLaunch(pathAddRedirectUrl(NO_TOKEN_BACK_URL, getH5RouteByUrl()))
+						uni.$snowy.tab.reLaunch(pathAddRedirectUrl(NO_TOKEN_BACK_URL, getH5RouteByUrl()))
 						// #endif
 						// #ifndef H5
-						tab.reLaunch(NO_TOKEN_BACK_URL)
+						uni.$snowy.tab.reLaunch(NO_TOKEN_BACK_URL)
 						// #endif
 					})
 					reject('无效的会话，或者会话已过期，请重新登录。')
 				} else if (code !== 200) {
-					modal.alert(msg)
+					uni.$snowy.modal.alert(msg)
 					reject(code)
 				}
 				resolve(response.data)
@@ -74,11 +72,11 @@ const upload = config => {
 				} else if (errMsg.includes('request:fail')) {
 					errMsg = '请求失败'
 				}
-				modal.alert(errMsg)
+				uni.$snowy.modal.alert(errMsg)
 				reject(error)
 			},
 			complete: () => {
-				modal.closeLoading()
+				uni.$snowy.modal.closeLoading()
 			}
 		})
 	})

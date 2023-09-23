@@ -53,9 +53,11 @@
 					<view class="item" :class="{ 'item-sel': !isMultiple ? item.id == curSelOrgId: curSelOrgId.indexOf(item.id) != -1 }" v-for="(item, index) in curClickSelOrg" :key="index" :index="index">
 						<uv-row>
 							<uv-col :span="1.5">
-								<view>
-									<uv-icon v-show="!isMultiple ? item.id != curSelOrgId: curSelOrgId.indexOf(item.id) == -1" name="checkmark-circle" :size="20" color="#999" @click="selOrg(item, index)"></uv-icon>
-									<uv-icon v-show="!isMultiple ? item.id == curSelOrgId: curSelOrgId.indexOf(item.id) != -1" name="checkmark-circle-fill" :size="20" color="#5677fc" @click="delOrg(item, index)"></uv-icon>
+								<view v-show="!isMultiple ? item.id != curSelOrgId: curSelOrgId.indexOf(item.id) == -1">
+									<uv-icon name="checkmark-circle" :size="20" color="#999" @click="selOrg(item, index)"></uv-icon>
+								</view>
+								<view v-show="!isMultiple ? item.id == curSelOrgId: curSelOrgId.indexOf(item.id) != -1">
+									<uv-icon name="checkmark-circle-fill" :size="20" color="#5677fc" @click="delOrg(item, index)"></uv-icon>
 								</view>
 							</uv-col>
 							<uv-col :span="9.5">
@@ -63,7 +65,7 @@
 							</uv-col>
 							<uv-col :span="1">
 								<view class="snowy-flex-end">
-									<uv-icon v-if="$utils.isEmpty(item.children) ? false : true" name="arrow-right" size="20" @click="clickOrg(item, index)"></uv-icon>
+									<uv-icon v-if="$xeu.isEmpty(item.children) ? false : true" name="arrow-right" size="20" @click="clickOrg(item, index)"></uv-icon>
 								</view>
 							</uv-col>
 						</uv-row>
@@ -75,7 +77,6 @@
 </template>
 <script setup>
 	import { reactive, ref, getCurrentInstance, watch, inject } from "vue"
-	import XEUtils from 'xe-utils'
 	const { proxy } = getCurrentInstance()
 	const emits = defineEmits(['update:modelValue', 'cancel', 'confirm'])
 	const props = defineProps({
@@ -145,12 +146,12 @@
 			// 单选curSelOrg初始化值赋值
 			if (!props.isMultiple) {
 				if (props.modelValue) {
-					curSelOrgId.value = XEUtils.clone(props.modelValue, true)
+					curSelOrgId.value = uni.$xeu.clone(props.modelValue, true)
 				} else {
 					curSelOrgId.value = ""
 				}
 				if (curSelOrgId.value) {
-					const curSelOrgArr = XEUtils.filterTree(allClickSelOrg.value, item => {
+					const curSelOrgArr = uni.$xeu.filterTree(allClickSelOrg.value, item => {
 						return curSelOrgId.value === item.id
 					})
 					if (curSelOrgArr && curSelOrgArr.length === 1) {
@@ -163,12 +164,12 @@
 			// 多选curSelOrg初始化值赋值
 			if (!!props.isMultiple) {
 				if (props.modelValue && props.modelValue.length > 0) {
-					curSelOrgId.value = XEUtils.clone(props.modelValue, true)
+					curSelOrgId.value = uni.$xeu.clone(props.modelValue, true)
 				} else {
 					curSelOrgId.value = []
 				}
 				if (curSelOrgId.value && curSelOrgId.value.length > 0) {
-					curSelOrg.value = XEUtils.filterTree(allClickSelOrg.value, item => {
+					curSelOrg.value = uni.$xeu.filterTree(allClickSelOrg.value, item => {
 						return curSelOrgId.value.includes(item.id)
 					})
 				} else {

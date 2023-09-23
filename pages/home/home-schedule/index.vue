@@ -27,10 +27,9 @@
 <script setup>
 	import { reactive, ref, getCurrentInstance, computed } from "vue"
 	import { indexScheduleList, indexScheduleDeleteSchedule } from '@/api/sys/indexApi'
-	import XEUtils from 'xe-utils'
 	import AddPop from './add-pop.vue'
 	const scheduleList = ref([])
-	const scheduleDate = ref(XEUtils.toDateString(new Date(), 'yyyy-MM-dd'))
+	const scheduleDate = ref(uni.$xeu.toDateString(new Date(), 'yyyy-MM-dd'))
 	const addPopRef = ref()
 	const seleScheduleList = () => {
 		indexScheduleList({

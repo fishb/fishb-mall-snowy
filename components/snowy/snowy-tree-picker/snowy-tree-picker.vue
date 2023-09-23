@@ -53,9 +53,11 @@
 					<view class="item" :class="{ 'item-sel': !isMultiple ? item[map.key] == curSelDataKey: curSelDataKey.indexOf(item[map.key]) != -1 }" v-for="(item, index) in curClickSelData" :key="index" :index="index">
 						<uv-row>
 							<uv-col :span="1.5">
-								<view>
-									<uv-icon v-show="!isMultiple ? item[map.key] != curSelDataKey: curSelDataKey.indexOf(item[map.key]) == -1" name="checkmark-circle" :size="20" color="#999" @click="selData(item, index)"></uv-icon>
-									<uv-icon v-show="!isMultiple ? item[map.key] == curSelDataKey: curSelDataKey.indexOf(item[map.key]) != -1" name="checkmark-circle-fill" :size="20" color="#2979ff" @click="delData(item, index)"></uv-icon>
+								<view v-show="!isMultiple ? item[map.key] != curSelDataKey: curSelDataKey.indexOf(item[map.key]) == -1">
+									<uv-icon name="checkmark-circle" :size="20" color="#999" @click="selData(item, index)"></uv-icon>
+								</view>
+								<view v-show="!isMultiple ? item[map.key] == curSelDataKey: curSelDataKey.indexOf(item[map.key]) != -1">
+									<uv-icon name="checkmark-circle-fill" :size="20" color="#2979ff" @click="delData(item, index)"></uv-icon>
 								</view>
 							</uv-col>
 							<uv-col :span="9.5">
@@ -63,7 +65,7 @@
 							</uv-col>
 							<uv-col :span="1">
 								<view class="snowy-flex-end">
-									<uv-icon v-if="$utils.isEmpty(item[map.children]) ? false : true" name="arrow-right" size="20" @click="clickData(item, index)"></uv-icon>
+									<uv-icon v-show="$xeu.isEmpty(item[map.children]) ? false : true" name="arrow-right" size="20" @click="clickData(item, index)"></uv-icon>
 								</view>
 							</uv-col>
 						</uv-row>
@@ -75,7 +77,6 @@
 </template>
 <script setup>
 	import { reactive, ref, getCurrentInstance, watch, inject } from "vue"
-	import XEUtils from 'xe-utils'
 	const emits = defineEmits(['update:modelValue', 'queryTreeData', 'cancel', 'confirm'])
 	const props = defineProps({
 		// value: [String, Array],
@@ -148,12 +149,12 @@
 			// 单选curSelData初始化值赋值
 			if (!props.isMultiple) {
 				if (props.modelValue) {
-					curSelDataKey.value = XEUtils.clone(props.modelValue, true)
+					curSelDataKey.value = uni.$xeu.clone(props.modelValue, true)
 				} else {
 					curSelDataKey.value = ""
 				}
 				if (curSelDataKey.value) {
-					const curSelDataArr = XEUtils.filterTree(allClickSelData.value, item => {
+					const curSelDataArr = uni.$xeu.filterTree(allClickSelData.value, item => {
 						return curSelDataKey.value === item[props.map.key]
 					})
 					if (curSelDataArr && curSelDataArr.length === 1) {
@@ -166,12 +167,12 @@
 			// 多选curSelData初始化值赋值
 			if (!!props.isMultiple) {
 				if (props.modelValue && props.modelValue.length > 0) {
-					curSelDataKey.value = XEUtils.clone(props.modelValue, true)
+					curSelDataKey.value = uni.$xeu.clone(props.modelValue, true)
 				} else {
 					curSelDataKey.value = []
 				}
 				if (curSelDataKey.value && curSelDataKey.value.length > 0) {
-					curSelData.value = XEUtils.filterTree(allClickSelData.value, item => {
+					curSelData.value = uni.$xeu.filterTree(allClickSelData.value, item => {
 						return curSelDataKey.value.includes(item[props.map.key])
 					})
 				} else {
@@ -223,7 +224,7 @@
 	}
 	// 点击数据
 	const clickData = (item, index) => {
-		if (XEUtils.isEmpty(item[props.map.children])) {
+		if (uni.$xeu.isEmpty(item[props.map.children])) {
 			return
 		}
 		curClickSelData.value = item[props.map.children]

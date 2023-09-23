@@ -53,7 +53,6 @@
 	import { ref, reactive, onMounted, getCurrentInstance, computed } from 'vue'
 	import store from '@/store'
 	import more from './more.vue'
-	import XEUtils from "xe-utils"
 	import env from '@/env'
 	const searchName = ref('')
 	const envKey = computed(() => {
@@ -65,7 +64,7 @@
 	// 过滤
 	const filterEnv = (allEnv) => {
 		const obj = {}
-		XEUtils.objectEach(allEnv, (item, key) => {
+		uni.$xeu.objectEach(allEnv, (item, key) => {
 			if (!searchName.value || item.name.indexOf(searchName.value) != -1) {
 				obj[key] = item
 			}

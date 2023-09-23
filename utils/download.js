@@ -2,7 +2,6 @@ import store from '@/store'
 import { getToken } from '@/utils/auth'
 import { errorCodeMap, reloadCodes } from '@/utils/errorCode'
 import { tansParams } from '@/utils/common'
-import modal from '@/plugins/modal'
 import config from '@/config'
 import { prefixUrl } from "@/utils/apiAdaptive"
 const { TIMEOUT, TOKEN_NAME, TOKEN_PREFIX } = config
@@ -23,7 +22,7 @@ const download = config => {
 		config.url = url
 	}
 	return new Promise((resolve, reject) => {
-		modal.loading('努力加载中')
+		uni.$snowy.modal.loading('努力加载中')
 		uni.downloadFile({
 			url: (config.baseUrl || store.getters.allEnv[store.getters.envKey].baseUrl) + config.url,
 			header: config.header,
@@ -35,7 +34,7 @@ const download = config => {
 				reject(error)
 			},
 			complete: () => {
-				modal.closeLoading()
+				uni.$snowy.modal.closeLoading()
 			}
 		})
 	})

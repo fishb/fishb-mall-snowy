@@ -2,7 +2,7 @@
 	<view class="snowy-calendar">
 		<view class="input" @click="clickInput" :class="{ 'input-disabled': props.disabled }">
 			<view class="input-value" :class="{ 'input-value-border': props.border, 'input-value-disabled': props.disabled }">
-				<view v-if="!$utils.isEmpty(curSelData)">
+				<view v-if="!$xeu.isEmpty(curSelData)">
 					{{ curSelData }}
 				</view>
 				<view class="placeholder" v-else>
@@ -15,7 +15,6 @@
 </template>
 <script setup>
 	import { reactive, ref, getCurrentInstance, watch, inject } from "vue"
-	import XEUtils from 'xe-utils'
 	const emits = defineEmits(['update:modelValue', 'cancel', 'confirm', 'validateField'])
 	const props = defineProps({
 		modelValue: [String, Array],

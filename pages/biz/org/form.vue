@@ -27,7 +27,6 @@
 </template>
 <script setup>
 	import { nextTick, reactive, ref } from "vue"
-	import tool from '@/plugins/tool'
 	import { orgTreeSelector, orgUserSelector, orgDetail, submitForm } from '@/api/biz/bizOrgApi'
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	import { userCenterGetUserListByIdList } from '@/api/sys/userCenterApi'
@@ -65,7 +64,7 @@
 			trigger: ['blur', 'change']
 		}],
 	})
-	const orgCategoryOptions = tool.dictList('ORG_CATEGORY')
+	const orgCategoryOptions = uni.$snowy.tool.dictList('ORG_CATEGORY')
 	const selectorApiFunction = {
 		orgTreeSelectorApi: (param) => {
 			return orgTreeSelector(param).then((res) => {

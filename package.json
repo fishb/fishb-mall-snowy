@@ -10,8 +10,6 @@
 	"keywords": [],
 	"author": "xiaonuo-Team",
 	"dependencies": {
-		"sm-crypto": "^0.3.11",
-		"vxe-utils": "^2.0.1",
-		"xe-utils": "^3.5.7"
+		"sm-crypto": "^0.3.11"
 	}
 }
