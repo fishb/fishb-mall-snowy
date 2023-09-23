@@ -15,7 +15,8 @@
 </template>
 <script setup>
 	import { reactive, ref, getCurrentInstance, watch, inject } from "vue"
-	const emits = defineEmits(['update:modelValue', 'cancel', 'confirm', 'validateField'])
+	const { proxy } = getCurrentInstance()
+	const emits = defineEmits(['update:modelValue', 'cancel', 'confirm',])
 	const props = defineProps({
 		modelValue: [String, Array],
 		border: {
@@ -52,7 +53,7 @@
 		curSelData.value = e.fulldate
 		emits('update:modelValue', e.fulldate)
 		// 校验字段
-		emits('validateField')
+		uni.$uv.formValidate(proxy, "change")
 	}
 </script>
 <style lang="scss" scoped>

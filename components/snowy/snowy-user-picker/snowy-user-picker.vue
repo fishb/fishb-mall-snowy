@@ -97,6 +97,7 @@
 <script setup>
 	import { reactive, ref, getCurrentInstance, watch, inject } from "vue";
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
+	const { proxy } = getCurrentInstance()
 	const emits = defineEmits(['update:modelValue', 'cancel', 'confirm'])
 	const props = defineProps({
 		modelValue: [String, Array],
@@ -303,6 +304,7 @@
 			curSelUserId: curSelUserId.value,
 			curSelUser: curSelUser.value
 		})
+		uni.$uv.formValidate(proxy, "change")
 		popRef.value.close()
 	}
 	const scrolltolower = () => {

@@ -194,13 +194,13 @@
 			type: 'string',
 			required: true,
 			message: '选择组织',
-			trigger: ['blur', 'change']
+			trigger: ['change']
 		}],
 		positionId: [{
 			type: 'string',
 			required: true,
 			message: '选择职位',
-			trigger: ['blur', 'change']
+			trigger: ['change']
 		}],
 	})
 	// 性别

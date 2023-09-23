@@ -72,6 +72,7 @@
 </template>
 <script setup>
 	import { reactive, ref, getCurrentInstance, watch, inject } from "vue"
+	const { proxy } = getCurrentInstance()
 	const emits = defineEmits(['update:modelValue', 'queryCurSelData', 'scrollToLower', 'cancel', 'confirm', 'searchConfirm', 'searchClear'])
 	const props = defineProps({
 		modelValue: [String, Array, Number],

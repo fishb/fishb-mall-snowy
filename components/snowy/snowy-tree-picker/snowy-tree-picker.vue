@@ -77,6 +77,7 @@
 </template>
 <script setup>
 	import { reactive, ref, getCurrentInstance, watch, inject } from "vue"
+	const { proxy } = getCurrentInstance()
 	const emits = defineEmits(['update:modelValue', 'queryTreeData', 'cancel', 'confirm'])
 	const props = defineProps({
 		// value: [String, Array],

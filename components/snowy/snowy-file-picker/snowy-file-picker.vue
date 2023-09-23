@@ -21,11 +21,12 @@
 </template>
 <script setup>
 	import { fileUploadDynamicReturnId, fileUploadReturnId, fileUploadAliyunReturnId, fileUploadTencentReturnId, fileDelete, fileDetail, fileDownload } from '@/api/dev/fileApi.js'
-	import { ref, watch, computed } from "vue";
+	import { ref, watch, computed, getCurrentInstance } from "vue"
 	import { prefixUrl } from "@/utils/apiAdaptive"
 	import store from '@/store'
 	import { toast } from './utils'
-	const emits = defineEmits(['update:modelValue', 'validateField'])
+	const { proxy } = getCurrentInstance()
+	const emits = defineEmits(['update:modelValue'])
 	const props = defineProps({
 		modelValue: [String, Array],
 		uploadType: {
@@ -375,7 +376,7 @@
 					modelValueWatchIsAct.value = false
 					emits('update:modelValue', getModelData())
 					// 校验字段
-					emits('validateField')
+					uni.$uv.formValidate(proxy, "change")
 				}).catch(err => {
 					console.log(err)
 				})
@@ -503,7 +504,7 @@
 			// 更新数据
 			emits('update:modelValue', getModelData())
 			// 校验字段
-			emits('validateField')
+			uni.$uv.formValidate(proxy, "change")
 		})
 	}
 </script>
