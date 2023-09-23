@@ -58,7 +58,6 @@
 				password: user.oldPassword,
 				newPassword: user.newPassword
 			}).then(response => {
-				uni.$snowy.modal.msgSuccess('修改成功')
 			})
 		})
 	}
