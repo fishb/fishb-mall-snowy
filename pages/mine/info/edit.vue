@@ -61,7 +61,6 @@
 			userUpdateUserInfo(formData.value).then(response => {
 				// 更新缓存
 				store.commit('SET_userInfo', formData.value)
-				uni.$snowy.modal.msgSuccess('修改成功')
 			})
 		})
 	}
