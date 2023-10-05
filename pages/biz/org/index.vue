@@ -4,14 +4,18 @@
 			{{ item.name + (index === (allSelOrg.length-1) ? '' : ' | ') }}
 		</text>
 	</view>
-	<view class="list snowy-shadow">
+	<view class="list snowy-shadow" v-show="!isLoading">
 		<tui-list-view unlined="all">
 			<tui-swipe-action v-for="(item, index) in curSelOrg" :key="index" :actions="actions" :params="item" @click="handlerButton">
 				<template v-slot:content>
 					<tui-list-cell :line-left="0" :hover="item.children? true : false" :arrow="item.children? true : false" @click="clickOrg(item, index)">
 						<view class="item">
-							<image v-if="item.category === 'COMPANY'" class="item-img" src="/static/svg/org/company.svg" mode="widthFix"></image>
-							<image v-if="item.category === 'DEPT'" class="item-img" src="/static/svg/org/department.svg" mode="widthFix"></image>
+							<view v-show="'COMPANY' === item?.category" >
+								<image class="item-img" src="/static/svg/org/company.svg" mode="widthFix"></image>
+							</view>
+							<view v-show="'DEPT' === item?.category">
+								<image class="item-img" src="/static/svg/org/department.svg" mode="widthFix"></image>
+							</view>
 							<view class="item-left">{{item.name}}</view>
 							<view class="item-right"></view>
 						</view>
@@ -31,6 +35,8 @@
 	const allSelOrg = ref([])
 	// 当前选择的机构
 	const curSelOrg = ref([])
+	// 加载标识
+	const isLoading = ref(false)
 	// 展示
 	onShow(() => {
 		uni.$once('formBack', (data) => {
@@ -38,6 +44,7 @@
 		})
 	})
 	const loadData = () => {
+		isLoading.value = true
 		orgTree().then(res => {
 			curSelOrg.value = res?.data || []
 			allSelOrg.value = [{
@@ -45,6 +52,7 @@
 				name: '全部',
 				children: res?.data || []
 			}]
+			isLoading.value = false
 		})
 	}
 	loadData()
