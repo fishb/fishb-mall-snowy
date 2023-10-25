@@ -76,9 +76,11 @@
 				store.dispatch('GetDictTypeTreeData'),
 			]).then((result) => {
 				// #ifdef H5
-				const { searchQuery } = uni.$xeu.parseUrl(location.href)
+				const { searchQuery, hashQuery } = uni.$xeu.parseUrl(location.href)
 				if (searchQuery.redirect) {
 					uni.$snowy.tab.reLaunch(searchQuery.redirect)
+				} else if(hashQuery.redirect){
+					uni.$snowy.tab.reLaunch(hashQuery.redirect)
 				} else {
 					// #endif
 					uni.$snowy.tab.reLaunch('/pages/home/index')
