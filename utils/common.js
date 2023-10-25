@@ -34,13 +34,16 @@ export function tansParams(params) {
  * @param {Object} redirectUrl
  */
 export function pathAddRedirectUrl(path, redirectUrl) {
-	const { search, searchQuery } = uni.$xeu.parseUrl(location.href)
+	const { search, searchQuery, hashQuery } = uni.$xeu.parseUrl(location.href)
 	if (uni.$xeu.isEmpty(redirectUrl) || redirectUrl == config.NO_TOKEN_BACK_URL || search.indexOf('redirect=')  != -1 ) {
 		return path += `${search}`
 	}
 	path += `?redirect=${redirectUrl}`
 	if (!uni.$xeu.isEmpty(searchQuery)) {
 		path += `&${uni.$xeu.serialize(searchQuery)}`
+	}
+	if (!uni.$xeu.isEmpty(hashQuery)) {
+		path += `&${uni.$xeu.serialize(hashQuery)}`
 	}
 	return path
 }
