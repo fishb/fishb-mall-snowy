@@ -71,7 +71,7 @@ export default {
 		'/pages/msg/detail', 
 		'/pages/work/index', 
 		'/pages/mine/index', 
-		'/pages/mine/setting/index', 
+		// '/pages/mine/setting/index', 
 		'/pages/mine/info/edit', 
 		'/pages/mine/home-config/index', 
 		'/pages/mine/pwd/index', 
