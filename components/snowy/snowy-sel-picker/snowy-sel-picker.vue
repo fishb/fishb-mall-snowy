@@ -135,7 +135,7 @@
 			} else {
 				if (!uni.$xeu.isEmpty(curSelDataKey.value) || uni.$xeu.isNumber(curSelDataKey.value)) {
 					const curSelDataArr = uni.$xeu.filterTree(props.rangeData, item => {
-						return curSelDataKey.value === item[props.map.key]
+						return curSelDataKey.value == item[props.map.key]
 					})
 					if (curSelDataArr && curSelDataArr.length === 1) {
 						curSelData.value = curSelDataArr[0]
