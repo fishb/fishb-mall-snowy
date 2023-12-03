@@ -26,7 +26,7 @@
 		},
 		isShow: {
 			type: Boolean,
-			default: '',
+			default: false,
 			required: true
 		},
 	})
