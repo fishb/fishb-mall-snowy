@@ -55,8 +55,8 @@
 	const submit = () => {
 		formRef.value.validate().then(res => {
 			userUpdatePassword({
-				password: user.oldPassword,
-				newPassword: user.newPassword
+				password: formData.value.oldPassword,
+				newPassword: formData.value.newPassword
 			}).then(response => {
 			})
 		})
