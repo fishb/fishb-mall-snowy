@@ -6,9 +6,9 @@
 	import store from '@/store'
 	import { prefixUrl } from "@/utils/apiAdaptive"
 	const data = reactive([{
-		image: `${store.getters.allEnv[store.getters.envKey].baseUrl}${prefixUrl('/images/')}swiper/swiper1.jpg`
+		image: `${store.getters.allEnv[store.getters.envKey].baseUrl}${prefixUrl('/mobile/')}swiper/swiper1.jpg`
 	}, {
-		image: `${store.getters.allEnv[store.getters.envKey].baseUrl}${prefixUrl('/images/')}swiper/swiper2.jpg`
+		image: `${store.getters.allEnv[store.getters.envKey].baseUrl}${prefixUrl('/mobile/')}swiper/swiper2.jpg`
 	}, ])
 </script>
 <style>
