@@ -252,27 +252,27 @@
 			return item[props.map.url]
 		}
 		if (['doc'].includes(item[props.map.ext])) {
-			return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/images/') + 'fileImg/docx.png'
+			return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/mobile/') + 'fileImg/docx.png'
 		}
 		if (['xls'].includes(item[props.map.ext])) {
-			return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/images/') + 'fileImg/xlsx.png'
+			return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/mobile/') + 'fileImg/xlsx.png'
 		}
 		if (['zip'].includes(item[props.map.ext])) {
-			return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/images/') + 'fileImg/zip.png'
+			return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/mobile/') + 'fileImg/zip.png'
 		}
 		if (['rar'].includes(item[props.map.ext])) {
-			return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/images/') + 'fileImg/rar.png'
+			return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/mobile/') + 'fileImg/rar.png'
 		}
 		if (['ppt'].includes(item[props.map.ext])) {
-			return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/images/') + 'fileImg/ppt.png'
+			return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/mobile/') + 'fileImg/ppt.png'
 		}
 		if (['txt'].includes(item[props.map.ext])) {
-			return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/images/') + 'fileImg/txt.png'
+			return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/mobile/') + 'fileImg/txt.png'
 		}
 		if (['html'].includes(item[props.map.ext])) {
-			return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/images/') + 'fileImg/html.png'
+			return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/mobile/') + 'fileImg/html.png'
 		}
-		return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/images/') + 'fileImg/file.png'
+		return store.getters.allEnv[store.getters.envKey].baseUrl + prefixUrl('/mobile/') + 'fileImg/file.png'
 	}
 	/**
 	 * 打开文件

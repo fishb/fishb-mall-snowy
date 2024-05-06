@@ -35,9 +35,9 @@
 	import { prefixUrl } from "@/utils/apiAdaptive"
 	const { proxy } = getCurrentInstance()
 	const data = reactive([{
-		image: `${store.getters.allEnv[store.getters.envKey].baseUrl}${prefixUrl('/images/')}swiper/swiper1.jpg`
+		image: `${store.getters.allEnv[store.getters.envKey].baseUrl}${prefixUrl('/mobile/')}swiper/swiper1.jpg`
 	}, {
-		image: `${store.getters.allEnv[store.getters.envKey].baseUrl}${prefixUrl('/images/')}swiper/swiper2.jpg`
+		image: `${store.getters.allEnv[store.getters.envKey].baseUrl}${prefixUrl('/mobile/')}swiper/swiper2.jpg`
 	}])
 	const userMobileMenus = store.getters.userMobileMenus
 	// 当前选中的数据
