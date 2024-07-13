@@ -1,94 +1,96 @@
 <template>
-	<view class="item">
-		<uv-row>
-			<uv-col span="1">
-				<uv-icon size="18" name="tags-fill" color="#5677fc"></uv-icon>
-			</uv-col>
-			<uv-col span="5">
-				<view class="item-left">账户</view>
-			</uv-col>
-			<uv-col span="6" textAlign="right">
-				<view class="item-right snowy-bold snowy-ellipsis"> {{ userInfo.account }} </view>
-			</uv-col>
-		</uv-row>
-	</view>
-	<view class="item">
-		<uv-row>
-			<uv-col span="1">
-				<uv-icon size="18" name="tags-fill" color="#5677fc"></uv-icon>
-			</uv-col>
-			<uv-col span="5">
-				<view class="item-left">姓名</view>
-			</uv-col>
-			<uv-col span="6" textAlign="right">
-				<view class="item-right snowy-bold snowy-ellipsis"> {{ userInfo.name }} </view>
-			</uv-col>
-		</uv-row>
-	</view>
-	<view class="item">
-		<uv-row>
-			<uv-col span="1">
-				<uv-icon size="18" name="tags-fill" color="#5677fc"></uv-icon>
-			</uv-col>
-			<uv-col span="5">
-				<view class="item-left">手机</view>
-			</uv-col>
-			<uv-col span="6" textAlign="right">
-				<view class="item-right snowy-bold snowy-ellipsis"> {{ userInfo.phone }} </view>
-			</uv-col>
-		</uv-row>
-	</view>
-	<view class="item">
-		<uv-row>
-			<uv-col span="1">
-				<uv-icon size="18" name="tags-fill" color="#5677fc"></uv-icon>
-			</uv-col>
-			<uv-col span="5">
-				<view class="item-left">昵称</view>
-			</uv-col>
-			<uv-col span="6" textAlign="right">
-				<view class="item-right snowy-bold snowy-ellipsis"> {{ userInfo.nickname }} </view>
-			</uv-col>
-		</uv-row>
-	</view>
-	<view class="item">
-		<uv-row>
-			<uv-col span="1">
-				<uv-icon size="18" name="tags-fill" color="#5677fc"></uv-icon>
-			</uv-col>
-			<uv-col span="5">
-				<view class="item-left">性别</view>
-			</uv-col>
-			<uv-col span="6" textAlign="right">
-				<view class="item-right snowy-bold snowy-ellipsis"> {{ userInfo.gender }} </view>
-			</uv-col>
-		</uv-row>
-	</view>
-	<view class="item">
-		<uv-row>
-			<uv-col span="1">
-				<uv-icon size="18" name="tags-fill" color="#5677fc"></uv-icon>
-			</uv-col>
-			<uv-col span="5">
-				<view class="item-left">生日</view>
-			</uv-col>
-			<uv-col span="6" textAlign="right">
-				<view class="item-right snowy-bold snowy-ellipsis"> {{ userInfo.birthday }} </view>
-			</uv-col>
-		</uv-row>
-	</view>
-	<view class="item">
-		<uv-row>
-			<uv-col span="1">
-				<uv-icon size="18" name="tags-fill" color="#5677fc"></uv-icon>
-			</uv-col>
-			<uv-col span="5">
-				<view class="item-left">邮箱</view>
-			</uv-col>
-			<uv-col span="6" textAlign="right">
-				<view class="item-right snowy-bold snowy-ellipsis"> {{ userInfo.email }} </view>
-			</uv-col>
-		</uv-row>
+	<view class="snowy-page">
+		<view class="snowy-shadow snowy-item snowy-padding">
+			<uni-row>
+				<uni-col :span="2">
+					<uni-icons size="18" type="paperclip" color="#5677fc"></uni-icons>
+				</uni-col>
+				<uni-col :span="10">
+					<view class="snowy-sub-title">账户</view>
+				</uni-col>
+				<uni-col :span="12">
+					<view class="snowy-text-right snowy-text-bold snowy-text-ellipsis"> {{ userInfo.account }} </view>
+				</uni-col>
+			</uni-row>
+		</view>
+		<view class="snowy-shadow snowy-item snowy-padding">
+			<uni-row>
+				<uni-col :span="2">
+					<uni-icons size="18" type="paperclip" color="#5677fc"></uni-icons>
+				</uni-col>
+				<uni-col :span="10">
+					<view class="snowy-sub-title">姓名</view>
+				</uni-col>
+				<uni-col :span="12">
+					<view class="snowy-text-right snowy-text-bold snowy-text-ellipsis"> {{ userInfo.name }} </view>
+				</uni-col>
+			</uni-row>
+		</view>
+		<view class="snowy-shadow snowy-item snowy-padding">
+			<uni-row>
+				<uni-col :span="2">
+					<uni-icons size="18" type="paperclip" color="#5677fc"></uni-icons>
+				</uni-col>
+				<uni-col :span="10">
+					<view class="snowy-sub-title">手机</view>
+				</uni-col>
+				<uni-col :span="12">
+					<view class="snowy-text-right snowy-text-bold snowy-text-ellipsis"> {{ userInfo.phone }} </view>
+				</uni-col>
+			</uni-row>
+		</view>
+		<view class="snowy-shadow snowy-item snowy-padding">
+			<uni-row>
+				<uni-col :span="2">
+					<uni-icons size="18" type="paperclip" color="#5677fc"></uni-icons>
+				</uni-col>
+				<uni-col :span="10">
+					<view class="snowy-sub-title">昵称</view>
+				</uni-col>
+				<uni-col :span="12">
+					<view class="snowy-text-right snowy-text-bold snowy-text-ellipsis"> {{ userInfo.nickname }} </view>
+				</uni-col>
+			</uni-row>
+		</view>
+		<view class="snowy-shadow snowy-item snowy-padding">
+			<uni-row>
+				<uni-col :span="2">
+					<uni-icons size="18" type="paperclip" color="#5677fc"></uni-icons>
+				</uni-col>
+				<uni-col :span="10">
+					<view class="snowy-sub-title">性别</view>
+				</uni-col>
+				<uni-col :span="12">
+					<view class="snowy-text-right snowy-text-bold snowy-text-ellipsis"> {{ userInfo.gender }} </view>
+				</uni-col>
+			</uni-row>
+		</view>
+		<view class="snowy-shadow snowy-item snowy-padding">
+			<uni-row>
+				<uni-col :span="2">
+					<uni-icons size="18" type="paperclip" color="#5677fc"></uni-icons>
+				</uni-col>
+				<uni-col :span="10">
+					<view class="snowy-sub-title">生日</view>
+				</uni-col>
+				<uni-col :span="12">
+					<view class="snowy-text-right snowy-text-bold snowy-text-ellipsis"> {{ userInfo.birthday }} </view>
+				</uni-col>
+			</uni-row>
+		</view>
+		<view class="snowy-shadow snowy-item snowy-padding">
+			<uni-row>
+				<uni-col :span="2">
+					<uni-icons size="18" type="paperclip" color="#5677fc"></uni-icons>
+				</uni-col>
+				<uni-col :span="10">
+					<view class="snowy-sub-title">邮箱</view>
+				</uni-col>
+				<uni-col :span="12">
+					<view class="snowy-text-right snowy-text-bold snowy-text-ellipsis"> {{ userInfo.email }} </view>
+				</uni-col>
+			</uni-row>
+		</view>
 	</view>
 </template>
 <script setup>
@@ -99,24 +101,4 @@
 	})
 </script>
 <style lang="scss" scoped>
-	.info-container {
-		background-color: #ffffff;
-		border-radius: 5upx;
-	}
-
-	.item {
-		background: #ffffff;
-		margin-bottom: 15rpx;
-		padding: 25rpx;
-		border-radius: 15rpx;
-
-		.item-left {
-			color: #999;
-			font-size: 26rpx;
-		}
-
-		.item-right {
-			font-size: 26rpx;
-		}
-	}
 </style>

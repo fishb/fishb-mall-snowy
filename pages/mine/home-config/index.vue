@@ -1,20 +1,18 @@
 <template>
-	<view class="home-config">
-		<uv-notice-bar direction="column" disableScroll :text="['首页调整完成后,请重新登录,谢谢!']"></uv-notice-bar>
-		<view style="margin-top: 20rpx;">
-			<view class="item" v-for="(item, index) in homeConfigs" :key="index" :index="index">
-				<uv-row>
-					<uv-col span="1" @tap="moreOpt(item,index)">
-						<uv-icon size="20" name="tags-fill" color="#5677fc"></uv-icon>
-					</uv-col>
-					<uv-col span="9" @tap="moreOpt(item,index)">
-						<view class="item-left">{{item.name}}</view>
-					</uv-col>
-					<uv-col span="2">
-						<switch :checked="item.isShow" style="transform:scale(0.7)" @change="(e)=>switchChange(item, e)" />
-					</uv-col>
-				</uv-row>
-			</view>
+	<view class="snowy-page">
+		<uni-notice-bar show-icon text="首页调整完成后,请重新登录,谢谢!" />
+		<view class="snowy-shadow snowy-item snowy-hover" v-for="(item, index) in homeConfigs" :key="index" :index="index">
+			<uni-row class="snowy-flex-v-center">
+				<uni-col :span="2" @tap="moreOpt(item,index)">
+					<uni-icons size="20" type="paperclip" color="#5677fc"></uni-icons>
+				</uni-col>
+				<uni-col :span="18" @tap="moreOpt(item,index)">
+					<view class="item-left">{{item.name}}</view>
+				</uni-col>
+				<uni-col :span="4">
+					<switch :checked="item.isShow" style="transform:scale(0.7)" @change="(e)=>switchChange(item, e)" />
+				</uni-col>
+			</uni-row>
 		</view>
 		<more ref="moreRef"></more>
 	</view>
@@ -37,18 +35,10 @@
 	}
 </script>
 <style lang="scss" scoped>
-	.home-config {}
+	@import '@/static/scss/index.scss';
 
-	.item {
-		background: #ffffff;
-		margin-bottom: 15rpx;
-		padding: 25rpx;
-		border-radius: 15rpx;
-
-		.item-left {
-			color: #5677fc;
-			font-weight: bold;
-			text-shadow: 2px 2px 4px #ccc;
-		}
+	::v-deep .uni-row {
+		@extend .snowy-flex-v-center;
+		padding: 15rpx;
 	}
 </style>

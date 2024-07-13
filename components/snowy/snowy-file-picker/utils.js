@@ -1,114 +1,114 @@
-/**
- * 获取文件名和后缀
- * @param {String} name
- */
-export const get_file_ext = (name) => {
-	const last_len = name.lastIndexOf('.')
-	const len = name.length
-	return {
-		name: name.substring(0, last_len),
-		ext: name.substring(last_len + 1, len)
+import { ID_DATA_TYPE } from './enum'
+
+// 判断不为空
+export const isNotEmpty = (value) => {
+	if (typeof value === 'object') {
+		for (const key in value) {
+			return true
+		}
+		return false
 	}
+	return !(value === null || value === undefined || value === 'undefined' || value === '')
 }
+// 判断为空
+export const isEmpty = (value) => {
+	return !isNotEmpty(value)
+}
+
 /**
- * 获取扩展名
- * @param {Array} fileExtname
+ * 处理id数据
  */
-export const get_extname = (fileExtname) => {
-	if (!Array.isArray(fileExtname)) {
-		let extname = fileExtname.replace(/(\[|\])/g, '')
-		return extname.split(',')
-	} else {
-		return fileExtname
+export const handleIdData = (idData, idDataType, map = { id: "id", url: "url" }) => {
+	let idArr = []
+	if (isEmpty(idData)) {
+		return idArr
 	}
-	return []
-}
-/**
- * 获取文件和检测是否可选
- */
-export const get_files_and_is_max = (res, _extname) => {
-	let filePaths = []
-	let files = []
-	if (!_extname || _extname.length === 0) {
-		return {
-			filePaths,
-			files
+	if (uni.$xeu.isString(idData)) {
+		if (ID_DATA_TYPE.idArrJsonStr.code === idDataType) {
+			JSON.parse(idData).forEach(item => {
+				if (isEmpty(item[map.id])) {
+					return
+				}
+				idArr.push(item[map.id])
+			})
+		}
+		if (ID_DATA_TYPE.idStr.code === idDataType) {
+			idData.split(ID_DATA_TYPE.idStr.separation).forEach(item => {
+				if (isEmpty(item)) {
+					return
+				}
+				idArr.push(item)
+			})
+		}
+		if (ID_DATA_TYPE.urlStr.code === idDataType) {
+			idData.split(ID_DATA_TYPE.urlStr.separation).forEach(item => {
+				const urlId = uni.$xeu.parseUrl(item[map.url])?.searchQuery[map.id]
+				if (isEmpty(urlId)) {
+					return
+				}
+				idArr.push(urlId)
+			})
 		}
 	}
-	res.tempFiles.forEach(v => {
-		let fileFullName = get_file_ext(v.name)
-		const extname = fileFullName.ext.toLowerCase()
-		if (_extname.indexOf(extname) !== -1) {
-			files.push(v)
-			filePaths.push(v.path)
-		}
-	})
-	if (files.length !== res.tempFiles.length) {
-		uni.showToast({
-			title: `当前选择了${res.tempFiles.length}个文件 ，${res.tempFiles.length - files.length} 个文件格式不正确`,
-			icon: 'none',
-			duration: 5000
-		})
-	}
-	return {
-		filePaths,
-		files
-	}
-}
-/**
- * 获取图片信息
- * @param {Object} filepath
- */
-export const get_file_info = (filepath) => {
-	return new Promise((resolve, reject) => {
-		uni.getImageInfo({
-			src: filepath,
-			success(res) {
-				resolve(res)
-			},
-			fail(err) {
-				reject(err)
+	if (uni.$xeu.isArray(idData)) {
+		idData.forEach(item => {
+			if (ID_DATA_TYPE.idArr.code === idDataType) {
+				if (isEmpty(item)) {
+					return
+				}
+				idArr.push(item)
+			}
+			if (ID_DATA_TYPE.urlArr.code === idDataType) {
+				const urlId = uni.$xeu.parseUrl(item[map.url])?.searchQuery[map.id]
+				if (isEmpty(urlId)) {
+					return
+				}
+				idArr.push(urlId)
+			}
+			if (ID_DATA_TYPE.objArr.code === idDataType) {
+				// 优先取url中的id
+				const urlId = uni.$xeu.parseUrl(item[map.url])?.searchQuery[map.id] || item[map.id]
+				if (isEmpty(urlId)) {
+					return
+				}
+				idArr.push(urlId)
 			}
 		})
-	})
+	}
+	return idArr
 }
 /**
- * 获取封装数据
+ * 根据id获取文件数据
  */
-export const get_file_data = async (files, type = 'image') => {
-	// 最终需要上传数据库的数据
-	let fileFullName = get_file_ext(files.name)
-	const extname = fileFullName.ext.toLowerCase()
-	let filedata = {
-		name: files.name,
-		uuid: files.uuid,
-		extname: extname || '',
-		cloudPath: files.cloudPath,
-		fileType: files.fileType,
-		url: files.path || files.path,
-		size: files.size, //单位是字节
-		image: {},
-		path: files.path,
-		video: {}
+export const getFileDataById = (idDataType, fileList = [], map= { id: "id", url: "url" }) => {
+	if (ID_DATA_TYPE.objArr.code === idDataType) {
+		return fileList
 	}
-	if (type === 'image') {
-		const imageinfo = await get_file_info(files.path)
-		delete filedata.video
-		filedata.image.width = imageinfo.width
-		filedata.image.height = imageinfo.height
-		filedata.image.location = imageinfo.path
-	} else {
-		delete filedata.image
+	if (ID_DATA_TYPE.idArrJsonStr.code === idDataType) {
+		return JSON.stringify(fileList)
 	}
-	return filedata
+	let fileData = null
+	const tempData = []
+	if (ID_DATA_TYPE.idStr.code === idDataType || ID_DATA_TYPE.idArr.code === idDataType) {
+		fileList.forEach(image => {
+			tempData.push(image[map.id])
+		})
+	}
+	if (ID_DATA_TYPE.urlStr.code === idDataType || ID_DATA_TYPE.urlArr.code === idDataType) {
+		fileList.forEach(image => {
+			tempData.push(image[map.url])
+		})
+	}
+	if (ID_DATA_TYPE.idArr.code === idDataType || ID_DATA_TYPE.urlArr.code === idDataType) {
+		fileData = tempData
+	}
+	if (ID_DATA_TYPE.idStr.code === idDataType) {
+		fileData = tempData.join(ID_DATA_TYPE.idStr.separation)
+	}
+	if (ID_DATA_TYPE.urlStr.code === idDataType) {
+		fileData = tempData.join(ID_DATA_TYPE.urlStr.separation)
+	}
+	return fileData
 }
-/**
- * 文字提示
- */
-export const toast = (text) => {
-	text && uni.showToast({
-		title: text,
-		icon: "none"
-	})
-}
+
 

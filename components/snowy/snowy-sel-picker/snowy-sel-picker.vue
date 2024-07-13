@@ -1,6 +1,6 @@
 <template>
 	<view class="snowy-sel-picker">
-		<view @click="handleInput" :class="{ 'input-disabled': props.disabled }">
+		<view @tap="tapInput" :class="{ 'input-disabled': props.disabled }">
 			<view class="input-value">
 				<!-- 单选 -->
 				<view v-if="!isMultiple && curSelDataKey && curSelDataKey !== ''">
@@ -15,65 +15,68 @@
 				</view>
 			</view>
 		</view>
-		<uv-popup ref="popRef" mode="bottom" bg-color="null" z-index="99" @maskClick="cancel">
-			<view class="pop-container">
+		<uni-popup ref="popRef" type="bottom" background-color="transparent" maskBackgroundColor="rgba(0, 0, 0, 0.6)">
+			<view class="snowy-shadow pop-container">
 				<view class="action">
-					<view class="cancel snowy-bold" @click="cancel"> 取消 </view>
-					<view class="confirm snowy-bold" @click="confirm"> 确定 </view>
+					<view class="snowy-color-grey snowy-text-bold" @click="cancel"> 取消 </view>
+					<view class="snowy-color-primary snowy-text-bold" @click="confirm"> 确定 </view>
 				</view>
 				<!-- 已选择 -->
-				<scroll-view :scroll-y="true" :style="{maxHeight:!isMultiple?'5vh':'10vh'}" class="choiced" v-show="!!curSelDataKey && (!isMultiple? true : curSelDataKey.length > 0)">
+				<scroll-view :scroll-y="true" class="snowy-shadow choiced" :style="{ maxHeight: !isMultiple? '5vh' : '10vh' }" v-show="!!curSelDataKey && (!isMultiple? true : curSelDataKey.length > 0)">
 					<!-- 单选已选择 -->
 					<view class="single" v-if="!isMultiple">
-						<view class="label" @click="delData(curSelData)">
+						<view class="snowy-color-white" @click="delData(curSelData)">
 							{{ curSelData[map.label] }}
 						</view>
 						<view class="icon">
-							<icon type="clear" @click="delData(curSelData)" color="#ffffff" size="15"></icon>
+							<icon type="clear" @click="delData(curSelData)" color="#ffffff" size="12"></icon>
 						</view>
 					</view>
 					<!-- 多选已选择 -->
 					<view class="multiple" v-if="!!isMultiple" v-for="(item, index) in curSelData" :key="index">
-						<view class="label" @click="delData(item)">
+						<view class="snowy-color-white" @click="delData(item)">
 							{{ item[map.label] }}
 						</view>
 						<view class="icon">
-							<icon type="clear" @click="delData(curSelData)" color="#ffffff" size="15"></icon>
+							<icon type="clear" @click="delData(item)" color="#ffffff" size="12"></icon>
 						</view>
 					</view>
 				</scroll-view>
 				<!-- 搜索 -->
-				<snowy-search v-if="enableSearch" @confirm="searchConfirm" @clear="searchClear" :customStyle="{'padding': 0}"></snowy-search>
+				<view v-if="searchEnabled">
+					<slot name="search">
+						<view class="snowy-item">
+							<snowy-search v-model="optParam[optParamMap.keyword]" @confirm="searchConfirm" @clear="searchClear" :customStyle="{'padding': 0}">
+							</snowy-search>
+						</view>
+					</slot>
+				</view>
 				<!-- 面板数据 -->
-				<scroll-view class="data" :scroll-y="true" @scrolltolower="scrolltolower">
-					<view class="item" :class="{ 'item-sel': !isMultiple ? item[map.key] == curSelDataKey: curSelDataKey.indexOf(item[map.key]) != -1 }" v-for="(item, index) in rangeData" :key="index" :index="index" @click="selOrDelData(item, index)">
-						<uv-row>
-							<uv-col :span="1.5">
-								<view v-show="!isMultiple ? item[map.key] != curSelDataKey: curSelDataKey.indexOf(item[map.key]) == -1">
-									<uv-icon name="checkmark-circle" :size="20" color="#999"></uv-icon>
-								</view>
-								<view v-show="!isMultiple ? item[map.key] == curSelDataKey: curSelDataKey.indexOf(item[map.key]) != -1">
-									<uv-icon name="checkmark-circle-fill" :size="20" color="#2979ff"></uv-icon>
-								</view>
-							</uv-col>
-							<uv-col :span="5.5">
-								<view class="item-left">{{item[map.label]}}</view>
-							</uv-col>
-							<uv-col :span="5">
-								<view class="item-right snowy-bold snowy-ellipsis"> {{item[map.label]}} </view>
-							</uv-col>
-						</uv-row>
-					</view>
-					<snowy-empty :fixed="true" v-show="$xeu.isEmpty(rangeData)"></snowy-empty>
-				</scroll-view>
+				<view class="data">
+					<z-paging ref="optDataPagingRef" :fixed="false" use-virtual-list :force-close-inner-list="true" cell-height-mode="dynamic" @virtualListChange="virtualListChange" @query="queryList" :auto="autoLoadOptData" :refresher-enabled="optDataRefresherEnabled">
+						<view class="snowy-shadow snowy-item snowy-padding" :id="`zp-id-${item.zp_index}`" :key="item.zp_index" v-for="(item,index) in panelData" :class="{ 'item-sel': !isMultiple ? item[map.key] == curSelDataKey: curSelDataKey.indexOf(item[map.key]) != -1 }" @click="selOrDelData(item, index)">
+							<uni-row>
+								<uni-col :span="22">
+									<slot name="option" :item="item">
+										<view class="snowy-text-bold snowy-text-ellipsis"> {{item[map.label]}} </view>
+									</slot>
+								</uni-col>
+								<uni-col :span="2">
+									<uni-icons v-show="!isMultiple ? item[map.key] != curSelDataKey: curSelDataKey.indexOf(item[map.key]) == -1" type="circle" :size="20"></uni-icons>
+									<uni-icons v-show="!isMultiple ? item[map.key] == curSelDataKey: curSelDataKey.indexOf(item[map.key]) != -1" type="checkbox-filled" :size="20" color="#2979ff"></uni-icons>
+								</uni-col>
+							</uni-row>
+						</view>
+					</z-paging>
+				</view>
 			</view>
-		</uv-popup>
+		</uni-popup>
 	</view>
 </template>
 <script setup>
-	import { reactive, ref, getCurrentInstance, watch, inject } from "vue"
-	const { proxy } = getCurrentInstance()
-	const emits = defineEmits(['update:modelValue', 'queryCurSelData', 'scrollToLower', 'cancel', 'confirm', 'searchConfirm', 'searchClear'])
+	import { reactive, ref, getCurrentInstance, watch, inject, nextTick } from "vue"
+	import CallbackState from "@/enum/callback-state";
+	const emits = defineEmits(['update:modelValue', 'noFindKey', 'getSelData', 'getOptData', 'cancel', 'confirm', 'searchConfirm', 'searchClear'])
 	const props = defineProps({
 		modelValue: [String, Array, Number],
 		isMultiple: {
@@ -88,15 +91,23 @@
 		},
 		map: {
 			type: Object,
-			default: {
-				key: "key",
-				label: "label"
+			default: () => {
+				return {
+					key: "key",
+					label: "label"
+				}
 			},
 			required: false
 		},
-		rangeData: {
-			type: Array,
-			default: [],
+		optParamMap: {
+			type: Object,
+			default: () => {
+				return {
+					pageNo: 'pageNo',
+					pageSize: 'pageSize',
+					keyword: 'keyword'
+				}
+			},
 			required: false
 		},
 		disabled: {
@@ -104,93 +115,222 @@
 			default: false,
 			required: false
 		},
-		// 是否开启大数据模式，如果开启大数据模式，
-		// 那么就要实现queryCurSelData方法，并提供相应的回调（通过服务端获取已选择的数据）
-		// 与此同时要实现scrollToLower方法（用于分页加载）
-		isBigData: {
+		// 是否开启分页模式，如果开启分页模式，
+		// 那么就要实现getSelData方法，并提供相应的回调（通过服务端获取已选择的数据）
+		// 与此同时要实现getOptData方法（用于分页加载）
+		isPage: {
 			type: Boolean,
 			default: false,
 			required: false
 		},
-		enableSearch: {
+		searchEnabled: {
 			type: Boolean,
 			default: false,
 			required: false
+		},
+		autoLoadOptData: {
+			type: Boolean,
+			default: true,
+			required: false
+		},
+		optDataRefresherEnabled: {
+			type: Boolean,
+			default: true,
+			required: false
 		}
 	})
-	
+	const panelData = ref([])
 	// 弹出
 	const popRef = ref()
 	// 当前选中的数据key及数据
 	const curSelDataKey = !props.isMultiple ? ref("") : ref([])
 	const curSelData = !props.isMultiple ? ref({}) : ref([])
-	const initOrResetData = () => {
+	// 选项参数
+	const optParam = ref({
+		[props.optParamMap.keyword]: ''
+	})
+	// 修改参数，供父组件调用
+	const setOptParam = (data) => {
+		optParam.value = { ...optParam.value, ...data }
+	}
+	const optDataPagingRef = ref()
+	const setSelData = () => {
 		// 单选curSelData初始化值赋值
 		if (!props.isMultiple) {
 			curSelDataKey.value = props.modelValue ? uni.$xeu.clone(props.modelValue, true) : ""
-			if (props.isBigData) {
-				emits('queryCurSelData', curSelDataKey.value, (val) => {
-					curSelData.value = val
+			curSelData.value = {}
+			if (uni.$snowy.tool.isEmpty(curSelDataKey.value)) {
+				return
+			}
+			// 单选分页
+			if (!!props.isPage) {
+				emits('getSelData', curSelDataKey.value, ({ state, data, msg }) => {
+					// 回调错误异常处理
+					if (state === CallbackState.ERROR) {
+						return uni.$snowy.modal.alert(msg)
+					}
+					if (uni.$snowy.tool.isEmpty(data)) {
+						// 单选无法找到已选中数据
+						curSelData.value = {
+							[props.map.key]: curSelDataKey.value,
+							[props.map.label]: '该数据无权限或不存在'
+						}
+						emits('noFindKey', {
+							[props.map.key]: curSelDataKey.value,
+						}, (val) => {
+							curSelData.value = val
+						})
+						return
+					}
+					return curSelData.value = data
 				})
-			} else {
-				if (!uni.$xeu.isEmpty(curSelDataKey.value) || uni.$xeu.isNumber(curSelDataKey.value)) {
-					const curSelDataArr = uni.$xeu.filterTree(props.rangeData, item => {
+			}
+			// 单选不分页
+			if (!props.isPage) {
+				emits('getOptData', optParam.value, ({ state, data, msg }) => {
+					// 回调错误异常处理
+					if (state === CallbackState.ERROR) {
+						return uni.$snowy.modal.alert(msg)
+					}
+					const findSelData = uni.$xeu.find(data || [], item => {
 						return curSelDataKey.value == item[props.map.key]
 					})
-					if (curSelDataArr && curSelDataArr.length === 1) {
-						curSelData.value = curSelDataArr[0]
+					if (uni.$snowy.tool.isEmpty(findSelData)) {
+						// 无法找到已选中数据
+						curSelData.value = {
+							[props.map.key]: curSelDataKey.value,
+							[props.map.label]: '该数据无权限或不存在'
+						}
+						emits('noFindKey', {
+							[props.map.key]: curSelDataKey.value,
+						}, (val) => {
+							curSelData.value = val
+						})
+						return
 					}
-				} else {
-					curSelData.value = {}
-				}
+					curSelData.value = findSelData
+				})
 			}
+			return
 		}
 		// 多选curSelData初始化值赋值
 		if (!!props.isMultiple) {
 			curSelDataKey.value = props.modelValue ? uni.$xeu.clone(props.modelValue, true) : []
-			if (props.isBigData) {
-				emits('queryCurSelData', curSelDataKey.value, (val) => {
-					curSelData.value = val
+			curSelData.value = []
+			if (uni.$snowy.tool.isEmpty(curSelDataKey.value)) {
+				return
+			}
+			// 多选分页
+			if (!!props.isPage) {
+				emits('getSelData', curSelDataKey.value, ({ state, data, msg }) => {
+					// 回调错误异常处理
+					if (state === CallbackState.ERROR) {
+						return uni.$snowy.modal.alert(msg)
+					}
+					for (let item of curSelDataKey.value) {
+						if (uni.$snowy.tool.isEmpty(data)) {
+							// 无法找到已选中数据
+							let notFindSelDataItem = {
+								[props.map.key]: item,
+								[props.map.label]: '该数据无权限或不存在'
+							}
+							emits('noFindKey', {
+								[props.map.key]: item,
+							}, (val) => {
+								notFindSelDataItem = val
+							})
+							curSelData.value.push(notFindSelDataItem)
+							continue;
+						}
+						const findSelDataItem = uni.$xeu.find(data || [], i => {
+							return item == i[props.map.key]
+						})
+						if (uni.$snowy.tool.isEmpty(findSelDataItem)) {
+							// 无法找到已选中数据
+							let notFindSelDataItem = {
+								[props.map.key]: item,
+								[props.map.label]: '该数据无权限或不存在'
+							}
+							emits('noFindKey', {
+								[props.map.key]: item,
+							}, (val) => {
+								notFindSelDataItem = val
+							})
+							curSelData.value.push(notFindSelDataItem)
+							continue;
+						}
+						curSelData.value.push(findSelDataItem)
+					}
 				})
-			} else {
-				if (!uni.$xeu.isEmpty(curSelDataKey.value)) {
-					curSelData.value = uni.$xeu.filterTree(props.rangeData, item => {
-						return curSelDataKey.value.includes(item[props.map.key])
-					})
-				} else {
-					curSelData.value = []
-				}
+			}
+			// 多选不分页
+			if (!props.isPage) {
+				emits('getOptData', optParam.value, ({ state, data, msg }) => {
+					// 回调错误异常处理
+					if (state === CallbackState.ERROR) {
+						return uni.$snowy.modal.alert(msg)
+					}
+					for (let item of curSelDataKey.value) {
+						// 返回数据为空
+						if (uni.$snowy.tool.isEmpty(data)) {
+							// 无法找到已选中数据
+							let notFindSelDataItem = {
+								[props.map.key]: item,
+								[props.map.label]: '该数据无权限或不存在'
+							}
+							emits('noFindKey', {
+								[props.map.key]: item,
+							}, (val) => {
+								notFindSelDataItem = val
+							})
+							curSelData.value.push(notFindSelDataItem)
+							continue;
+						}
+						const findSelDataItem = uni.$xeu.find(data || [], i => {
+							return item == i[props.map.key]
+						})
+						// 返回数据不为空，但找不到数据
+						if (uni.$snowy.tool.isEmpty(findSelDataItem)) {
+							// 无法找到已选中数据
+							let notFindSelDataItem = {
+								[props.map.key]: item,
+								[props.map.label]: '该数据无权限或不存在'
+							}
+							emits('noFindKey', {
+								[props.map.key]: item,
+							}, (val) => {
+								notFindSelDataItem = val
+							})
+							curSelData.value.push(notFindSelDataItem)
+							continue;
+						}
+						curSelData.value.push(findSelDataItem)
+					}
+				})
 			}
 		}
 	}
-	// 控制modelValue watch方法是否执行
-	const modelValueWatchIsAct = ref(true)
+	setSelData()
 	watch(() => props.modelValue, (newValue, oldValue) => {
-		if(modelValueWatchIsAct.value){
-			initOrResetData()
+		if (newValue !== oldValue) {
+			setSelData()
 		}
-		modelValueWatchIsAct.value = true
 	}, {
 		deep: false,
-		immediate: true
-	})
-	watch(() => props.rangeData, (newValue, oldValue) => {
-		initOrResetData()
-	}, {
-		deep: false,
-		immediate: true
+		immediate: false
 	})
 	// 搜索确认
 	const searchConfirm = (val) => {
 		emits('searchConfirm', val)
+		optDataPagingRef.value.reload()
 	}
 	// 搜索清除
 	const searchClear = () => {
 		emits('searchClear')
+		optDataPagingRef.value.reload()
 	}
 	// 点击输入框
-	const handleInput = () => {
-		// initOrResetData()
+	const tapInput = () => {
 		popRef.value.open()
 	}
 	// 选择或删除数据
@@ -231,37 +371,74 @@
 	}
 	// 取消
 	const cancel = () => {
-		initOrResetData()
+		setSelData()
+		emits('cancel')
 		popRef.value.close()
 	}
 	const confirm = () => {
 		// 更新数据
-		modelValueWatchIsAct.value = false
 		emits('update:modelValue', curSelDataKey.value)
 		// 调用父组件方法
 		emits('confirm', {
 			curSelDataKey: curSelDataKey.value,
 			curSelData: curSelData.value
 		})
-		uni.$uv.formValidate(proxy, "change")
 		popRef.value.close()
 	}
-	const scrolltolower = () => {
-		emits('scrollToLower')
+	const virtualListChange = (vList) => {
+		panelData.value = vList;
+	}
+	const queryList = (pageNo, pageSize) => {
+		if (!props.isPage) {
+			emits('getOptData', optParam.value, ({ state, data, msg }) => {
+				// 回调错误异常处理
+				if (state === CallbackState.ERROR) {
+					return uni.$snowy.modal.alert(msg)
+				}
+				optDataPagingRef.value.setLocalPaging(data)
+			})
+		}
+		if (!!props.isPage) {
+			emits('getOptData', {
+				...optParam.value,
+				[props.optParamMap.pageNo]: pageNo,
+				[props.optParamMap.pageSize]: pageSize,
+			}, ({ state, data, msg }) => {
+				// 回调错误异常处理
+				if (state === CallbackState.ERROR) {
+					return uni.$snowy.modal.alert(msg)
+				}
+				optDataPagingRef.value.complete(data)
+			})
+		}
+	}
+	const reloadOptData = () => {
+		optDataPagingRef.value.reload()
 	}
 	defineExpose({
-		initOrResetData
+		// 设置下拉选择参数
+		setOptParam,
+		// 设置已选择数据
+		setSelData,
+		// 重置选项数据
+		reloadOptData
 	})
 </script>
 <style lang="scss" scoped>
+	@import '@/static/scss/index.scss';
+
+	::v-deep .uni-row {
+		@extend .snowy-flex-v-center;
+	}
+
 	.snowy-sel-picker {
 		width: 100%;
 	}
+
 	.input-value {
 		font-size: 28rpx;
 		line-height: 30rpx;
 		padding: 20rpx;
-		min-height: 30rpx;
 		border: 1px solid #EDEDED;
 		border-radius: 5rpx;
 
@@ -283,77 +460,45 @@
 
 	.pop-container {
 		margin: 5rpx;
-		border-radius: 10rpx;
 		padding: 10rpx;
-		background-color: #f7f7f7; //white;
+		// background-color: #f7f7f7;
 	}
 
 	.action {
 		display: flex;
 		justify-content: space-between;
 		margin: 30rpx;
-		font-size: 30rpx;
-
-		.cancel {
-			color: #909399
-		}
-
-		.confirm {
-			color: #5677fc
-		}
 	}
 
 	.choiced {
 		background: #5677fc;
 		margin: 20rpx 0;
 		padding: 10rpx 0;
-		box-shadow: 0 1px 2px #ccc;
-		border-radius: 15rpx;
 
 		.single {
 			margin: 5rpx 30rpx;
 			display: inline-flex;
 		}
-		
+
 		.multiple {
-			margin: 10rpx 0 10rpx 20rpx;
+			margin: 10rpx 0 10rpx 30rpx;
 			display: inline-flex;
 		}
-		
-		.label {
-			color: #ffffff;
-			margin-right: 5rpx;
-		}
-		
+
 		.icon {
 			display: flex;
 			align-items: center;
+			margin-left: 5rpx;
 		}
 	}
 
 	.data {
 		height: 50vh;
-
-		.item {
-			background: #ffffff;
-			margin: 20rpx 0;
-			padding: 25rpx;
-			box-shadow: 0 1px 2px #ccc;
-			border-radius: 15rpx;
-
-			.item-left {
-				color: #999;
-				font-size: 27rpx;
-			}
-
-			.item-right {
-				font-size: 27rpx;
-				text-align: right;
-			}
-		}
+		background-color: #f7f7f7;
+		padding-top: 10rpx;
 
 		.item-sel {
-			box-shadow: 1upx 5upx 5upx #5677fc;
+			box-shadow: 1rpx 2rpx 2rpx $snowy-primary;
 		}
 	}
 </style>

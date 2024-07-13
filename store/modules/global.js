@@ -2,11 +2,11 @@ import config from '@/config'
 import storage from '@/utils/storage'
 import constant from '@/utils/constant'
 import smCrypto from '@/utils/smCrypto'
-import { login, getLoginUser, logout } from '@/api/login'
-import { userLoginMobileMenu } from '@/api/sys/userCenterApi'
+import loginApi from '@/api/auth/login-api'
+import userCenterApi from '@/api/sys/user-center-api'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { configSysBaseList } from '@/api/dev/configApi'
-import { dictTree } from '@/api/dev/dictApi'
+import configApi from '@/api/dev/config-api'
+import dictApi from '@/api/dev/dict-api'
 import env from '@/env'
 export default {
 	state: {
@@ -14,6 +14,8 @@ export default {
 		envKey: storage.get(constant.envKey) || env.DEFAULT_ENV_KEY,
 		// 所有环境
 		allEnv: storage.get(constant.allEnv) || env.DEFAULT_ALL_ENV,
+		// 当前租户域
+		tenantDomain: storage.get(constant.tenantDomain) || env.DEFAULT_ALL_ENV[env.DEFAULT_ENV_KEY].tenantDomain,
 		// token信息
 		token: getToken(),
 		// 首页配置
@@ -35,6 +37,10 @@ export default {
 		SET_allEnv: (state, allEnv) => {
 			state.allEnv = allEnv
 			storage.set(constant.allEnv, allEnv)
+		},
+		SET_tenantDomain: (state, tenantDomain) => {
+			state.tenantDomain = tenantDomain
+			storage.set(constant.tenantDomain, tenantDomain)
 		},
 		SET_token: (state, token) => {
 			state.token = token
@@ -62,6 +68,9 @@ export default {
 		},
 		// 清除缓存
 		CLEAR_cache: (state) => {
+			// 租户域清理
+			// state.tenantDomain = ''
+			// storage.remove(constant.tenantDomain)
 			// token
 			state.token = ''
 			removeToken()
@@ -83,7 +92,8 @@ export default {
 	actions: {
 		// 登录获取token
 		Login({
-			commit
+			commit,
+			state
 		}, userInfo) {
 			const paramData = {
 				account: userInfo.account.trim(),
@@ -93,10 +103,10 @@ export default {
 				validCodeReqNo: userInfo.validCodeReqNo
 			}
 			return new Promise((resolve, reject) => {
-				login(paramData).then(res => {
+				loginApi.login(paramData).then(data => {
 					// 缓存token
-					commit('SET_token', res.data)
-					resolve(res.data)
+					commit('SET_token', data)
+					resolve(data)
 				}).catch(error => {
 					reject(error)
 				})
@@ -108,10 +118,10 @@ export default {
 			state
 		}) {
 			return new Promise((resolve, reject) => {
-				getLoginUser().then(res => {
+				loginApi.getLoginUser().then(data => {
 					// 缓存用户信息
-					commit('SET_userInfo', res.data)
-					resolve(res.data)
+					commit('SET_userInfo', data)
+					resolve(data)
 				}).catch(error => {
 					reject(error)
 				})
@@ -123,10 +133,10 @@ export default {
 			state
 		}) {
 			return new Promise((resolve, reject) => {
-				userLoginMobileMenu().then(res => {
+				userCenterApi.userLoginMobileMenu().then(data => {
 					// 缓存移动端用户菜单
-					commit('SET_userMobileMenus', res.data)
-					resolve(res.data)
+					commit('SET_userMobileMenus', data)
+					resolve(data)
 				}).catch(error => {
 					reject(error)
 				})
@@ -138,11 +148,11 @@ export default {
 			state
 		}) {
 			return new Promise((resolve, reject) => {
-				dictTree().then((res) => {
-					if (res.data) {
+				dictApi.dictTree().then((data) => {
+					if (data) {
 						// 缓存字典
-						commit('SET_dictTypeTreeData', res.data)
-						resolve(res.data)
+						commit('SET_dictTypeTreeData', data)
+						resolve(data)
 					}
 				}).catch(error => {
 					reject(error)
@@ -156,10 +166,9 @@ export default {
 		}) {
 			return new Promise((resolve, reject) => {
 				let sysBaseConfig = {}
-				// getApp().globalData.config = config
-				configSysBaseList().then((res) => {
-					if (res.data) {
-						res.data.forEach((item) => {
+				configApi.configSysBaseList().then((data) => {
+					if (data) {
+						data.forEach((item) => {
 							sysBaseConfig[item.configKey] = item.configValue
 						})
 						// 缓存配置
@@ -174,11 +183,12 @@ export default {
 		// 退出系统
 		LogOut({
 			commit,
-			state,
-			dispatch
+			state
 		}) {
 			return new Promise((resolve, reject) => {
-				logout().then(() => {
+				loginApi.logout().then(() => {
+					// 将当前租户重置至主租户中
+					// commit('SET_tenantDomain', state.allEnv[state.envKey].tenantDomain)
 					// 清除缓存
 					commit('CLEAR_cache')
 					resolve()

@@ -15,10 +15,11 @@
 					fontSize: size + 'rpx',
 					fontWeight: bold && currentTab == index ? 'bold' : 'normal',transform:`scale(${currentTab == index?scale:1})`
 				}">
-				{{ item.name }}
+				{{ item[field] }}
 				<view :class="[item.isDot ? 'tui-badge__dot' : 'tui-tabs__badge']"
-					:style="{ color: badgeColor, backgroundColor: getBadgeBgColor }" v-if="item.num || item.isDot">
-					{{ item.isDot ? '' : item.num }}
+					:style="{ color: badgeColor, backgroundColor: getBadgeBgColor }"
+					v-if="item[badgeField] || item.isDot">
+					{{ item.isDot ? '' : item[badgeField] }}
 				</view>
 			</view>
 		</view>
@@ -46,9 +47,18 @@
 					return [];
 				}
 			},
+			//显示文本字段名称
+			field: {
+				type: String,
+				default: 'name'
+			},
+			badgeField: {
+				type: String,
+				default: 'num'
+			},
 			//tabs宽度，不传值则默认使用windowWidth，单位px
 			width: {
-				type: Number,
+				type: [Number, String],
 				default: 0
 			},
 			//rpx
@@ -197,7 +207,7 @@
 				uni.getSystemInfo({
 					success: res => {
 						this.winWidth = res.windowWidth;
-						this.tabsWidth = this.width == 0 ? this.winWidth : this.width;
+						this.tabsWidth = this.width == 0 ? this.winWidth : Number(this.width);
 						this.checkCor();
 					}
 				});
@@ -213,9 +223,9 @@
 		methods: {
 			checkCor: function() {
 				let tabsNum = this.tabs.length;
-				let padding = (this.winWidth / 750) * this.padding;
+				let padding = uni.upx2px(Number(this.padding));
 				let width = this.tabsWidth - padding * 2;
-				let left = (width / tabsNum - (this.winWidth / 750) * this.sliderWidth) / 2 + padding;
+				let left = (width / tabsNum - uni.upx2px(Number(this.sliderWidth))) / 2 + padding;
 				let scrollLeft = left;
 				if (this.currentTab > 0) {
 					scrollLeft = scrollLeft + (width / tabsNum) * this.currentTab;
@@ -230,7 +240,8 @@
 					return false;
 				} else {
 					this.$emit('change', {
-						index: Number(index)
+						index: Number(index),
+						item: item
 					});
 				}
 			}
@@ -300,7 +311,7 @@
 	.tui-tabs-slider {
 		position: absolute;
 		left: 0;
-		transition: all 0.15s ease-in-out;
+		transition: all 0.3s ease-in-out;
 		z-index: 1;
 		transform-style: preserve-3d;
 	}

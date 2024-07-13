@@ -30,6 +30,8 @@ export default {
 		// 默认重置密码
 		SNOWY_SYS_DEFAULT_PASSWORD: '123456'
 	},
+	// 是否启用环境配置页面
+	ENABLE_CONFIG_PAGE: true,
 	// 首页配置
 	HOME_CONFIGS: [
 		// 轮播

@@ -1,47 +1,63 @@
 <template>
-	<view>
-		<snowy-search v-model="searchName" :enableSenior="true">
+	<view class="snowy-page">
+		<snowy-search v-model="searchName" :seniorEnable="true">
 			<view @click="resetEnv">
 				<text> 重置\n环境 </text>
 			</view>
 		</snowy-search>
-		<view class="item" v-for="(item, key) in filterEnv(allEnv)" :key="key" :index="key">
-			<view @tap="switchEnv(key)" class="item">
-				<uv-row>
-					<uv-col span="6">
-						<uv-icon v-if="key === envKey" size="20" name="integral-fill" color="#007AFF"></uv-icon>
-						<uv-icon v-else size="20" name="integral"></uv-icon>
-					</uv-col>
-					<uv-col span="6" textAlign="right">
-						<view class="item-right snowy-bold snowy-ellipsis"> {{item.name}} </view>
-					</uv-col>
-				</uv-row>
+		<view class="snowy-shadow snowy-item snowy-padding snowy-hover" v-for="(item, key) in filterEnv(allEnv)" :key="key" :index="key">
+			<view @tap="switchEnv(key)" class="snowy-shadow snowy-item snowy-padding">
+				<uni-row>
+					<uni-col :span="12">
+						<uni-icons v-if="key === envKey" size="20" type="circle-filled" color="#007AFF"></uni-icons>
+						<uni-icons v-else size="20" type="circle"></uni-icons>
+					</uni-col>
+					<uni-col :span="12">
+						<view class="snowy-flex-end snowy-text-bold snowy-text-ellipsis"> {{item.name}} </view>
+					</uni-col>
+				</uni-row>
 			</view>
-			<view @tap="$refs.moreRef.open({key:key, ...item})" class="item">
-				<uv-row customStyle="margin-top: 15rpx">
-					<uv-col span="6">
-						<view class="item-left">key：</view>
-					</uv-col>
-					<uv-col span="6" textAlign="right">
-						<view class="item-right snowy-bold snowy-ellipsis"> {{ key }} </view>
-					</uv-col>
-				</uv-row>
-				<uv-row customStyle="margin-top: 15rpx">
-					<uv-col span="6">
-						<view class="item-left">baseUrl：</view>
-					</uv-col>
-					<uv-col span="6" textAlign="right">
-						<view class="item-right snowy-bold snowy-ellipsis"> {{item.baseUrl}} </view>
-					</uv-col>
-				</uv-row>
-				<uv-row customStyle="margin-top: 15rpx">
-					<uv-col span="6">
-						<view class="item-left">tenant：</view>
-					</uv-col>
-					<uv-col span="6" textAlign="right">
-						<view class="item-right snowy-bold snowy-ellipsis"> {{item.tenantDomain}} </view>
-					</uv-col>
-				</uv-row>
+			<view @tap="$refs.moreRef.open({key:key, ...item})" class="snowy-item snowy-padding">
+				<uni-row>
+					<uni-col :span="12">
+						<view class="snowy-sub-title">环境KEY：</view>
+					</uni-col>
+					<uni-col :span="12">
+						<view class="snowy-flex-end snowy-text-bold snowy-text-ellipsis"> {{ key }} </view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="12">
+						<view class="snowy-sub-title">服务端BaseUrl：</view>
+					</uni-col>
+					<uni-col :span="12">
+						<view class="snowy-flex-end snowy-text-bold snowy-text-ellipsis"> {{item.baseUrl}} </view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="12">
+						<view class="snowy-sub-title">主租户域：</view>
+					</uni-col>
+					<uni-col :span="12">
+						<view class="snowy-flex-end snowy-text-bold snowy-text-ellipsis"> {{item.mainTenantDomain}} </view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="12">
+						<view class="snowy-sub-title">当前租户域：</view>
+					</uni-col>
+					<uni-col :span="12">
+						<view class="snowy-flex-end snowy-text-bold snowy-text-ellipsis"> {{item.tenantDomain}} </view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="12">
+						<view class="snowy-sub-title">登录切换租户域：</view>
+					</uni-col>
+					<uni-col :span="12">
+						<view class="snowy-flex-end snowy-text-bold snowy-text-ellipsis"> {{item.loginSwitchTenant?'开启':'关闭'}} </view>
+					</uni-col>
+				</uni-row>
 			</view>
 		</view>
 		<tui-button margin="50rpx 0" :preventClick="true" :shadow="true" @click="loginBtn">确认</tui-button>
@@ -75,11 +91,14 @@
 	const resetEnv = () => {
 		store.commit('SET_envKey', env.DEFAULT_ENV_KEY)
 		store.commit('SET_allEnv', env.DEFAULT_ALL_ENV)
+		store.commit('SET_tenantDomain', env.DEFAULT_ALL_ENV[env.DEFAULT_ENV_KEY].tenantDomain)
 	}
 	// 切换
 	const switchEnv = (key) => {
 		// 设置当前环境key
 		store.commit('SET_envKey', key)
+		// 设置当前租户
+		store.commit('SET_tenantDomain', store.getters.allEnv[store.getters.envKey].tenantDomain)
 	}
 	const loginBtn = () => {
 		uni.reLaunch({
@@ -94,24 +113,7 @@
 	}
 </script>
 <style lang="scss" scoped>
-	.item {
-		background: #ffffff;
-		margin: 20rpx 0;
-		padding: 25rpx;
-		box-shadow: 0 1px 2px #ccc;
-		border-radius: 15rpx;
-
-		.item-left {
-			color: #999;
-			font-size: 26rpx;
-		}
-
-		.item-right {
-			font-size: 26rpx;
-		}
-	}
-
-	.item:hover {
-		box-shadow: 1upx 5upx 5upx #5677fc;
+	::v-deep .uni-row {
+		margin: 15rpx;
 	}
 </style>

@@ -1,314 +1,269 @@
 <template>
 	<view>
-		<view>
+		<view style="margin-bottom: 80rpx;">
 			<tui-tabs :top="0" :isFixed="true" :tabs="[{name:'基础信息'}, {name: '更多信息'}]" :currentTab="curView" @change="(e) => {
 					if (curView != e.index) {
 						curView = e.index
 					}
 				}"></tui-tabs>
 		</view>
-		<view class="container snowy-shadow">
-			<uv-form ref="formRef" :model="formData" label-position="top" :rules="rules" labelWidth="auto" :labelStyle="{marginBottom: '25rpx', fontSize: '27rpx', color: '#606266'}">
+		<view class="snowy-form">
+			<uni-forms ref="formRef" :model="formData" label-position="top" :rules="rules" validate-trigger="blur" labelWidth="auto">
 				<view v-show="curView === 0">
-					<uv-form-item label="账号" prop="account" required>
-						<uv-input v-model="formData.account" placeholder="请输入账号"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="姓名" prop="name" required>
-						<uv-input v-model="formData.name" placeholder="请输入姓名"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="性别" prop="gender">
-						<uv-radio-group v-model="formData.category">
-							<uv-radio :customStyle="{marginRight: '50rpx'}" v-for="(item, index) in genderOptions" :key="index" :label="item.text" :name="item.value">
-							</uv-radio>
-						</uv-radio-group>
-					</uv-form-item>
-					<uv-form-item label="昵称" prop="nickname">
-						<uv-input v-model="formData.nickname" placeholder="请输入昵称"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="手机号" prop="phone">
-						<uv-input v-model="formData.phone" placeholder="请输入手机"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="邮箱" prop="email">
-						<uv-input v-model="formData.email" placeholder="请输入邮箱"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="出生日期" prop="birthday">
-						<snowy-calendar v-model="formData.birthday" placeholder="请选择出生日期"></snowy-calendar>
-					</uv-form-item>
-					<uv-form-item label="选择组织" prop="orgId" required>
-						<!-- 多选属性:isMultiple="true" -->
-						<snowy-org-picker v-model="formData.orgId" placeholder="请选择组织" @confirm="orgChange" :org-tree-api="selectorApiFunction.orgTreeApi">
-						</snowy-org-picker>
-					</uv-form-item>
-					<uv-form-item label="选择职位" prop="positionId" required>
-						<snowy-sel-picker :map="{key: 'id', label: 'name'}" v-model="formData.positionId" :rangeData="positionData" placeholder="请选择选择职位" :isBigData="true" @queryCurSelData="positionQueryCurSelData" @scrollToLower="positionScrollToLower"></snowy-sel-picker>
-					</uv-form-item>
-					<uv-form-item label="选择主管" prop="directorId">
-						<!-- 多选属性:isMultiple="true" ref="directorRef" :autoInitData="false" -->
-						<snowy-user-picker v-model="formData.directorId" placeholder="请选择主管" :org-tree-api="selectorApiFunction.orgTreeApi" :user-page-api="selectorApiFunction.userPageApi" :checked-user-list-api="selectorApiFunction.checkedUserListApi">
+					<uni-forms-item label="账号" name="account" required :rules="[{ required: true, errorMessage: '请输入账号' }]">
+						<uni-easyinput v-model="formData.account" placeholder="请输入账号"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="姓名" name="name" required :rules="[{ required: true, errorMessage: '请输入姓名' }]">
+						<uni-easyinput v-model="formData.name" placeholder="请输入姓名"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="性别" name="gender">
+						<uni-data-checkbox v-model="formData.gender" :localdata="genderOptions" />
+					</uni-forms-item>
+					<uni-forms-item label="昵称" name="nickname">
+						<uni-easyinput v-model="formData.nickname" placeholder="请输入昵称"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="手机号" name="phone">
+						<uni-easyinput v-model="formData.phone" placeholder="请输入手机"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="邮箱" name="email">
+						<uni-easyinput v-model="formData.email" placeholder="请输入邮箱"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="出生日期" name="birthday">
+						<uni-datetime-picker type="date" return-type="string" format="YYYY-MM-DD" v-model="formData.birthday" />
+					</uni-forms-item>
+					<uni-forms-item label="选择组织" name="orgId" required :rules="[{ required: true, errorMessage: '请选择组织' }]">
+						<snowy-tree-picker v-model="formData.orgId" placeholder="请选择组织" @getTreeOptData="selectorFunction.org.getTreeOptData" :map="{key: 'id', parentKey: 'parentId', children: 'children', label: 'name'}" @confirm="selectorFunction.org.confirm">
+						</snowy-tree-picker>
+					</uni-forms-item>
+					<uni-forms-item label="选择职位" name="positionId" required :rules="[{ required: true, errorMessage: '请选择职位' }]">
+						<snowy-sel-picker :autoLoadOptData="isLoadPositionOptData" :optDataRefresherEnabled="isLoadPositionOptData" :map="{key: 'id', label: 'name'}" v-model="formData.positionId" @getOptData="selectorFunction.position.getOptData" placeholder="请选择选择职位" :isPage="true" @getSelData="selectorFunction.position.getSelData"></snowy-sel-picker>
+					</uni-forms-item>
+					<uni-forms-item label="选择主管" name="directorId">
+						<snowy-user-picker v-model="formData.directorId" placeholder="请选择主管" :map="{key: 'id', label: 'name'}" @getOptData="selectorFunction.user.getOptData" :isPage="true" @getSelData="selectorFunction.user.getSelData">
 						</snowy-user-picker>
-					</uv-form-item>
-					<uv-form-item label="员工编号" prop="empNo">
-						<uv-input v-model="formData.empNo" placeholder="请输入员工编号"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="职位级别" prop="positionLevel">
-						<uv-input v-model="formData.positionLevel" placeholder="请输入职位级别"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="入职日期" prop="entryDate">
-						<snowy-calendar v-model="formData.entryDate" placeholder="请选择入职日期"></snowy-calendar>
-					</uv-form-item>
+					</uni-forms-item>
+					<uni-forms-item label="员工编号" name="empNo">
+						<uni-easyinput v-model="formData.empNo" placeholder="请输入员工编号"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="职位级别" name="positionLevel">
+						<uni-easyinput v-model="formData.positionLevel" placeholder="请输入职位级别"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="入职日期" name="entryDate">
+						<uni-datetime-picker type="date" return-type="string" format="YYYY-MM-DD" v-model="formData.entryDate" />
+					</uni-forms-item>
 					<!-- required :rules="[{ required: true, errorMessage: '请添加任职信息' }]" -->
-					<uv-form-item label="任职信息" prop="positionJson">
+					<uni-forms-item label="任职信息" name="positionJson">
 						<formPosition v-model="formData.positionJson" ref="positionJsonRef"></formPosition>
-					</uv-form-item>
+					</uni-forms-item>
 				</view>
 				<view v-show="curView === 1">
-					<uv-form-item label="民族" prop="nation">
-						<!-- :isMultiple="true" -->
-						<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.nation" :rangeData="nationOptions" placeholder="请选择民族"></snowy-sel-picker>
-					</uv-form-item>
-					<uv-form-item label="籍贯" prop="nativePlace">
-						<uv-input v-model="formData.nativePlace" placeholder="请输入籍贯"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="家庭住址" prop="homeAddress">
-						<uv-textarea v-model="formData.homeAddress" placeholder="请输入家庭住址"></uv-textarea>
-					</uv-form-item>
-					<uv-form-item label="通信地址" prop="mailingAddress">
-						<uv-textarea v-model="formData.mailingAddress" placeholder="请输入通信地址">
-						</uv-textarea>
-					</uv-form-item>
-					<uv-form-item label="证件类型" prop="idCardType">
-						<!-- :isMultiple="true" -->
-						<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.idCardType" :rangeData="idcardTypeOptions" placeholder="请选择证件类型"></snowy-sel-picker>
-					</uv-form-item>
-					<uv-form-item label="证件号码" prop="idCardNumber">
-						<uv-input v-model="formData.idCardNumber" placeholder="请输入证件号码"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="文化程度" prop="cultureLevel">
-						<!-- :isMultiple="true" -->
-						<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.cultureLevel" :rangeData="cultureLevelOptions" placeholder="请选择文化程度"></snowy-sel-picker>
-					</uv-form-item>
-					<uv-form-item label="政治面貌" prop="politicalOutlook">
-						<uv-input v-model="formData.politicalOutlook" placeholder="请输入政治面貌"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="毕业学校" prop="college">
-						<uv-input v-model="formData.college" placeholder="请输入毕业学校"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="学历" prop="education">
-						<uv-input v-model="formData.education" placeholder="请输入学历"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="学制" prop="eduLength">
-						<uv-input v-model="formData.eduLength" placeholder="请输入学制"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="学位" prop="degree">
-						<uv-input v-model="formData.degree" placeholder="请输入学位"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="家庭电话" prop="homeTel">
-						<uv-input v-model="formData.homeTel" placeholder="请输入家庭电话"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="办公电话" prop="officeTel">
-						<uv-input v-model="formData.officeTel" placeholder="请输入办公电话"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="紧急联系人" prop="emergencyContact">
-						<uv-input v-model="formData.emergencyContact" placeholder="请输入紧急联系人"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="紧急联系电话" prop="emergencyPhone">
-						<uv-input v-model="formData.emergencyPhone" placeholder="请输入紧急联系电话"></uv-input>
-					</uv-form-item>
-					<uv-form-item label="紧急联系人地址" prop="emergencyAddress">
-						<uv-textarea v-model="formData.emergencyAddress" placeholder="请输入紧急联系人地址">
-						</uv-textarea>
-					</uv-form-item>
+					<uni-forms-item label="民族" name="nation">
+						<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.nation" @getOptData="selectorFunction.nationOpt" searchEnabled placeholder="请选择民族"></snowy-sel-picker>
+					</uni-forms-item>
+					<uni-forms-item label="籍贯" name="nativePlace">
+						<uni-easyinput v-model="formData.nativePlace" placeholder="请输入籍贯"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="家庭住址" name="homeAddress">
+						<uni-easyinput type="textarea" v-model="formData.homeAddress" placeholder="请输入家庭住址"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="通信地址" name="mailingAddress">
+						<uni-easyinput type="textarea" v-model="formData.mailingAddress" placeholder="请输入通信地址">
+						</uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="证件类型" name="idCardType">
+						<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.idCardType" @getOptData="selectorFunction.idcardTypeOpt" placeholder="请选择证件类型"></snowy-sel-picker>
+					</uni-forms-item>
+					<uni-forms-item label="证件号码" name="idCardNumber">
+						<uni-easyinput v-model="formData.idCardNumber" placeholder="请输入证件号码"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="文化程度" name="cultureLevel">
+						<snowy-sel-picker :map="{key: 'value', label: 'text'}" v-model="formData.cultureLevel" @getOptData="selectorFunction.cultureLevelOpt" placeholder="请选择文化程度"></snowy-sel-picker>
+					</uni-forms-item>
+					<uni-forms-item label="政治面貌" name="politicalOutlook">
+						<uni-easyinput v-model="formData.politicalOutlook" placeholder="请输入政治面貌"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="毕业学校" name="college">
+						<uni-easyinput v-model="formData.college" placeholder="请输入毕业学校"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="学历" name="education">
+						<uni-easyinput v-model="formData.education" placeholder="请输入学历"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="学制" name="eduLength">
+						<uni-easyinput v-model="formData.eduLength" placeholder="请输入学制"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="学位" name="degree">
+						<uni-easyinput v-model="formData.degree" placeholder="请输入学位"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="家庭电话" name="homeTel">
+						<uni-easyinput v-model="formData.homeTel" placeholder="请输入家庭电话"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="办公电话" name="officeTel">
+						<uni-easyinput v-model="formData.officeTel" placeholder="请输入办公电话"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="紧急联系人" name="emergencyContact">
+						<uni-easyinput v-model="formData.emergencyContact" placeholder="请输入紧急联系人"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="紧急联系电话" name="emergencyPhone">
+						<uni-easyinput v-model="formData.emergencyPhone" placeholder="请输入紧急联系电话"></uni-easyinput>
+					</uni-forms-item>
+					<uni-forms-item label="紧急联系人地址" name="emergencyAddress">
+						<uni-easyinput type="textarea" v-model="formData.emergencyAddress" placeholder="请输入紧急联系人地址">
+						</uni-easyinput>
+					</uni-forms-item>
+					<uni-forms ref="dynamicFormRef" :model="dynamicFormData" label-position="top" labelWidth="auto">
+						<snowy-dyna-field v-for="(item, index) in dynamicFieldConfigList" :key="index" :index="index" :fieldConfig="item" :formData="dynamicFormData" />
+					</uni-forms>
 				</view>
-			</uv-form>
+			</uni-forms>
 			<tui-button margin="50rpx 0" :preventClick="true" :shadow="true" @click="submit">提交</tui-button>
 		</view>
 	</view>
 </template>
 <script setup>
 	import { nextTick, reactive, ref } from "vue"
-	import { userDetail, userPositionSelector, submitForm, userSelector, userOrgTreeSelector } from '@/api/biz/bizUserApi'
-	import { getPositionListByIdList, userCenterGetUserListByIdList } from '@/api/sys/userCenterApi'
-	import formPosition from '@/pages/biz/user/form-position.vue'
+	import bizUserApi from '@/api/biz/biz-user-api'
+	import userCenterApi from '@/api/sys/user-center-api'
+	import formPosition from './form-position.vue'
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
+	import CallbackState from "@/enum/callback-state"
 	const curView = ref(0)
 	const formRef = ref()
 	// 表单数据
-	const formData = ref({
-		account: '',
-		name: '',
-		gender: '',
-		nickname: '',
-		phone: '',
-		email: '',
-		birthday: '',
-		orgId: '',
-		positionId: '',
-		directorId: '',
-		empNo: '',
-		positionLevel: '',
-		entryDate: '',
-		positionJson: '',
-		nation: '',
-		nativePlace: '',
-		homeAddress: '',
-		mailingAddress: '',
-		idCardType: '',
-		idCardNumber: '',
-		cultureLevel: '',
-		politicalOutlook: '',
-		college: '',
-		education: '',
-		eduLength: '',
-		degree: '',
-		homeTel: '',
-		officeTel: '',
-		emergencyContact: '',
-		emergencyPhone: '',
-		emergencyAddress: ''
-	})
+	const formData = ref({})
 	// 常用正则规则大全：https://any86.github.io/any-rule/
 	const rules = reactive({
-		account: [{
-			type: 'string',
-			required: true,
-			message: '请输入账号',
-			trigger: ['blur', 'change']
-		}],
-		name: [{
-			type: 'string',
-			required: true,
-			message: '请输入姓名',
-			trigger: ['blur', 'change']
-		}],
-		phone: [{
-			pattern: /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/,
-			message: '请填写符合要求的11位手机号',
-			trigger: ['blur', 'change']
-		}],
-		email: [{
-			pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
-			message: '请填写正确的邮箱号',
-			trigger: ['blur', 'change']
-		}],
-		orgId: [{
-			type: 'string',
-			required: true,
-			message: '选择组织',
-			trigger: ['change']
-		}],
-		positionId: [{
-			type: 'string',
-			required: true,
-			message: '选择职位',
-			trigger: ['change']
-		}],
+		phone: {
+			rules: [{
+					pattern: /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/,
+					errorMessage: '请填写符合要求的11位手机号',
+				},
+				// {
+				// 	minLength: 3,
+				// 	maxLength: 5,
+				// 	errorMessage: '账户长度在 {minLength} 到 {maxLength} 个字符',
+				// }
+			]
+		},
+		email: {
+			rules: [{
+				pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
+				errorMessage: '请填写正确的邮箱号',
+			}, ]
+		},
 	})
 	// 性别
 	const genderOptions = uni.$snowy.tool.dictList('GENDER')
-	// 职位
-	const positionData = ref([])
-	// 民族
-	const nationOptions = uni.$snowy.tool.dictList('NATION')
-	// 身份证件
-	const idcardTypeOptions = uni.$snowy.tool.dictList('IDCARD_TYPE')
-	// 文化程度
-	const cultureLevelOptions = uni.$snowy.tool.dictList('CULTURE_LEVEL')
+	// 职位参数
+	const isLoadPositionOptData = ref(false)
+	const positionSearchData = ref({})
 	// 职位
 	const positionJsonRef = ref()
-	// const directorRef = ref()
 	// 传递用户选择器需要的API
-	const selectorApiFunction = {
-		orgTreeApi: (param) => {
-			return userOrgTreeSelector(param).then((res) => {
-				return Promise.resolve(res)
-			})
+	const selectorFunction = {
+		// 组织
+		org: {
+			getTreeOptData: async (param, callback) => {
+				const data = await bizUserApi.userOrgTreeSelector(param)
+				callback({ state: CallbackState.SUCCESS, treeData: data })
+			},
+			confirm: ({ curSelOrgId, curSelOrg }) => {
+				formData.value.positionId = null
+				positionSearchData.value.orgId = curSelOrgId
+				isLoadPositionOptData.value = true
+			},
 		},
-		userPageApi: (param) => {
-			return userSelector(param).then((res) => {
-				return Promise.resolve(res)
-			})
-		},
-		checkedUserListApi: (param) => {
-			return userCenterGetUserListByIdList(param).then((res) => {
-				return Promise.resolve(res)
-			})
-		}
-	}
-	// 职位参数
-	const positionParam = reactive({
-		current: 1,
-		size: 10
-	})
-	// 职位分页加载
-	const loadPositionSelector = (isReset) => {
-		if (isReset) {
-			positionParam.current = 1
-			positionData.value = []
-		}
-		userPositionSelector(positionParam).then(res => {
-			if (uni.$xeu.isEmpty(res?.data?.records)) {
-				return
+		// 职位
+		position: {
+			getOptData: async ({ pageNo, pageSize }, callback) => {
+				const parameter = { current: pageNo, size: pageSize }
+				Object.assign(parameter, positionSearchData.value)
+				const data = await bizUserApi.userPositionSelector(parameter)
+				callback({ state: CallbackState.SUCCESS, data: data?.records })
+			},
+			getSelData: async (curSelDataKey, callback) => {
+				if (uni.$snowy.tool.isNotEmpty(curSelDataKey)) {
+					const data = await userCenterApi.getPositionListByIdList({
+						idList: [curSelDataKey]
+					})
+					callback({ state: CallbackState.SUCCESS, data: data[0] })
+				}
 			}
-			positionData.value = positionData.value.concat(res.data.records)
-			positionParam.current++
-		})
+		},
+		// 用户
+		user: {
+			getOptData: async ({ pageNo, pageSize, keyword }, callback) => {
+				const parameter = { current: pageNo, size: pageSize, searchKey: keyword }
+				const data = await bizUserApi.userSelector(parameter)
+				callback({ state: CallbackState.SUCCESS, data: data?.records })
+			},
+			getSelData: async (curSelDataKey, callback) => {
+				if (uni.$snowy.tool.isNotEmpty(curSelDataKey)) {
+					const data = await userCenterApi.userCenterGetUserListByIdList({
+						idList: [curSelDataKey]
+					})
+					callback({ state: CallbackState.SUCCESS, data: data[0] })
+				}
+			}
+		},
+		// 民族
+		nationOpt: ({ keyword }, callback) => {
+			let optData = uni.$snowy.tool.dictList('NATION')
+			if (uni.$snowy.tool.isNotEmpty(keyword)) {
+				optData = optData.filter(item => item.text.includes(keyword))
+			}
+			callback({ state: CallbackState.SUCCESS, data: optData })
+		},
+		// 身份证件
+		idcardTypeOpt: (param, callback) => {
+			callback({ state: CallbackState.SUCCESS, data: uni.$snowy.tool.dictList('IDCARD_TYPE') })
+		},
+		// 文化程度
+		cultureLevelOpt: (param, callback) => {
+			callback({ state: CallbackState.SUCCESS, data: uni.$snowy.tool.dictList('CULTURE_LEVEL') })
+		},
 	}
+	// 动态表单
+	const dynamicFormRef = ref()
+	const dynamicFieldConfigList = ref([])
+	const dynamicFormData = ref({})
+	bizUserApi.userDynamicFieldConfigList().then(data => {
+		dynamicFieldConfigList.value = data || []
+	})
 	// 加載
-	onLoad((option) => {
-		if (!option.id) {
-			return
-		}
-		userDetail({
-			id: option.id
-		}).then(res => {
-			formData.value = res?.data
-			// 職位
-			if (!formData.value.orgId) {
-				return
-			}
-			positionParam.orgId = formData.value.orgId
-			loadPositionSelector(true)
-			// directorRef.value.loadUserData(true, {orgId: formData.value.orgId})
-		})
+	onLoad(async (option) => {
+		if (!option.id) { return }
+		formData.value = await bizUserApi.userDetail({ id: option.id })
+		dynamicFormData.value = JSON.parse(formData.value.extJson) || {}
+		if (!formData.value.orgId) { return }
+		positionSearchData.value.orgId = formData.value.orgId
+		isLoadPositionOptData.value = true
 	})
-	// 机构
-	const orgChange = ({
-		curSelOrgId,
-		curSelOrg
-	}) => {
-		formData.value.positionId = null
-		positionParam.orgId = curSelOrgId
-		loadPositionSelector(true)
-		// directorRef.value.loadOrgTree()
-		// formData.value.directorId = null
-		// directorRef.value.loadUserData(true, {orgId: curSelOrgId})
-	}
-	// 根据职位id进行查询
-	const positionQueryCurSelData = (curSelDataKey, callback) => {
-		if (!uni.$xeu.isEmpty(curSelDataKey)) {
-			getPositionListByIdList({
-				idList: [curSelDataKey]
-			}).then(res => {
-				callback(res.data[0])
-			})
-		}
-	}
-	// 职位下拉触发
-	const positionScrollToLower = () => {
-		loadPositionSelector()
-	}
 	const submit = () => {
 		// 子表单数据给父表单数据赋值，并校验子表单数据
 		positionJsonRef.value.formListEmitAndValidate().then(result => {
-			// 父表单校验
-			formRef.value.validate().then(res => {
-				submitForm(formData.value, !formData.value.id).then(respond => {
-					uni.$emit('formBack', {
-						data: respond.data
-					})
-					uni.navigateBack({
-						delta: 1
-					})
+			const promiseList = []
+			promiseList.push(new Promise((resolve, reject) => {
+				formRef.value.validate().then((result) => {
+					resolve(result)
+				}).catch((err) => {
+					reject(err)
+				})
+			}))
+			promiseList.push(new Promise((resolve, reject) => {
+				dynamicFormRef.value.validate().then((result) => {
+					resolve(result)
+				}).catch((err) => {
+					reject(err)
+				})
+			}))
+			Promise.all(promiseList).then(async () => {
+				formData.value.extJson = JSON.stringify(dynamicFormData.value)
+				const data = await bizUserApi.submitForm(formData.value, !formData.value.id)
+				uni.$emit('formBack', {
+					data: data
+				})
+				uni.navigateBack({
+					delta: 1
 				})
 			}).catch(err => {
 				console.error('父表单错误信息：', err);
@@ -319,8 +274,4 @@
 	}
 </script>
 <style lang="scss" scoped>
-	.container {
-		margin: 80rpx 0 0;
-		padding: 30rpx;
-	}
 </style>

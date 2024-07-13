@@ -1,30 +1,38 @@
 <template>
-	<view class="container">
+	<view class="snowy-page">
 		<!-- 轮播图 -->
-		<uv-swiper :list="data" keyName="image" indicator indicatorMode="line" circular></uv-swiper>
-		<!-- 宫格组件 -->
-		<view class="item snowy-shadow" v-for="(userMenu, i) in userMobileMenus" :index="i" :key="userMenu.id" style="background-color: #ffffff;">
-			<uv-row customStyle="padding: 10px">
-				<uv-col span="0.8">
-					<uv-icon custom-prefix="snowy" :name="userMenu.icon" size="16" :color="userMenu.color"></uv-icon>
-				</uv-col>
-				<uv-col span="4">
-					{{userMenu.name}}
-				</uv-col>
-				<uv-col span="7.2" textAlign="right">
-					<text v-for="(item,index) in allSelData[userMenu.id]" :key="index" :style=" { marginLeft: '5px', color: index === (allSelData[userMenu.id].length-1) ?'#8799a3':'#1890FF'}" @click="clickText(item,index, userMenu.id)">
-						{{item.name + (index === (allSelData[userMenu.id].length-1) ? '' : ' | ') }}
-					</text>
-				</uv-col>
-			</uv-row>
-			<uv-grid :border="false" :col="4">
-				<uv-grid-item v-for="(item, j) in handleData(userMenu.id, userMenu.children)" :index="j" :key="handleKey(item,j)" @tap="gridItemClick(userMenu.id, item, j)">
-					<view class="grid-item-box">
-						<snowy-icon :backgroundColor="item.color" custom-prefix="snowy" :name="item.icon" size="20" color="#FFFFFF"></snowy-icon>
-						<text class="text">{{item.title}}</text>
+		<uni-swiper-dot :info="data" :current="current" field="content">
+			<swiper :current="swiperDotIndex" :autoplay="true" :interval="3000" :duration="1000" @change="changeSwiper">
+				<swiper-item v-for="(item, index) in data" :key="index">
+					<view @click="clickBannerItem(item)">
+						<image style="width:100%; border-radius: 5rpx;" :src="item.image" mode="widthFix" :draggable="false" />
 					</view>
-				</uv-grid-item>
-			</uv-grid>
+				</swiper-item>
+			</swiper>
+		</uni-swiper-dot>
+		<!-- 宫格组件 -->
+		<view class="snowy-item snowy-shadow" v-for="(userMenu, i) in userMobileMenus" :index="i" :key="userMenu.id">
+			<uni-section :title="userMenu.name">
+				<template v-slot:decoration>
+					<view style="margin-right: 5rpx;">
+						<uni-icons custom-prefix="snowy" :type="userMenu.icon" size="16" :color="userMenu.color">
+						</uni-icons>
+					</view>
+				</template>
+				<template v-slot:right>
+					<snowy-crumb :crumbData="allSelData[userMenu.id]" @clickCruItem="({ item, index })=>clickText(item,index, userMenu.id)"></snowy-crumb>
+				</template>
+			</uni-section>
+			<view>
+				<uni-grid :column="4" :showBorder="false">
+					<uni-grid-item v-for="(item, j) in handleData(userMenu.id, userMenu.children)" :index="j" :key="handleKey(item,j)" @tap="gridItemClick(userMenu.id, item, j)">
+						<view class="snowy-grid-center">
+							<snowy-icon :backgroundColor="item.color" custom-prefix="snowy" :type="item.icon" size="20" color="#FFFFFF"></snowy-icon>
+							<text class="snowy-text-center" style="margin-top: 10rpx">{{item.title}}</text>
+						</view>
+					</uni-grid-item>
+				</uni-grid>
+			</view>
 		</view>
 	</view>
 </template>
@@ -32,13 +40,21 @@
 	import store from '@/store'
 	import config from '@/config'
 	import { reactive, ref, getCurrentInstance } from "vue"
-	import { prefixUrl } from "@/utils/apiAdaptive"
+	import { prefixUrl } from "@/utils/api-adaptive"
 	const { proxy } = getCurrentInstance()
+	const current = ref(0)
+	const swiperDotIndex = ref(0)
 	const data = reactive([{
 		image: `${store.getters.allEnv[store.getters.envKey].baseUrl}${prefixUrl('/mobile/')}swiper/swiper1.jpg`
 	}, {
 		image: `${store.getters.allEnv[store.getters.envKey].baseUrl}${prefixUrl('/mobile/')}swiper/swiper2.jpg`
 	}])
+	const changeSwiper = (e) => {
+		current.value = e.detail.current
+	}
+	const clickBannerItem = (item) => {
+		console.log(item)
+	}
 	const userMobileMenus = store.getters.userMobileMenus
 	// 当前选中的数据
 	let selData = reactive({})
@@ -99,26 +115,4 @@
 	}
 </script>
 <style lang="scss" scoped>
-	.container {
-		.item {
-			margin: 15rpx 0;
-		}
-	}
-
-	.text {
-		text-align: center;
-		font-size: 26rpx;
-		margin-top: 10rpx;
-	}
-
-	.grid-item-box {
-		flex: 1;
-		/* #ifndef APP-NVUE */
-		display: flex;
-		/* #endif */
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		padding: 15upx 0;
-	}
 </style>

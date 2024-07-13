@@ -1,5 +1,5 @@
 <template>
-	<view class="home-container">
+	<view class="snowy-page">
 		<item v-for="(it, i) in homeConfigs" :index="i" :key="i" :code="it.code" :isShow="it.isShow"></item>
 	</view>
 </template>
@@ -12,7 +12,5 @@
 		return store.getters.homeConfigs
 	})
 </script>
-<style lang="scss">
-	.home-container {
-	}
+<style lang="scss" scoped>
 </style>
