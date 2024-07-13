@@ -1,8 +1,10 @@
 <template>
 	<view class="container-icon" :style="{ backgroundColor: backgroundColor }">
-		<uv-icon v-bind="$attrs"></uv-icon>
+		<uni-icons v-bind="$attrs">
+		</uni-icons>
 	</view>
 </template>
+
 <script setup>
 	const props = defineProps({
 		backgroundColor: {
@@ -11,11 +13,12 @@
 		},
 	})
 </script>
+
 <style lang="scss" scoped>
 	.container-icon {
-		width: 80upx;
-		height: 80upx;
-		border-radius: 25upx;
+		width: 80rpx;
+		height: 80rpx;
+		border-radius: 10rpx;
 		display: flex;
 		align-items: center;
 		justify-content: center;

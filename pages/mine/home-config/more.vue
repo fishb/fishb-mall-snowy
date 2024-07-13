@@ -1,19 +1,17 @@
 <template>
-	<uv-popup ref="popRef" mode="bottom" bg-color="null" z-index="99">
-		<view class="container">
-			<tui-list-view unlined="all" background-color="transparent">
-				<tui-list-cell v-if="confIndex != 0" :hover="true" :arrow="false" @click="up" :radius="10" >
-					<view class="item"> 上移 </view>
-				</tui-list-cell>
-				<tui-list-cell v-if="confIndex != configs.length-1" :hover="true" :arrow="false" @click="down" :radius="10" :margin-top="2">
-					<view class="item"> 下移 </view>
-				</tui-list-cell>
-				<tui-list-cell :hover="true" :arrow="false" @click="cancel" :margin-top="10" :radius="10">
-					<view class="item"> 取消 </view>
-				</tui-list-cell>
-			</tui-list-view>
-		</view>
-	</uv-popup>
+	<uni-popup ref="popRef" type="bottom" background-color="transparent" maskBackgroundColor="rgba(0, 0, 0, 0.6)">
+		<tui-list-view unlined="all" background-color="transparent">
+			<tui-list-cell v-if="confIndex != 0" :hover="true" :arrow="false" @click="up" :radius="10">
+				<view class="snowy-text-center"> 上移 </view>
+			</tui-list-cell>
+			<tui-list-cell v-if="confIndex != configs.length-1" :hover="true" :arrow="false" @click="down" :radius="10" :margin-top="2">
+				<view class="snowy-text-center"> 下移 </view>
+			</tui-list-cell>
+			<tui-list-cell :hover="true" :arrow="false" @click="cancel" :margin-top="10" :radius="10">
+				<view class="snowy-text-center"> 取消 </view>
+			</tui-list-cell>
+		</tui-list-view>
+	</uni-popup>
 </template>
 <script setup>
 	import store from '@/store'
@@ -55,6 +53,7 @@
 	.container {
 		padding: 5upx;
 		background-color: transparent;
+
 		.item {
 			text-align: center;
 		}

@@ -1,17 +1,12 @@
 <template>
 	<view class="floating-button" @click="handleButtonClick">
-		<slot><uv-icon name="plus" color="#ffffff" size="20"></uv-icon></slot>
+		<slot>
+			<uni-icons type="plusempty" color="#ffffff" :size="20"></uni-icons>
+		</slot>
 	</view>
 </template>
 <script setup>
 	const emits = defineEmits(['click'])
-	const props = defineProps({
-		buttonText: {
-			type: String,
-			required: false,
-			default: "+",
-		},
-	})
 	const handleButtonClick = () => {
 		emits('click');
 	}

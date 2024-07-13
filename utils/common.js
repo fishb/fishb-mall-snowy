@@ -2,6 +2,7 @@ import config from '@/config'
 // #ifdef H5
 import manifest from '@/manifest.json'
 // #endif
+
 /**
  * 参数处理
  * @param params 参数

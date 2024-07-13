@@ -1,5 +1,5 @@
 <template>
-	<view class="search-bar">
+	<view class="search-bar" :style="customStyle">
 		<view class="search-bar-form">
 			<view class="search-bar-box">
 				<icon type="search" :size="16"></icon>
@@ -7,7 +7,7 @@
 				<icon type="clear" :size="15" v-if="inputShowed" @tap="clearInput"></icon>
 			</view>
 		</view>
-		<view v-if="$attrs.enableSenior" class="senior" @tap="seniorSearch">
+		<view v-if="$attrs.seniorEnable" class="senior" @tap="seniorSearch">
 			<slot><text style="color: #5677fc; font-weight: bold; text-shadow: 2px 2px 4px #ccc;">高级\n搜索</text></slot>
 		</view>
 	</view>
@@ -17,6 +17,11 @@
 	const emits = defineEmits(['update:modelValue', 'confirm', 'clear', 'seniorSearch'])
 	const props = defineProps({
 		modelValue: [String, Array],
+		customStyle: {
+			type: Object,
+			default: {},
+			required: false
+		}
 	})
 	const inputVal = ref("")
 	watch(() => props.modelValue, (newValue, oldValue) => {
@@ -60,7 +65,7 @@
 			flex: 1;
 			position: relative;
 			border-radius: 10rpx; // 32rpx;
-			background: #F8F8F8F8; // #f2f5f7;
+			background: #f2f5f7; // #F8F8F8F8; // #f2f5f7;
 			box-shadow: 0 2px 2px #ccc;
 
 			.search-bar-box {
@@ -78,7 +83,7 @@
 					padding-left: 20rpx;
 					font-size: 30rpx;
 					color: #333;
-					background: #F8F8F8F8; // #f2f5f7;
+					background: #f2f5f7; //#F8F8F8F8; // #f2f5f7;
 				}
 
 				.phcolor {

@@ -9,7 +9,8 @@ let storageNodeKeys = [
 	constant.homeConfigs,
 	constant.userInfo,
 	constant.userMobileMenus,
-	constant.dictTypeTreeData
+	constant.dictTypeTreeData,
+	constant.tenantDomain
 ]
 // 存储的数据
 let storageData = uni.getStorageSync(storageKey) || {}
