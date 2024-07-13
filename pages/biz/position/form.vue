@@ -22,6 +22,7 @@
 	</view>
 </template>
 <script setup>
+	import config from '@/config'
 	import { nextTick, reactive, ref } from "vue"
 	import bizPositionApi from '@/api/biz/biz-position-api'
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
@@ -36,9 +37,11 @@
 	const dynamicFormRef = ref()
 	const dynamicFieldConfigList = ref([])
 	const dynamicFormData = ref({})
-	bizPositionApi.positionDynamicFieldConfigList().then(data => {
-		dynamicFieldConfigList.value = data || []
-	})
+	if (config.IS_ENTTERPRISE) {
+		bizPositionApi.positionDynamicFieldConfigList().then(data => {
+			dynamicFieldConfigList.value = data || []
+		})
+	}
 	// 加載
 	onLoad(async (option) => {
 		if (!option.id) {
