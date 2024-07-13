@@ -1,23 +1,21 @@
 <template>
-	<uv-popup ref="popRef" mode="bottom" bg-color="null" z-index="99">
-		<view class="container">
-			<tui-list-view unlined="all" background-color="transparent">
-				<tui-list-cell v-if="$snowy.hasPerm('mobileBizUserEdit')" :hover="true" :arrow="false" @click="edit" :radius="10" >
-					<view class="item"> 编辑 </view>
-				</tui-list-cell>
-				<tui-list-cell v-if="$snowy.hasPerm('mobileBizUserDelete')" :hover="true" :arrow="false" @click="del" :radius="10" :margin-top="2">
-					<view class="item"> 刪除 </view>
-				</tui-list-cell>
-				<tui-list-cell :hover="true" :arrow="false" @click="cancel" :margin-top="10" :radius="10">
-					<view class="item"> 取消 </view>
-				</tui-list-cell>
-			</tui-list-view>
-		</view>
-	</uv-popup>
+	<uni-popup ref="popRef" type="bottom" background-color="transparent" maskBackgroundColor="rgba(0, 0, 0, 0.6)">
+		<tui-list-view unlined="all" background-color="transparent">
+			<tui-list-cell v-if="$snowy.hasPerm('mobileBizUserEdit')" :hover="true" :arrow="false" @click="edit" :radius="10" >
+				<view class="snowy-text-center"> 编辑 </view>
+			</tui-list-cell>
+			<tui-list-cell v-if="$snowy.hasPerm('mobileBizUserDelete')" :hover="true" :arrow="false" @click="del" :radius="10" :margin-top="2">
+				<view class="snowy-text-center"> 刪除 </view>
+			</tui-list-cell>
+			<tui-list-cell :hover="true" :arrow="false" @click="cancel" :margin-top="10" :radius="10">
+				<view class="snowy-text-center"> 取消 </view>
+			</tui-list-cell>
+		</tui-list-view>
+	</uni-popup>
 </template>
 <script setup>
 	import { reactive, ref, getCurrentInstance } from "vue";
-	import { userDelete } from '@/api/biz/bizUserApi'
+	import bizUserApi from '@/api/biz/biz-user-api'
 	const emits = defineEmits(['handleOk'])
 	const popRef = ref()
 	const record = ref({})
@@ -35,9 +33,9 @@
 	// 删除
 	const del = () => {
 		uni.$snowy.modal.confirm(`是否确认删除【${ record.value.name }】用户？`).then(() => {
-			userDelete([{
+			bizUserApi.userDelete([{
 				id: record.value.id
-			}]).then(res => {
+			}]).then(data => {
 				emits('handleOk')
 				popRef.value.close()
 			})
@@ -52,11 +50,4 @@
 	})
 </script>
 <style lang="scss">
-	.container {
-		padding: 5upx;
-		background-color: transparent;
-		.item {
-			text-align: center;
-		}
-	}
 </style>

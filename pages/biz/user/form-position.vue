@@ -1,32 +1,35 @@
 <template>
-	<view style="width: 100%;">
-		<view v-for="(item, index) in dataList" :key="index">
-			<tui-button margin="0 0 50rpx 0" :preventClick="true" type="danger" @click="del(index)">删除任职</tui-button>
-			<uv-form :key="index" :ref="`formRef${ index }`" :model="item" :rules="rules" label-position="top" labelWidth="auto">
-				<uv-form-item label="机构" prop="orgId" required>
-					<!-- 多选属性:isMultiple="true" -->
-					<snowy-org-picker v-model="item.orgId" placeholder="请选择机构" @confirm="(data)=>{orgChange(data,index)}" :org-tree-api="selectorApiFunction.orgTreeApi" @validateField="$refs[`formRef${ index }`][0].validateField('orgId')">
-					</snowy-org-picker>
-				</uv-form-item>
-				<uv-form-item label="职位" prop="positionId" required>
-					<snowy-sel-picker :ref="`positionRef${ index }`" :map="{key: 'id', label: 'name'}" v-model="item.positionId" :rangeData="positionDataList[index]" placeholder="请选择选择职位" :isBigData="true" @scrollToLower="positionScrollToLower(index)" @queryCurSelData="positionQueryCurSelData" @validateField="$refs[`formRef${ index }`][0].validateField('positionId')"></snowy-sel-picker>
-				</uv-form-item>
-				<uv-form-item label="主管" prop="directorId">
-					<!-- 多选属性:isMultiple="true"  :autoInitData="false" -->
-					<snowy-user-picker :ref="`directorRef${ index }`" v-model="item.directorId" placeholder="请选择主管" :org-tree-api="selectorApiFunction.orgTreeApi" :user-page-api="selectorApiFunction.userPageApi" :checked-user-list-api="selectorApiFunction.checkedUserListApi">
-					</snowy-user-picker>
-				</uv-form-item>
-			</uv-form>
-		</view>
-		<tui-button margin="50rpx 0 0 0" :preventClick="true" type="primary" @click="add">增加任职</tui-button>
+	<view class="snowy-shadow" style="margin-bottom: 20rpx;padding: 20rpx; background-color: #f5fff0" v-for="(item, index) in dataList" :key="index">
+		<uni-row>
+			<uni-col :span="24">
+				<view class="snowy-flex-end">
+					<icon type="clear" :size="20" color="#5677fc" @click="del(index)"></icon>
+				</view>
+			</uni-col>
+		</uni-row>
+		<uni-forms :key="index" :ref="`formRef${ index }`" :model="item" label-position="top" validate-trigger="submit" labelWidth="auto">
+			<uni-forms-item label="机构" name="orgId" required :rules="[{ required: true, errorMessage: '请选择机构' }]">
+				<snowy-tree-picker v-model="item.orgId" placeholder="请选择机构" @confirm="(data)=>{selectorFunction.org.confirm(data,index)}" @getTreeOptData="selectorFunction.org.getTreeOpt" :map="{key: 'id', parentKey: 'parentId', children: 'children', label: 'name'}">
+				</snowy-tree-picker>
+			</uni-forms-item>
+			<uni-forms-item label="职位" name="positionId" required :rules="[{ required: true, errorMessage: '请选择职位' }]">
+				<snowy-sel-picker :autoLoadOptData="isLoadPositionOptData[index]" :optDataRefresherEnabled="isLoadPositionOptData[index]" :map="{key: 'id', label: 'name'}" v-model="item.positionId" @getOptData="(param, callback) =>selectorFunction.position.getOptData(param, callback, index)" placeholder="请选择选择职位" :isPage="true" @getSelData="selectorFunction.position.getSelData">
+				</snowy-sel-picker>
+			</uni-forms-item>
+			<uni-forms-item label="主管" name="directorId">
+				<snowy-user-picker v-model="item.directorId" placeholder="请选择主管" :map="{key: 'id', label: 'name'}" @getOptData="selectorFunction.user.getOptData" :isPage="true" @getSelData="selectorFunction.user.getSelData">
+				</snowy-user-picker>
+			</uni-forms-item>
+		</uni-forms>
 	</view>
-	
+	<tui-button margin="50rpx 0 0 0" :preventClick="true" type="primary" @click="add">增加任职</tui-button>
 </template>
 <script setup>
-	import { userPositionSelector, userSelector, userOrgTreeSelector } from '@/api/biz/bizUserApi'
-	import { getPositionListByIdList, userCenterGetUserListByIdList } from '@/api/sys/userCenterApi'
+	import bizUserApi from '@/api/biz/biz-user-api'
+	import userCenterApi from '@/api/sys/user-center-api'
 	import { nextTick, reactive, ref, watch, getCurrentInstance } from "vue"
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
+	import CallbackState from "@/enum/callback-state"
 	const { proxy } = getCurrentInstance()
 	const emits = defineEmits(['update:modelValue'])
 	const props = defineProps({
@@ -36,111 +39,82 @@
 			required: false
 		},
 	})
-	const rules = reactive({
-		orgId: [{
-			type: 'string',
-			required: true,
-			message: '请选择机构',
-			trigger: ['change']
-		}],
-		positionId: [{
-			type: 'string',
-			required: true,
-			message: '请选择职位',
-			trigger: ['change']
-		}],
-	})
 	// 数据列表
 	const dataList = ref([])
-	// 传递用户选择器需要的API
-	const selectorApiFunction = {
-		orgTreeApi: (param) => {
-			return userOrgTreeSelector(param).then((res) => {
-				return Promise.resolve(res)
-			})
-		},
-		userPageApi: (param) => {
-			return userSelector(param).then((data) => {
-				return Promise.resolve(data)
-			})
-		},
-		checkedUserListApi: (param) => {
-			return userCenterGetUserListByIdList(param).then((data) => {
-				return Promise.resolve(data)
-			})
-		}
-	}
 	// 职位参数
-	const positionParamList = ref([])
-	// 职位下拉列表
-	const positionDataList = ref([])
+	const isLoadPositionOptData = ref([])
+	const positionSearchData = ref([])
+	// 传递选择器需要的方法
+	const selectorFunction = {
+		// 组织
+		org: {
+			getTreeOpt: (param, callback) => bizUserApi.userOrgTreeSelector(param).then((data) => {
+				callback({ state: CallbackState.SUCCESS, treeData: data })
+			}),
+			// 组织改变
+			confirm: ({ curSelOrgId, curSelOrg }, index) => {
+				// 重置职位数据
+				dataList.value[index].positionId = null
+				positionSearchData.value[index].orgId = curSelOrgId
+				isLoadPositionOptData.value[index] = true
+			},
+		},
+		// 职位
+		position: {
+			getOptData: async ({ pageNo, pageSize }, callback, index) => {
+				const parameter = { current: pageNo, size: pageSize }
+				Object.assign(parameter, positionSearchData.value[index])
+				const data = await bizUserApi.userPositionSelector(parameter)
+				callback({ state: CallbackState.SUCCESS, data: data?.records })
+			},
+			getSelData: async (curSelDataKey, callback) => {
+				if (uni.$snowy.tool.isNotEmpty(curSelDataKey)) {
+					const data = await userCenterApi.getPositionListByIdList({ idList: [curSelDataKey] })
+					callback({ state: CallbackState.SUCCESS, data: data[0] })
+				}
+			}
+		},
+		// 用户
+		user: {
+			getOptData: async ({ pageNo, pageSize, keyword }, callback) => {
+				const parameter = { current: pageNo, size: pageSize, searchKey: keyword }
+				const data = await bizUserApi.userSelector(parameter)
+				callback({ state: CallbackState.SUCCESS, data: data?.records })
+			},
+			getSelData: async (curSelDataKey, callback) => {
+				if (uni.$snowy.tool.isNotEmpty(curSelDataKey)) {
+					const data = await userCenterApi.userCenterGetUserListByIdList({
+						idList: [curSelDataKey]
+					})
+					callback({ state: CallbackState.SUCCESS, data: data[0] })
+				}
+			}
+		},
+	}
+	const initData = () => {
+		if (uni.$snowy.tool.isEmpty(props.modelValue)) {
+			return dataList.value = []
+		}
+		Object.assign(dataList.value, JSON.parse(props.modelValue))
+		dataList.value.forEach((item, index) => {
+			positionSearchData.value[index] = {}
+			if (uni.$snowy.tool.isEmpty(item.orgId)) {
+				return
+			}
+			positionSearchData.value[index].orgId = item.orgId
+			isLoadPositionOptData.value[index] = true
+		})
+	}
+	initData()
 	watch(() => props.modelValue, (newValue, oldValue) => {
-		initData()
+		if (newValue !== oldValue) {
+			initData()
+		}
 	}, {
 		deep: false,
 		immediate: false
 	})
-	const initData = () => {
-		if (props.modelValue) {
-			dataList.value = uni.$xeu.clone(JSON.parse(props.modelValue), true)
-		} else {
-			dataList.value = []
-		}
-		dataList.value.forEach((item, index) => {
-			if (positionParamList.value[index] === undefined || positionParamList.value[index] === null) {
-				positionParamList.value[index] = {}
-			}
-			positionParamList.value[index].orgId = item.orgId
-			loadPositionSelector(true, index)
-			nextTick(() => {
-				proxy.$refs[`positionRef${ index }`][0].initData()
-				proxy.$refs[`directorRef${ index }`][0].initData()
-				// proxy.$refs[`directorRef${ index }`][0].loadUserData(true, {orgId: item.orgId})
-			})
-		})
-	}
-	// 组织变换
-	const orgChange = ({
-		curSelOrgId,
-		curSelOrg
-	}, index) => {
-		// 重置职位数据
-		dataList.value[index].positionId = null
-		positionParamList.value[index].orgId = curSelOrgId
-		loadPositionSelector(true, index)
-		// 重置用户数据
-		// dataList.value[index].directorId = null
-		// proxy.$refs[`directorRef${ index }`][0].loadUserData(true, {orgId: curSelOrgId})
-	}
-	// 根据职位id进行查询
-	const positionQueryCurSelData = (curSelDataKey, callback) => {
-		if (!uni.$xeu.isEmpty(curSelDataKey)) {
-			getPositionListByIdList({
-				idList: [curSelDataKey]
-			}).then(res => {
-				callback(res.data[0])
-			})
-		}
-	}
-	// 职位分页加载
-	const loadPositionSelector = (isReset, index) => {
-		if (isReset) {
-			positionParamList.value[index].current = 1
-			positionParamList.value[index].size = 10
-			positionDataList.value[index] = []
-		}
-		userPositionSelector(positionParamList.value[index]).then(res => {
-			if (uni.$xeu.isEmpty(res?.data?.records)) {
-				return
-			}
-			positionDataList.value[index] = positionDataList.value[index].concat(res.data.records)
-			positionParamList.value[index].current++
-		})
-	}
-	// 职位下拉触发
-	const positionScrollToLower = (index) => {
-		loadPositionSelector(false, index)
-	}
+	
 	// 新增
 	const add = () => {
 		dataList.value.push({
@@ -148,14 +122,14 @@
 			positionId: "",
 			directorId: ""
 		})
-		positionDataList.value.push([])
-		positionParamList.value.push({})
+		positionSearchData.value.push({})
+		isLoadPositionOptData.value.push(false)
 	}
 	// 删除
 	const del = (index) => {
 		dataList.value.splice(index, 1)
-		positionDataList.value.splice(index, 1)
-		positionParamList.value.splice(index, 1)
+		positionSearchData.value.splice(index, 1)
+		isLoadPositionOptData.value.splice(index, 1)
 	}
 	// 表单校验
 	const formListEmitAndValidate = () => {

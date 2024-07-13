@@ -56,7 +56,7 @@ export function checkPermission(path) {
 			if (isVisit) {
 				return true
 			} else {
-				uni.$snowy.modal.alert("页面【" + path + "】需要进行授权，才能进行访问！")
+				modal.alert("页面【" + path + "】需要进行授权，才能进行访问！")
 				// 无权访问
 				uni.reLaunch({
 					url: config.HAS_TOKEN_BACK_URL

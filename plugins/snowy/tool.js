@@ -33,4 +33,18 @@ tool.dictList = (dictValue) => {
 	}
 	return []
 }
+// 判断不为空
+tool.isNotEmpty = (value) => {
+	if (typeof value === 'object') {
+		for (const key in value) {
+			return true
+		}
+		return false
+	}
+	return !(value === null || value === undefined || value === 'undefined' || value === '')
+}
+// 判断为空
+tool.isEmpty = (value) => {
+	return !tool.isNotEmpty(value)
+}
 export default tool

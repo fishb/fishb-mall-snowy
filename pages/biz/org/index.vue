@@ -1,34 +1,39 @@
 <template>
-	<view class="crumb snowy-shadow">
-		<text class="text" v-for="(item, index) in allSelOrg" :key="index" @click="clickOrgCru(item, index)" :class="index === (allSelOrg.length-1) ? 'uni-secondary-color' : 'uni-primary'">
-			{{ item.name + (index === (allSelOrg.length-1) ? '' : ' | ') }}
-		</text>
-	</view>
-	<view class="list snowy-shadow" v-show="!isLoading">
-		<tui-list-view unlined="all">
-			<tui-swipe-action v-for="(item, index) in curSelOrg" :key="index" :actions="actions" :params="item" @click="handlerButton">
+	<view class="snowy-page">
+		<view class="snowy-shadow snowy-item">
+			<snowy-crumb :crumbData="allSelOrg" @clickCruItem="clickOrgCru"></snowy-crumb>
+		</view>
+		<!-- 组织 -->
+		<view class="snowy-shadow snowy-item snowy-hover" v-for="(item, index) in curSelOrg" :key="index" @tap="tapOrg(item, index)">
+			<tui-swipe-action :actions="actions" :params="item" @click="handlerButton">
 				<template v-slot:content>
-					<tui-list-cell :line-left="0" :hover="item.children? true : false" :arrow="item.children? true : false" @click="clickOrg(item, index)">
-						<view class="item">
+					<uni-row>
+						<uni-col :span="4">
 							<view v-show="'COMPANY' === item?.category" >
-								<image class="item-img" src="/static/svg/org/company.svg" mode="widthFix"></image>
+								<image style="width: 80rpx; height: 80rpx;" src="/static/svg/org/company.svg" mode="widthFix"></image>
 							</view>
 							<view v-show="'DEPT' === item?.category">
-								<image class="item-img" src="/static/svg/org/department.svg" mode="widthFix"></image>
+								<image style="width: 80rpx; height: 80rpx;" src="/static/svg/org/department.svg" mode="widthFix"></image>
 							</view>
-							<view class="item-left">{{item.name}}</view>
-							<view class="item-right"></view>
-						</view>
-					</tui-list-cell>
+						</uni-col>
+						<uni-col :span="15">
+							<view>{{item.name}}</view>
+						</uni-col>
+						<uni-col :span="5">
+							<view class="snowy-flex-end" v-if="item.children">
+								<uni-icons type="forward" size="20"></uni-icons>
+							</view>
+						</uni-col>
+					</uni-row>
 				</template>
 			</tui-swipe-action>
-		</tui-list-view>
-		<snowy-empty v-show="$xeu.isEmpty(curSelOrg)"/>
+		</view>
+		<snowy-empty v-show="$snowy.tool.isEmpty(curSelOrg)" />
+		<snowy-float-btn v-if="$snowy.hasPerm('mobileBizOrgAdd')" @click="add"></snowy-float-btn>
 	</view>
-	<snowy-float-btn v-if="$snowy.hasPerm('mobileBizOrgAdd')" @click="add"></snowy-float-btn>
 </template>
 <script setup>
-	import { orgTree, orgDelete } from '@/api/biz/bizOrgApi'
+	import bizOrgApi from '@/api/biz/biz-org-api'
 	import { reactive, ref, getCurrentInstance, nextTick } from "vue";
 	import { onLoad, onShow, onReady, onPullDownRefresh } from "@dcloudio/uni-app"
 	// 所有选择的机构
@@ -43,24 +48,23 @@
 			loadData()
 		})
 	})
-	const loadData = () => {
+	const loadData = async () => {
 		isLoading.value = true
-		orgTree().then(res => {
-			curSelOrg.value = res?.data || []
-			allSelOrg.value = [{
-				id: '0',
-				name: '全部',
-				children: res?.data || []
-			}]
-			isLoading.value = false
-		})
+		const data = await bizOrgApi.orgTree()
+		curSelOrg.value = data || []
+		allSelOrg.value = [{
+			id: '0',
+			name: '全部',
+			children: data || []
+		}]
+		isLoading.value = false
 	}
 	loadData()
-	const clickOrgCru = (item, index) => {
+	const clickOrgCru = ({item, index}) => {
 		curSelOrg.value = item.children
 		allSelOrg.value.splice(index + 1, allSelOrg.value.length - (index + 1))
 	}
-	const clickOrg = (item, index) => {
+	const tapOrg = (item, index) => {
 		if (item.children) {
 			curSelOrg.value = item.children
 			allSelOrg.value.push(item)
@@ -99,9 +103,9 @@
 		}
 		if ('删除' === actions[index]?.name) {
 			return uni.$snowy.modal.confirm(`是否确认删除【${ item.name }】机构？`).then(() => {
-				orgDelete([{
+				bizOrgApi.orgDelete([{
 					id: item.id
-				}]).then(res => {
+				}]).then(data => {
 					loadData()
 				})
 			})
@@ -109,50 +113,12 @@
 	}
 </script>
 <style lang="scss" scoped>
-	.crumb {
-		white-space: nowrap;
-		overflow-x: scroll;
-		padding: 20rpx;
+	@import '@/static/scss/index.scss';
 
-		.text {
-			display: inline-block;
-			margin-left: 5rpx;
-			text-align: center;
-		}
+	::v-deep .uni-row {
+		@extend .snowy-flex-v-center;
+		padding: 15rpx;
 	}
 
-	.list {
-		margin: 15rpx 0;
-		background-color: white;
-		padding: 5rpx 0;
-
-		.item {
-			width: 100%;
-			display: flex;
-			align-items: center;
-
-			.item-img {
-				width: 70rpx;
-				height: 70rpx;
-				border-radius: 50%;
-				display: block;
-				margin-right: 5rpx;
-				flex-shrink: 0;
-			}
-
-			.item-left {
-				padding-left: 20rpx;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
-
-			.item-right {
-				margin-left: auto;
-				margin-right: 34rpx;
-				font-size: 26rpx;
-				color: #999;
-			}
-		}
-	}
+	
 </style>

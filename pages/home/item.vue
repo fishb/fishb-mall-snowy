@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 轮播图 -->
-		<view v-if="['swiper',].includes(code) && isShow">
+		<view class="img-item" v-if="['swiper',].includes(code) && isShow">
 			<home-swiper></home-swiper>
 		</view>
 		<!-- 图表 插件地址：https://ext.dcloud.net.cn/plugin?id=271 官方地址：https://www.ucharts.cn/v2/#/demo/index-->
@@ -32,9 +32,12 @@
 	})
 </script>
 <style lang="scss" scoped>
+	.img-item {
+		margin-bottom: 5rpx;
+	}
 	.item {
 		background-color: #ffffff;
-		margin: 15rpx 0;
+		margin-bottom: 15rpx;
 		padding: 10rpx 0;
 	}
 </style>

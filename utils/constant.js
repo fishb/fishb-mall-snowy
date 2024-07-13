@@ -1,6 +1,7 @@
 const constant = {
 	envKey: "envKey",
 	allEnv: "allEnv",
+	tenantDomain: 'tenantDomain',
 	sysBaseConfig: 'sysBaseConfig',
 	homeConfigs: "homeConfigs",
 	userInfo: 'userInfo',

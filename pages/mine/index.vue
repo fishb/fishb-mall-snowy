@@ -1,86 +1,94 @@
 <template>
-	<view class="header snowy-shadow">
-		<uv-row>
-			<uv-col span="2.5">
-				<image class="avatar" v-if="userInfo?.avatar" :src="userInfo?.avatar" mode="aspectFit"></image>
-			</uv-col>
-			<uv-col span="4">
-				<view class="header-left">{{userInfo?.name}}</view>
-			</uv-col>
-			<uv-col span="5" textAlign="right" @tap="handleToInfo">
-				<view class="header-right">个人信息</view>
-			</uv-col>
-			<uv-col span="0.5" @tap="handleToInfo">
-				<uv-icon name="arrow-right" color="white" size="15"></uv-icon>
-			</uv-col>
-		</uv-row>
-	</view>
-	<view class="grid snowy-shadow">
-		<uv-grid :border="false" :col="4">
-			<uv-grid-item @tap="handleToHomeConfig">
-				<view class="grid-item-box">
-					<snowy-icon backgroundColor="#ff9900" name="home-fill" size="20" color="#FFFFFF"></snowy-icon>
-					<text class="text">首页设置</text>
-				</view>
-			</uv-grid-item>
-			<uv-grid-item @tap="handleToHomeConfig">
-				<view class="grid-item-box">
-					<snowy-icon backgroundColor="#ff9900" name="home-fill" size="20" color="#FFFFFF"></snowy-icon>
-					<text class="text">首页设置</text>
-				</view>
-			</uv-grid-item>
-			<uv-grid-item @tap="handleToHomeConfig">
-				<view class="grid-item-box">
-					<snowy-icon backgroundColor="#ff9900" name="home-fill" size="20" color="#FFFFFF"></snowy-icon>
-					<text class="text">首页设置</text>
-				</view>
-			</uv-grid-item>
-			<uv-grid-item @tap="handleToHomeConfig">
-				<view class="grid-item-box">
-					<snowy-icon backgroundColor="#ff9900" name="home-fill" size="20" color="#FFFFFF"></snowy-icon>
-					<text class="text">首页设置</text>
-				</view>
-			</uv-grid-item>
-		</uv-grid>
-	</view>
-	<view class="menu snowy-shadow">
-		<uv-row @click="handleToEditInfo">
-			<uv-col span="1">
-				<uv-icon name="account-fill" color="#2979ff" size="20"></uv-icon>
-			</uv-col>
-			<uv-col span="10.5">
-				<view class="menu-left">编辑资料</view>
-			</uv-col>
-			<uv-col span="0.5">
-				<uv-icon name="arrow-right" color="#2979ff" size="15"></uv-icon>
-			</uv-col>
-		</uv-row>
-	</view>
-	<view class="menu snowy-shadow">
-		<uv-row @click="handleToPwd">
-			<uv-col span="1">
-				<uv-icon name="lock-fill" color="#fa3534" size="20"></uv-icon>
-			</uv-col>
-			<uv-col span="10.5">
-				<view class="menu-left">修改密码</view>
-			</uv-col>
-			<uv-col span="0.5">
-				<uv-icon name="arrow-right" color="#2979ff" size="15"></uv-icon>
-			</uv-col>
-		</uv-row>
-	</view>
-	<view class="menu snowy-shadow">
-		<uv-row @click="handleLogout">
-			<uv-col span="1">
-				<uv-icon name="warning-fill" color="#ff9900" size="20"></uv-icon>
-			</uv-col>
-			<uv-col span="10.5">
-				<view class="menu-left">退出登录</view>
-			</uv-col>
-			<uv-col span="0.5">
-				<uv-icon name="arrow-right" color="#2979ff" size="15"></uv-icon>
-			</uv-col>
-		</uv-row>
+	<view class="snowy-page">
+		<view class="header snowy-shadow">
+			<uni-row>
+				<uni-col :span="5">
+					<image class="snowy-flex-vh-center avatar" v-if="userInfo?.avatar" :src="userInfo?.avatar" mode="aspectFit"></image>
+				</uni-col>
+				<uni-col :span="8">
+					<view class="snowy-color-white" style="font-size: 40rpx;">{{userInfo?.name}}</view>
+				</uni-col>
+				<uni-col :span="10" textAlign="right" @tap="handleToInfo">
+					<view class="snowy-flex-end snowy-color-white snowy-main-title">个人信息</view>
+				</uni-col>
+				<uni-col :span="1" @tap="handleToInfo">
+					<view class="snowy-flex-end">
+						<uni-icons type="right" color="white" size="15"></uni-icons>
+					</view>
+				</uni-col>
+			</uni-row>
+		</view>
+		<view class="snowy-shadow snowy-item">
+			<uni-grid :column="4" :showBorder="false">
+				<uni-grid-item @tap="handleToHomeConfig">
+					<view class="snowy-grid-center">
+						<snowy-icon backgroundColor="#2979ff" type="home-filled" size="20" color="#FFFFFF">
+						</snowy-icon>
+						<text style="margin-top: 10rpx">首页设置</text>
+					</view>
+				</uni-grid-item>
+				<uni-grid-item @tap="handleBuilding">
+					<view class="snowy-grid-center">
+						<snowy-icon backgroundColor="#fa3534" type="flag-filled" size="20" color="#FFFFFF">
+						</snowy-icon>
+						<text style="margin-top: 10rpx">建设中</text>
+					</view>
+				</uni-grid-item>
+				<uni-grid-item @tap="handleBuilding">
+					<view class="snowy-grid-center">
+						<snowy-icon backgroundColor="#ff9900" type="flag-filled" size="20" color="#FFFFFF">
+						</snowy-icon>
+						<text style="margin-top: 10rpx">建设中</text>
+					</view>
+				</uni-grid-item>
+				<uni-grid-item @tap="handleBuilding">
+					<view class="snowy-grid-center">
+						<snowy-icon backgroundColor="#19be6b" type="flag-filled" size="20" color="#FFFFFF">
+						</snowy-icon>
+						<text style="margin-top: 10rpx">建设中</text>
+					</view>
+				</uni-grid-item>
+			</uni-grid>
+		</view>
+		<view class="snowy-shadow snowy-item snowy-padding">
+			<uni-row @tap="handleToEditInfo">
+				<uni-col :span="2">
+					<uni-icons type="person-filled" color="#2979ff" size="20"></uni-icons>
+				</uni-col>
+				<uni-col :span="21">
+					<view class="snowy-main-title">编辑资料</view>
+				</uni-col>
+				<uni-col :span="1">
+					<uni-icons type="right" color="#2979ff" size="20"></uni-icons>
+				</uni-col>
+			</uni-row>
+		</view>
+		<view class="snowy-shadow snowy-item snowy-padding">
+			<uni-row @tap="handleToPwd">
+				<uni-col :span="2">
+					<uni-icons type="locked-filled" color="#fa3534" size="20"></uni-icons>
+				</uni-col>
+				<uni-col :span="21">
+					<view class="snowy-main-title">修改密码</view>
+				</uni-col>
+				<uni-col :span="1">
+					<uni-icons type="right" color="#2979ff" size="20"></uni-icons>
+				</uni-col>
+			</uni-row>
+		</view>
+		<view class="snowy-shadow snowy-item snowy-padding">
+			<uni-row @tap="handleLogout">
+				<uni-col :span="2">
+					<uni-icons type="paperplane-filled" color="#ff9900" size="20"></uni-icons>
+				</uni-col>
+				<uni-col :span="21">
+					<view class="snowy-main-title">退出登录</view>
+				</uni-col>
+				<uni-col :span="1">
+					<uni-icons type="right" color="#2979ff" size="20"></uni-icons>
+				</uni-col>
+			</uni-row>
+		</view>
 	</view>
 </template>
 <script setup>
@@ -110,6 +118,11 @@
 			url: '/pages/mine/home-config/index'
 		})
 	}
+	const handleBuilding = () => {
+		uni.showToast({
+			title: '模块建设中'
+		})
+	}
 	const handleLogout = () => {
 		uni.$snowy.modal.confirm('确定注销并退出系统吗？').then(() => {
 			// 退出
@@ -120,75 +133,27 @@
 	}
 </script>
 <style lang="scss" scoped>
+	@import '@/static/scss/index.scss';
+
+	::v-deep .uni-row {
+		@extend .snowy-flex-v-center;
+	}
+
 	@mixin circular {
-		width: 120upx;
-		height: 120upx;
+		width: 120rpx;
+		height: 120rpx;
 		border-radius: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background-color: #ffffff;
+	// 	background-color: #ffffff;
 	}
 
 	.header {
-		background: #5677fc;
+		background: $snowy-primary;
 		margin-bottom: 15rpx;
 		padding: 90rpx 25rpx;
-		border-radius: 15rpx;
 
 		.avatar {
 			@include circular;
-			border: 4upx solid #eaeaea;
-		}
-
-		.header-left {
-			color: white;
-			font-size: 40upx;
-			line-height: 40upx;
-		}
-
-		.header-right {
-			color: white;
-			font-size: 28rpx;
-		}
-	}
-
-	.grid {
-		background: white;
-		margin-bottom: 15rpx;
-		padding: 10rpx 10rpx;
-		border-radius: 15rpx;
-	}
-
-	.menu {
-		background: #ffffff;
-		margin-bottom: 15rpx;
-		padding: 25rpx;
-		border-radius: 15rpx;
-
-		.menu-left {
-			font-size: 30rpx;
-		}
-
-		.menu-right {
-			font-size: 28rpx;
-		}
-	}
-
-	.grid-item-box {
-		flex: 1;
-		/* #ifndef APP-NVUE */
-		display: flex;
-		/* #endif */
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		padding: 15px 0;
-
-		.text {
-			text-align: center;
-			font-size: 26rpx;
-			margin-top: 15rpx;
+			border: 4rpx solid #eaeaea;
 		}
 	}
 </style>
