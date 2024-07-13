@@ -4,6 +4,8 @@ const hasTokenBackUrl = "/pages/home/index"
 export default {
 	// 服务平台类型（SNOWY或SNOWY_CLOUD）
 	SERVER_TYPE: 'SNOWY',
+	// 是否是企业版
+	IS_ENTTERPRISE: false,
 	// 请求超时
 	TIMEOUT: 10000,
 	TOKEN_NAME: 'token',

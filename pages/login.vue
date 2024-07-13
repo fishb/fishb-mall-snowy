@@ -79,7 +79,9 @@
 			curTenanIndex.value = indexOfRes
 		}
 	}
-	getTenSelector()
+	if(config.IS_ENTTERPRISE){
+		getTenSelector()
+	}
 	// 租户切换
 	const tenanChange = (e) => {
 		curTenanIndex.value = e.detail.value;

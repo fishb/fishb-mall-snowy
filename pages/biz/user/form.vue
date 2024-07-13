@@ -120,6 +120,7 @@
 	</view>
 </template>
 <script setup>
+	import config from '@/config'
 	import { nextTick, reactive, ref } from "vue"
 	import bizUserApi from '@/api/biz/biz-user-api'
 	import userCenterApi from '@/api/sys/user-center-api'
@@ -226,9 +227,11 @@
 	const dynamicFormRef = ref()
 	const dynamicFieldConfigList = ref([])
 	const dynamicFormData = ref({})
-	bizUserApi.userDynamicFieldConfigList().then(data => {
-		dynamicFieldConfigList.value = data || []
-	})
+	if (config.IS_ENTTERPRISE) {
+		bizUserApi.userDynamicFieldConfigList().then(data => {
+			dynamicFieldConfigList.value = data || []
+		})
+	}
 	// 加載
 	onLoad(async (option) => {
 		if (!option.id) { return }
