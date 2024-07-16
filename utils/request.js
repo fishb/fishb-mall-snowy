@@ -3,6 +3,7 @@ import { getToken } from '@/utils/auth'
 import { errorCodeMap, reloadCodes } from '@/utils/errorCode'
 import sysConfig from '@/config'
 import { prefixUrl } from "@/utils/api-adaptive"
+import { ref } from 'vue'
 // #ifdef H5
 import { pathAddRedirectUrl } from '@/utils/common'
 import { getH5RouteByUrl } from '@/utils/common'
