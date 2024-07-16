@@ -8,6 +8,7 @@ import { pathAddRedirectUrl } from '@/utils/common'
 import { getH5RouteByUrl } from '@/utils/common'
 // #endif
 const { TIMEOUT, TOKEN_NAME, TOKEN_PREFIX, NO_TOKEN_BACK_URL } = sysConfig
+const requestCount = ref(0)
 const request = config => {
 	// 是否需要设置 token
 	config.header = config.header || {}
@@ -15,6 +16,7 @@ const request = config => {
 		config.header[TOKEN_NAME] = TOKEN_PREFIX + getToken()
 	}
 	return new Promise((resolve, reject) => {
+		requestCount.value++
 		uni.$snowy.modal.loading('努力加载中')
 		uni.request({
 			method: config.method || 'GET',
@@ -64,7 +66,10 @@ const request = config => {
 			uni.$snowy.modal.alert(errMsg)
 			reject(error)
 		}).finally(() => {
-			uni.$snowy.modal.closeLoading()
+			requestCount.value--
+			if(requestCount.value === 0){
+				uni.$snowy.modal.closeLoading()
+			}
 		})
 	})
 }
