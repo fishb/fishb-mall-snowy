@@ -1,18 +1,16 @@
 <template>
     <uni-popup ref="popRef" type="bottom" background-color="transparent" maskBackgroundColor="rgba(0, 0, 0, 0.6)">
-        <view class="container">
-            <tui-list-view unlined="all" background-color="transparent">
-                <tui-list-cell v-if="$snowy.hasPerm('mobile${className}Edit')" :hover="true" :arrow="false" @click="edit" :radius="10" >
-                    <view class="snowy-text-center"> 编辑 </view>
-                </tui-list-cell>
-                <tui-list-cell v-if="$snowy.hasPerm('mobile${className}Delete')" :hover="true" :arrow="false" @click="del" :radius="10" :margin-top="2">
-                    <view class="snowy-text-center"> 刪除 </view>
-                </tui-list-cell>
-                <tui-list-cell :hover="true" :arrow="false" @click="cancel" :margin-top="10" :radius="10">
-                    <view class="snowy-text-center"> 取消 </view>
-                </tui-list-cell>
-            </tui-list-view>
-        </view>
+        <tui-list-view unlined="all" background-color="transparent">
+            <tui-list-cell v-if="$snowy.hasPerm('mobile${className}Edit')" :hover="true" :arrow="false" @click="edit" :radius="10" >
+                <view class="snowy-text-center"> 编辑 </view>
+            </tui-list-cell>
+            <tui-list-cell v-if="$snowy.hasPerm('mobile${className}Delete')" :hover="true" :arrow="false" @click="del" :radius="10" :margin-top="2">
+                <view class="snowy-text-center"> 刪除 </view>
+            </tui-list-cell>
+            <tui-list-cell :hover="true" :arrow="false" @click="cancel" :margin-top="10" :radius="10">
+                <view class="snowy-text-center"> 取消 </view>
+            </tui-list-cell>
+        </tui-list-view>
     </uni-popup>
 </template>
 <script setup name="${classNameFirstLower}More">
