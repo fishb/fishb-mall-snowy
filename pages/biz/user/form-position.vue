@@ -13,7 +13,7 @@
 				</snowy-tree-picker>
 			</uni-forms-item>
 			<uni-forms-item label="职位" name="positionId" required :rules="[{ required: true, errorMessage: '请选择职位' }]">
-				<snowy-sel-picker :autoLoadOptData="isLoadPositionOptData[index]" :optDataRefresherEnabled="isLoadPositionOptData[index]" :map="{key: 'id', label: 'name'}" v-model="item.positionId" @getOptData="(param, callback) =>selectorFunction.position.getOptData(param, callback, index)" placeholder="请选择选择职位" :isPage="true" @getSelData="selectorFunction.position.getSelData">
+				<snowy-sel-picker :ref="`positionIdRef${ index }`" :autoLoadOptData="isLoadPositionOptData[index]" :optDataRefresherEnabled="isLoadPositionOptData[index]" :map="{key: 'id', label: 'name'}" v-model="item.positionId" @getOptData="(param, callback) =>selectorFunction.position.getOptData(param, callback, index)" placeholder="请选择选择职位" :isPage="true" @getSelData="selectorFunction.position.getSelData">
 				</snowy-sel-picker>
 			</uni-forms-item>
 			<uni-forms-item label="主管" name="directorId">
@@ -52,11 +52,12 @@
 				callback({ state: CallbackState.SUCCESS, treeData: data })
 			}),
 			// 组织改变
-			confirm: ({ curSelOrgId, curSelOrg }, index) => {
+			confirm: ({ curSelDataKey, curSelData }, index) => {
 				// 重置职位数据
 				dataList.value[index].positionId = null
-				positionSearchData.value[index].orgId = curSelOrgId
+				positionSearchData.value[index].orgId = curSelDataKey
 				isLoadPositionOptData.value[index] = true
+				proxy.$refs[`positionIdRef${ index }`][0].reloadOptData()
 			},
 		},
 		// 职位

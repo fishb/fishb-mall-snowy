@@ -1,145 +1,145 @@
 <template>
 	<view>
 		<uni-forms-item
-			v-if="formField && formField.type && ['input','textarea','number',].includes(formField.type) && (typeof(formField.options.hidden) === 'boolean' ? !formField.options.hidden : true)"
-			:label="formField.label"
-			:name="formField.name" 
-			:required="formField.required" 
-			:rules="formField.rules">
+			v-if="fieldConfig && fieldConfig.type && ['input','textarea','number',].includes(fieldConfig.type) && (typeof(fieldConfig.options.hidden) === 'boolean' ? !fieldConfig.options.hidden : true)"
+			:label="fieldConfig.label"
+			:name="fieldConfig.name" 
+			:required="fieldConfig.required" 
+			:rules="fieldConfig.rules">
 			<uni-easyinput
-				:disabled="typeof(formFieldDisable) === 'boolean' ? formFieldDisable : typeof(formField.options.disabled) === 'boolean' ? formField.options.disabled : false"
-				:type="formField.type"
-				v-model="formData[formField.name]"
-				:placeholder="formField.options.placeholder" />
+				:disabled="typeof(fieldConfigDisable) === 'boolean' ? fieldConfigDisable : typeof(fieldConfig.options.disabled) === 'boolean' ? fieldConfig.options.disabled : false"
+				:type="fieldConfig.type"
+				v-model="formData[fieldConfig.name]"
+				:placeholder="fieldConfig.options.placeholder" />
 		</uni-forms-item>
 		
 		<uni-forms-item
-			v-if="formField && formField.type && ['radio','checkbox',].includes(formField.type) && (typeof(formField.options.hidden) === 'boolean' ? !formField.options.hidden : true)"
-			:label="formField.label"
-			:name="formField.name" 
-			:required="formField.required" 
-			:rules="formField.rules">
+			v-if="fieldConfig && fieldConfig.type && ['radio','checkbox',].includes(fieldConfig.type) && (typeof(fieldConfig.options.hidden) === 'boolean' ? !fieldConfig.options.hidden : true)"
+			:label="fieldConfig.label"
+			:name="fieldConfig.name" 
+			:required="fieldConfig.required" 
+			:rules="fieldConfig.rules">
 			<uni-data-checkbox
-				:disabled="typeof(formFieldDisable) === 'boolean' ? formFieldDisable : typeof(formField.options.disabled) === 'boolean' ? formField.options.disabled : false"
-				v-model="formData[formField.name]"
-				:multiple="formField.options.isMultiple"
-				:map="formField.options.map"
-				:localdata="formField.options.options" />
+				:disabled="typeof(fieldConfigDisable) === 'boolean' ? fieldConfigDisable : typeof(fieldConfig.options.disabled) === 'boolean' ? fieldConfig.options.disabled : false"
+				v-model="formData[fieldConfig.name]"
+				:multiple="fieldConfig.options.isMultiple"
+				:map="fieldConfig.options.map"
+				:localdata="fieldConfig.options.options" />
 		</uni-forms-item>
 		
 		<uni-forms-item
-			v-if="formField && formField.type && ['select',].includes(formField.type) && (typeof(formField.options.hidden) === 'boolean' ? !formField.options.hidden : true)"
-			:label="formField.label"
-			:name="formField.name" 
-			:required="formField.required" 
-			:rules="formField.rules">
+			v-if="fieldConfig && fieldConfig.type && ['select',].includes(fieldConfig.type) && (typeof(fieldConfig.options.hidden) === 'boolean' ? !fieldConfig.options.hidden : true)"
+			:label="fieldConfig.label"
+			:name="fieldConfig.name" 
+			:required="fieldConfig.required" 
+			:rules="fieldConfig.rules">
 			<snowy-sel-picker
-				:disabled="typeof(formFieldDisable) === 'boolean' ? formFieldDisable : typeof(formField.options.disabled) === 'boolean' ? formField.options.disabled : false"
-				v-model="formData[formField.name]"
-				:isMultiple = "formField.options.isMultiple"
-				:map="formField.options.map"
-				@getOptData="(param, callback) => callback({ state: CallbackState.SUCCESS, data: formField.options.options })" />
+				:disabled="typeof(fieldConfigDisable) === 'boolean' ? fieldConfigDisable : typeof(fieldConfig.options.disabled) === 'boolean' ? fieldConfig.options.disabled : false"
+				v-model="formData[fieldConfig.name]"
+				:isMultiple = "fieldConfig.options.isMultiple"
+				:map="fieldConfig.options.map"
+				@getOptData="(param, callback) => callback({ state: CallbackState.SUCCESS, data: fieldConfig.options.options })" />
 		</uni-forms-item>
 		
 		<uni-forms-item
-			v-if="formField && formField.type && ['date'].includes(formField.type) && (typeof(formField.options.hidden) === 'boolean' ? !formField.options.hidden : true)"
-			:label="formField.label"
-			:name="formField.name" 
-			:required="formField.required" 
-			:rules="formField.rules">
+			v-if="fieldConfig && fieldConfig.type && ['date'].includes(fieldConfig.type) && (typeof(fieldConfig.options.hidden) === 'boolean' ? !fieldConfig.options.hidden : true)"
+			:label="fieldConfig.label"
+			:name="fieldConfig.name" 
+			:required="fieldConfig.required" 
+			:rules="fieldConfig.rules">
 			<uni-datetime-picker
-				:disabled="typeof(formFieldDisable) === 'boolean' ? formFieldDisable : typeof(formField.options.disabled) === 'boolean' ? formField.options.disabled : false"
-				v-model="formData[formField.name]"
-				:type="getDatetimePickerType(formField.options.range, formField.options.showTime)"
-				:placeholder="formField.options.placeholder"
-				:start-placeholder="formField.options.rangePlaceholder?formField.options.rangePlaceholder[0]:null"
-				:end-placeholder="formField.options.rangePlaceholder?formField.options.rangePlaceholder[1]:null"
+				:disabled="typeof(fieldConfigDisable) === 'boolean' ? fieldConfigDisable : typeof(fieldConfig.options.disabled) === 'boolean' ? fieldConfig.options.disabled : false"
+				v-model="formData[fieldConfig.name]"
+				:type="getDatetimePickerType(fieldConfig.options.range, fieldConfig.options.showTime)"
+				:placeholder="fieldConfig.options.placeholder"
+				:start-placeholder="fieldConfig.options.rangePlaceholder?fieldConfig.options.rangePlaceholder[0]:null"
+				:end-placeholder="fieldConfig.options.rangePlaceholder?fieldConfig.options.rangePlaceholder[1]:null"
 				 return-type="string"
-				:clear-icon="formField.options.clearable">
+				:clear-icon="fieldConfig.options.clearable">
 			</uni-datetime-picker>
 		</uni-forms-item>
 		
 		<uni-forms-item
-			v-if="formField && formField.type && ['time',].includes(formField.type) && (typeof(formField.options.hidden) === 'boolean' ? !formField.options.hidden : true)"
-			:label="formField.label"
-			:name="formField.name" 
-			:required="formField.required" 
-			:rules="formField.rules">
+			v-if="fieldConfig && fieldConfig.type && ['time',].includes(fieldConfig.type) && (typeof(fieldConfig.options.hidden) === 'boolean' ? !fieldConfig.options.hidden : true)"
+			:label="fieldConfig.label"
+			:name="fieldConfig.name" 
+			:required="fieldConfig.required" 
+			:rules="fieldConfig.rules">
 			<view style="flex: 1;">
 				<!-- start="09:01" end="21:01" -->
 				<picker 
-					:disabled="typeof(formFieldDisable) === 'boolean' ? formFieldDisable : typeof(formField.options.disabled) === 'boolean' ? formField.options.disabled : false" 
+					:disabled="typeof(fieldConfigDisable) === 'boolean' ? fieldConfigDisable : typeof(fieldConfig.options.disabled) === 'boolean' ? fieldConfig.options.disabled : false" 
 					mode="time"
-					:value="formData[formField.name]" 
-					@change="(e)=>{formData[formField.name] = e.detail.value}">
-					<view class="uni-input input-value-border">{{formData[formField.name]?formData[formField.name]:formField.options.placeholder}}</view>
+					:value="formData[fieldConfig.name]" 
+					@change="(e)=>{formData[fieldConfig.name] = e.detail.value}">
+					<view class="uni-input input-value-border">{{formData[fieldConfig.name]?formData[fieldConfig.name]:fieldConfig.options.placeholder}}</view>
 				</picker>
 			</view>
 		</uni-forms-item>
 		
 		<uni-forms-item
-			v-if="formField && formField.type && ['rate',].includes(formField.type) && (typeof(formField.options.hidden) === 'boolean' ? !formField.options.hidden : true)"
-			:label="formField.label"
-			:name="formField.name" 
-			:required="formField.required" 
-			:rules="formField.rules">
+			v-if="fieldConfig && fieldConfig.type && ['rate',].includes(fieldConfig.type) && (typeof(fieldConfig.options.hidden) === 'boolean' ? !fieldConfig.options.hidden : true)"
+			:label="fieldConfig.label"
+			:name="fieldConfig.name" 
+			:required="fieldConfig.required" 
+			:rules="fieldConfig.rules">
 			<uni-rate
-				:disabled="typeof(formFieldDisable) === 'boolean' ? formFieldDisable : typeof(formField.options.disabled) === 'boolean' ? formField.options.disabled : false"
-				v-model="formData[formField.name]"/>
+				:disabled="typeof(fieldConfigDisable) === 'boolean' ? fieldConfigDisable : typeof(fieldConfig.options.disabled) === 'boolean' ? fieldConfig.options.disabled : false"
+				v-model="formData[fieldConfig.name]"/>
 		</uni-forms-item>
 		
 		<uni-forms-item
-			v-if="formField && formField.type && ['slider',].includes(formField.type) && (typeof(formField.options.hidden) === 'boolean' ? !formField.options.hidden : true)"
-			:label="formField.label"
-			:name="formField.name" 
-			:required="formField.required" 
-			:rules="formField.rules">
+			v-if="fieldConfig && fieldConfig.type && ['slider',].includes(fieldConfig.type) && (typeof(fieldConfig.options.hidden) === 'boolean' ? !fieldConfig.options.hidden : true)"
+			:label="fieldConfig.label"
+			:name="fieldConfig.name" 
+			:required="fieldConfig.required" 
+			:rules="fieldConfig.rules">
 			<slider
-				:disabled="typeof(formFieldDisable) === 'boolean' ? formFieldDisable : typeof(formField.options.disabled) === 'boolean' ? formField.options.disabled : false"
-				:min="formField.options.min"
-				:max="formField.options.max"
-				:value="formData[formField.name]"
-				:step="formField.options.step"
-				@change="(e)=>{formData[formField.name] = e.detail.value}"
+				:disabled="typeof(fieldConfigDisable) === 'boolean' ? fieldConfigDisable : typeof(fieldConfig.options.disabled) === 'boolean' ? fieldConfig.options.disabled : false"
+				:min="fieldConfig.options.min"
+				:max="fieldConfig.options.max"
+				:value="formData[fieldConfig.name]"
+				:step="fieldConfig.options.step"
+				@change="(e)=>{formData[fieldConfig.name] = e.detail.value}"
 				show-value/>
 		</uni-forms-item>
 		
 		<uni-forms-item
-			v-if="formField && formField.type && ['switch',].includes(formField.type) && (typeof(formField.options.hidden) === 'boolean' ? !formField.options.hidden : true)"
-			:label="formField.label"
-			:name="formField.name" 
-			:required="formField.required" 
-			:rules="formField.rules">
+			v-if="fieldConfig && fieldConfig.type && ['switch',].includes(fieldConfig.type) && (typeof(fieldConfig.options.hidden) === 'boolean' ? !fieldConfig.options.hidden : true)"
+			:label="fieldConfig.label"
+			:name="fieldConfig.name" 
+			:required="fieldConfig.required" 
+			:rules="fieldConfig.rules">
 			<switch
-				:disabled="typeof(formFieldDisable) === 'boolean' ? formFieldDisable : typeof(formField.options.disabled) === 'boolean' ? formField.options.disabled : false"
-				:checked = "formData[formField.name]"
-				@change="(e)=>{formData[formField.name] = e.detail.value}" />
+				:disabled="typeof(fieldConfigDisable) === 'boolean' ? fieldConfigDisable : typeof(fieldConfig.options.disabled) === 'boolean' ? fieldConfig.options.disabled : false"
+				:checked = "formData[fieldConfig.name]"
+				@change="(e)=>{formData[fieldConfig.name] = e.detail.value}" />
 		</uni-forms-item>
 		
 		<uni-forms-item
-			v-if="formField && formField.type && ['uploadFile',].includes(formField.type) && (typeof(formField.options.hidden) === 'boolean' ? !formField.options.hidden : true)"
-			:label="formField.label"
-			:name="formField.name" 
-			:required="formField.required" 
-			:rules="formField.rules">
+			v-if="fieldConfig && fieldConfig.type && ['uploadFile',].includes(fieldConfig.type) && (typeof(fieldConfig.options.hidden) === 'boolean' ? !fieldConfig.options.hidden : true)"
+			:label="fieldConfig.label"
+			:name="fieldConfig.name" 
+			:required="fieldConfig.required" 
+			:rules="fieldConfig.rules">
 			<snowy-file-picker-api 
-				:disabled="typeof(formFieldDisable) === 'boolean' ? formFieldDisable : typeof(formField.options.disabled) === 'boolean' ? formField.options.disabled : false" 
+				:disabled="typeof(fieldConfigDisable) === 'boolean' ? fieldConfigDisable : typeof(fieldConfig.options.disabled) === 'boolean' ? fieldConfig.options.disabled : false" 
 				idDataType="objArr"
-				v-model="formData[formField.name]">
+				v-model="formData[fieldConfig.name]">
 			</snowy-file-picker-api>
 		</uni-forms-item>
 		
 		<uni-forms-item
-			v-if="formField && formField.type && ['userSelector',].includes(formField.type) && (typeof(formField.options.hidden) === 'boolean' ? !formField.options.hidden : true)"
-			:label="formField.label"
-			:name="formField.name" 
-			:required="formField.required" 
-			:rules="formField.rules">
+			v-if="fieldConfig && fieldConfig.type && ['userSelector',].includes(fieldConfig.type) && (typeof(fieldConfig.options.hidden) === 'boolean' ? !fieldConfig.options.hidden : true)"
+			:label="fieldConfig.label"
+			:name="fieldConfig.name" 
+			:required="fieldConfig.required" 
+			:rules="fieldConfig.rules">
 			<snowy-user-picker
-				:disabled="typeof(formFieldDisable) === 'boolean' ? formFieldDisable : typeof(formField.options.disabled) === 'boolean' ? formField.options.disabled : false"
-				v-model="formData[formField.name]"
-				:isMultiple = "formField.options.isMultiple"
-				:placeholder="formField.options.placeholder"
+				:disabled="typeof(fieldConfigDisable) === 'boolean' ? fieldConfigDisable : typeof(fieldConfig.options.disabled) === 'boolean' ? fieldConfig.options.disabled : false"
+				v-model="formData[fieldConfig.name]"
+				:isMultiple = "fieldConfig.options.isMultiple"
+				:placeholder="fieldConfig.options.placeholder"
 				:map="{key: 'id', label: 'name'}"
 				@getOptData="selectorFunction.user.getOptData"
 				:isPage="true"
@@ -148,44 +148,44 @@
 		</uni-forms-item>
 		
 		<uni-forms-item
-			v-if="formField && formField.type && ['editor',].includes(formField.type) && (typeof(formField.options.hidden) === 'boolean' ? !formField.options.hidden : true)"
-			:label="formField.label"
-			:name="formField.name" 
-			:required="formField.required" 
-			:rules="formField.rules">
+			v-if="fieldConfig && fieldConfig.type && ['editor',].includes(fieldConfig.type) && (typeof(fieldConfig.options.hidden) === 'boolean' ? !fieldConfig.options.hidden : true)"
+			:label="fieldConfig.label"
+			:name="fieldConfig.name" 
+			:required="fieldConfig.required" 
+			:rules="fieldConfig.rules">
 			<editor 
-				:placeholder="formField.options.placeholder"></editor>
+				:placeholder="fieldConfig.options.placeholder"></editor>
 		</uni-forms-item>
 		
 		<uni-forms-item
-			v-if="formField && formField.type && ['batch',].includes(formField.type) && (typeof(formField.options.hidden) === 'boolean' ? !formField.options.hidden : true)"
-			:label="formField.label"
-			:name="formField.name" 
-			:required="formField.required" 
+			v-if="fieldConfig && fieldConfig.type && ['batch',].includes(fieldConfig.type) && (typeof(fieldConfig.options.hidden) === 'boolean' ? !fieldConfig.options.hidden : true)"
+			:label="fieldConfig.label"
+			:name="fieldConfig.name" 
+			:required="fieldConfig.required" 
 			>
 			
-			<view v-for="(item, index) in formData[formField.name]" :key="`v-${ index }`" :index="`v-${ index }`">
-				<button class="uni-btn" type="warn" :plain="true" v-if ="typeof(formField.options.disabled) === 'boolean' ? !formField.options.disabled : true" @click="()=>{formData[formField.name].splice(index, 1);}">
-					删除{{ formField.label }}
+			<view v-for="(item, index) in formData[fieldConfig.name]" :key="`v-${ index }`" :index="`v-${ index }`">
+				<button class="uni-btn" type="warn" :plain="true" v-if ="typeof(fieldConfig.options.disabled) === 'boolean' ? !fieldConfig.options.disabled : true" @click="()=>{formData[fieldConfig.name].splice(index, 1);}">
+					删除{{ fieldConfig.label }}
 				</button>
-				<uni-forms :ref="`batch-form-ref-${ formField.name }-${ index }`" :model="item" label-position="top" labelWidth="auto" validate-trigger="submit">
+				<uni-forms :ref="`batch-form-ref-${ fieldConfig.name }-${ index }`" :model="item" label-position="top" labelWidth="auto" validate-trigger="submit">
 					<!-- #ifndef MP-WEIXIN -->
-					<snowy-form-item v-for="(fItem, fIndex) in formField.list" :key="`sfi-${ fIndex }`" :index="`sfi-${ fIndex }`" :formField="fItem" :formData="item" :formFieldDisable="typeof(formField.options.disabled) === 'boolean' ? formField.options.disabled : false" :useDefault="useDefault"/>
+					<snowy-form-item v-for="(fItem, fIndex) in fieldConfig.list" :key="`sfi-${ fIndex }`" :index="`sfi-${ fIndex }`" :fieldConfig="fItem" :formData="item" :fieldConfigDisable="typeof(fieldConfig.options.disabled) === 'boolean' ? fieldConfig.options.disabled : false" :useDefault="useDefault"/>
 					<!-- #endif -->
 					<!-- #ifdef MP-WEIXIN -->
 					<!-- 适配小程序 -->
-					<batch-form-item v-for="(fItem, fIndex) in formField.list" :key="`sfi-${ fIndex }`" :index="`sfi-${ fIndex }`" :batchFormField="fItem" :batchFormData="item" :formFieldDisable="typeof(formField.options.disabled) === 'boolean' ? formField.options.disabled : false" :useDefault="useDefault"></batch-form-item>
+					<batch-form-item v-for="(fItem, fIndex) in fieldConfig.list" :key="`sfi-${ fIndex }`" :index="`sfi-${ fIndex }`" :batchfieldConfig="fItem" :batchFormData="item" :fieldConfigDisable="typeof(fieldConfig.options.disabled) === 'boolean' ? fieldConfig.options.disabled : false" :useDefault="useDefault"></batch-form-item>
 					<!-- #endif -->	
 				</uni-forms>
 			</view>
-			<button class="uni-btn" type="primary" :disabled ="typeof(formField.options.disabled) === 'boolean' ? formField.options.disabled : false" @click="()=>{
-				if(!formData[formField.name]){
-					formData[formField.name] = []
+			<button class="uni-btn" type="primary" :disabled ="typeof(fieldConfig.options.disabled) === 'boolean' ? fieldConfig.options.disabled : false" @click="()=>{
+				if(!formData[fieldConfig.name]){
+					formData[fieldConfig.name] = []
 				}
-				formData[formField.name].push({})
-				// formData[formField.name].unshift({})
+				formData[fieldConfig.name].push({})
+				// formData[fieldConfig.name].unshift({})
 			}">
-				增加{{ formField.label }}
+				增加{{ fieldConfig.label }}
 			</button>
 		</uni-forms-item>
 	</view>
@@ -204,11 +204,11 @@
 	
 	const { proxy } = getCurrentInstance()
 	const props = defineProps({
-		formField: {
+		fieldConfig: {
 			type: Object,
 			required: true
 		},
-		formFieldDisable:{
+		fieldConfigDisable:{
 			type: Boolean,
 			default: null,
 			required:false
@@ -227,30 +227,30 @@
 	
 	if(props.useDefault){
 		// 默认值处理
-		if(['input','textarea','number',].includes(props.formField.type)){
-			props.formData[props.formField.name] = props.formField.options.defaultValue
-		}else if(['radio','checkbox',].includes(props.formField.type)){
-			props.formData[props.formField.name] = props.formField.options.defaultValue
-		}else if(['select',].includes(props.formField.type)){
-			if(props.formField.options.isMultiple){
-				props.formData[props.formField.name] = [props.formField.options.defaultValue]
+		if(['input','textarea','number',].includes(props.fieldConfig.type)){
+			props.formData[props.fieldConfig.name] = props.fieldConfig.options.defaultValue
+		}else if(['radio','checkbox',].includes(props.fieldConfig.type)){
+			props.formData[props.fieldConfig.name] = props.fieldConfig.options.defaultValue
+		}else if(['select',].includes(props.fieldConfig.type)){
+			if(props.fieldConfig.options.isMultiple){
+				props.formData[props.fieldConfig.name] = [props.fieldConfig.options.defaultValue]
 			}else{
-				props.formData[props.formField.name] = props.formField.options.defaultValue
+				props.formData[props.fieldConfig.name] = props.fieldConfig.options.defaultValue
 			}
-		}else if(['date',].includes(props.formField.type)){
-			if(props.formField.options.range){
-				props.formData[props.formField.name] = props.formField.options.rangeDefaultValue
+		}else if(['date',].includes(props.fieldConfig.type)){
+			if(props.fieldConfig.options.range){
+				props.formData[props.fieldConfig.name] = props.fieldConfig.options.rangeDefaultValue
 			}else{
-				props.formData[props.formField.name] = props.formField.options.defaultValue
+				props.formData[props.fieldConfig.name] = props.fieldConfig.options.defaultValue
 			}
-		}else if(['time',].includes(props.formField.type)){
-			props.formData[props.formField.name] = props.formField.options.defaultValue
-		}else if(['rate',].includes(props.formField.type)){
-			props.formData[props.formField.name] = props.formField.options.defaultValue
-		}else if(['slider',].includes(props.formField.type)){
-			props.formData[props.formField.name] = props.formField.options.defaultValue
-		}else if(['switch',].includes(props.formField.type)){
-			props.formData[props.formField.name] = props.formField.options.defaultValue
+		}else if(['time',].includes(props.fieldConfig.type)){
+			props.formData[props.fieldConfig.name] = props.fieldConfig.options.defaultValue
+		}else if(['rate',].includes(props.fieldConfig.type)){
+			props.formData[props.fieldConfig.name] = props.fieldConfig.options.defaultValue
+		}else if(['slider',].includes(props.fieldConfig.type)){
+			props.formData[props.fieldConfig.name] = props.fieldConfig.options.defaultValue
+		}else if(['switch',].includes(props.fieldConfig.type)){
+			props.formData[props.fieldConfig.name] = props.fieldConfig.options.defaultValue
 		}
 	}
 	
@@ -283,14 +283,14 @@
 			},
 			getSelData: async (curSelDataKey, callback) => {
 				if (uni.$snowy.tool.isNotEmpty(curSelDataKey)) {
-					if(!props.formField.options.isMultiple){
+					if(!props.fieldConfig.options.isMultiple){
 						const data = await userCenterApi.userCenterGetUserListByIdList({
 							idList: [curSelDataKey]
 						})
 						callback({ state: CallbackState.SUCCESS, data: data[0] })
 						return
 					}
-					if(!!props.formField.options.isMultiple){
+					if(!!props.fieldConfig.options.isMultiple){
 						const data = await userCenterApi.userCenterGetUserListByIdList({
 							idList: curSelDataKey
 						})
@@ -305,12 +305,12 @@
 	
 	// 表单校验
 	const formListValidate = () => {
-		if(props.formField.type === 'batch'){
+		if(props.fieldConfig.type === 'batch'){
 			const promiseList = []
-			if(props.formData[props.formField.name]){
-				props.formData[props.formField.name].forEach((item, index)=>{
+			if(props.formData[props.fieldConfig.name]){
+				props.formData[props.fieldConfig.name].forEach((item, index)=>{
 					promiseList.push(new Promise((resolve, reject) => {
-						proxy.$refs[`batch-form-ref-${ props.formField.name }-${ index }`][0].validate().then(result => {
+						proxy.$refs[`batch-form-ref-${ props.fieldConfig.name }-${ index }`][0].validate().then(result => {
 							resolve(result)
 						}).catch(err => {
 							reject(err)

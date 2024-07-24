@@ -1,10 +1,17 @@
 <template>
 	<uni-forms ref="dyFormRef" :model="formData" label-position="top" labelWidth="auto" validate-trigger="submit">
-		<snowy-form-item v-for="(formField, formFieldIndex) in formFields" :ref="`form-item-ref-${ formFieldIndex }`" :key="`form-item-key${formFieldIndex}`" :index="`form-item-key${formFieldIndex}`" :formField="formField" :formData="formData" :useDefault="useDefault" />
+		<snowy-form-item 
+			v-for="(fieldConfig, fieldConfigIndex) in fieldConfigs"
+			:ref="`form-item-ref-${fieldConfigIndex}`"
+			:key="`form-item-key-${fieldConfigIndex}`"
+			:fieldConfig="fieldConfig"
+			:formData="formData"
+			:useDefault="useDefault" />
 	</uni-forms>
 </template>
 <script setup>
 	import { nextTick, reactive, ref, watch, getCurrentInstance } from "vue"
+	const emits = defineEmits(['update:formData'])
 	const { proxy } = getCurrentInstance()
 	const props = defineProps({
 		formData: {
@@ -12,7 +19,7 @@
 			default: {},
 			required: false
 		},
-		formFields: {
+		fieldConfigs: {
 			type: Array,
 			default: [],
 			required: true
@@ -23,10 +30,29 @@
 			required: false
 		}
 	})
+	// 动态表单ref
 	const dyFormRef = ref()
+	// 表单的规则
+	const localFormRules = ref({})
+	// 表单数据
+	const localFormData = ref({})
+	// 双向数据绑定
+	watch(() => props.formData, () => {
+		localFormData.value = props.formData || {}
+	}, {
+		deep: true,
+		immediate: false
+	})
+	watch(() => localFormData, () => {
+		emits('update:formData', localFormData.value)
+	}, {
+		deep: true,
+		immediate: false
+	})
+	// 表单数据提取
 	const formListEmitAndValidate = () => {
 		const promiseList = []
-		props.formFields.forEach((item, index) => {
+		props.fieldConfigs.forEach((item, index) => {
 			if (item.type === 'batch') {
 				promiseList.push(new Promise((resolve, reject) => {
 					// 验证多个batch字段

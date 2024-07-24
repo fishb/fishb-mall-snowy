@@ -36,7 +36,7 @@
 						</snowy-tree-picker>
 					</uni-forms-item>
 					<uni-forms-item label="选择职位" name="positionId" required :rules="[{ required: true, errorMessage: '请选择职位' }]">
-						<snowy-sel-picker :autoLoadOptData="isLoadPositionOptData" :optDataRefresherEnabled="isLoadPositionOptData" :map="{key: 'id', label: 'name'}" v-model="formData.positionId" @getOptData="selectorFunction.position.getOptData" placeholder="请选择选择职位" :isPage="true" @getSelData="selectorFunction.position.getSelData"></snowy-sel-picker>
+						<snowy-sel-picker ref="positionIdRef" :autoLoadOptData="isLoadPositionOptData" :optDataRefresherEnabled="isLoadPositionOptData" :map="{key: 'id', label: 'name'}" v-model="formData.positionId" @getOptData="selectorFunction.position.getOptData" placeholder="请选择选择职位" :isPage="true" @getSelData="selectorFunction.position.getSelData"></snowy-sel-picker>
 					</uni-forms-item>
 					<uni-forms-item label="选择主管" name="directorId">
 						<snowy-user-picker v-model="formData.directorId" placeholder="请选择主管" :map="{key: 'id', label: 'name'}" @getOptData="selectorFunction.user.getOptData" :isPage="true" @getSelData="selectorFunction.user.getSelData">
@@ -156,6 +156,7 @@
 	const genderOptions = uni.$snowy.tool.dictList('GENDER')
 	// 职位参数
 	const isLoadPositionOptData = ref(false)
+	const positionIdRef = ref()
 	const positionSearchData = ref({})
 	// 职位
 	const positionJsonRef = ref()
@@ -167,10 +168,11 @@
 				const data = await bizUserApi.userOrgTreeSelector(param)
 				callback({ state: CallbackState.SUCCESS, treeData: data })
 			},
-			confirm: ({ curSelOrgId, curSelOrg }) => {
+			confirm: ({ curSelDataKey, curSelData }) => {
 				formData.value.positionId = null
-				positionSearchData.value.orgId = curSelOrgId
+				positionSearchData.value.orgId = curSelDataKey
 				isLoadPositionOptData.value = true
+				positionIdRef.value.reloadOptData()
 			},
 		},
 		// 职位

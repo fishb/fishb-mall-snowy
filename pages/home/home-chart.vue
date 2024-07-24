@@ -1,8 +1,10 @@
 <template>
 	<view>
 		<uni-section :title="`图表（示例）`" type="square"></uni-section>
+		<!-- #ifndef MP-WEIXIN -->
 		<qiun-data-charts type="column" :opts="opts" :chartData="chartData" />
 		<qiun-data-charts type="line" :opts="opts" :chartData="chartData" />
+		<!-- #endif -->
 	</view>
 </template>
 <script setup>
