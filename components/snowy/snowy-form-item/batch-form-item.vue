@@ -1,11 +1,11 @@
 <template>
-	<snowy-form-item :formField="batchFormField" :formData="batchFormData" :formFieldDisable="formFieldDisable" :useDefault="useDefault" />
+	<snowy-form-item :fieldConfig="batchFieldConfig" :formData="batchFormData" :fieldConfigDisable="fieldConfigDisable" :useDefault="useDefault" />
 </template>
 <script setup>
 	import { nextTick, reactive, ref, watch, getCurrentInstance } from "vue"
 	const { proxy } = getCurrentInstance()
 	const props = defineProps({
-		batchFormField: {
+		batchFieldConfig: {
 			type: Object,
 			required: true
 		},
@@ -13,7 +13,7 @@
 			type: Object,
 			required: true
 		},
-		formFieldDisable: {
+		fieldConfigDisable: {
 			type: Boolean,
 			default: null,
 			required: false

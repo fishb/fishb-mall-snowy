@@ -35,17 +35,6 @@
             <% } %>
             <% } %>
         </uni-forms>
-        <% if (dfcWhether == 'Y') { %>
-        <uni-forms ref="dynamicFormRef" :model="dynamicFormData" label-position="top" labelWidth="auto">
-            <snowy-dyna-field
-                v-for="(item, index) in dynamicFieldConfigList"
-                :key="index"
-                :index="index"
-                :fieldConfig="item"
-                :formData="dynamicFormData"
-            />
-        </uni-forms>
-        <% } %>
         <tui-button margin="50rpx 0" :preventClick="true" :shadow="true" @click="submit">提交</tui-button>
     </view>
 </template>
@@ -64,7 +53,7 @@
     import { onLoad } from "@dcloudio/uni-app"
     import ${classNameFirstLower}Api from '@/api/${moduleName}/${classNameLowerKebab}-api'
     import { reactive, ref, getCurrentInstance } from "vue"
-	import CallbackState from "@/enum/callback-state"
+    import CallbackState from "@/enum/callback-state"
 
     const { proxy } = getCurrentInstance()
     const formRef = ref()
@@ -83,14 +72,6 @@
 	<% } %>
     <% } %>
     <% } %>
-    <% if (dfcWhether == 'Y') { %>
-    const dynamicFormRef = ref()
-    const dynamicFieldConfigList = ref([])
-    const dynamicFormData = ref({})
-    ${classNameFirstLower}Api.${classNameFirstLower}DynamicFieldConfigList({ columnName: 'EXT_JSON' }).then(data => {
-        dynamicFieldConfigList.value = data || []
-    })
-    <% } %>
     onLoad((option) => {
         <% for(var i = 0; i < configList.~size; i++) { %>
         <% if(!configList[i].needTableId) { %>
@@ -106,13 +87,9 @@
             id: option.id
         }).then(data => {
             formData.value = data
-            <% if (dfcWhether == 'Y') { %>
-            dynamicFormData.value = JSON.parse(formData.value.extJson) || {}
-            <% } %>
         })
     })
     const submit = () => {
-        <% if (dfcWhether == 'N') { %>
         formRef.value.validate().then(res => {
             ${classNameFirstLower}Api.${classNameFirstLower}SubmitForm(formData.value, !formData.value.id).then(data => {
                 uni.$emit('formBack', {
@@ -123,39 +100,6 @@
                 })
             })
         })
-        <% } %>
-        <% if (dfcWhether == 'Y') { %>
-        const promiseList = []
-        promiseList.push(
-            new Promise((resolve, reject) => {
-                formRef.value.validate().then((result) => {
-                    resolve(result)
-                }).catch((err) => {
-                    reject(err)
-                })
-            })
-        )
-        promiseList.push(
-            new Promise((resolve, reject) => {
-                dynamicFormRef.value.validate().then((result) => {
-                    resolve(result)
-                }).catch((err) => {
-                    reject(err)
-                })
-            })
-        )
-        Promise.all(promiseList).then(() => {
-            formData.value.extJson = JSON.stringify(dynamicFormData.value)
-            ${classNameFirstLower}Api.${classNameFirstLower}SubmitForm(formData.value, !formData.value.id).then(data => {
-                uni.$emit('formBack', {
-                    data: data
-                })
-                uni.navigateBack({
-                    delta: 1
-                })
-            })
-        })
-        <% } %>
     }
 </script>
 <style lang="scss" scoped>
