@@ -1,6 +1,6 @@
 <template>
 	<view class="snowy-form">
-		<uni-forms ref="formRef" :model="formData" label-position="top" labelWidth="auto">
+		<uni-forms ref="formRef" :model="formData" label-position="top" label-width="auto" label-align="left">
 			<uni-forms-item label="所属机构" name="orgId" required :rules="[{ required: true, errorMessage: '请选择所属机构' }]">
 				<snowy-tree-picker v-model="formData.orgId" placeholder="请选择所属机构" @getTreeOptData="getOrgTreeOpt" :map="{key: 'id', parentKey: 'parentId', children: 'children', label: 'name'}">
 				</snowy-tree-picker>
@@ -15,7 +15,7 @@
 				<uni-number-box v-model="formData.sortCode" background="#2979FF" color="#fff" :step="1" :max="100"></uni-number-box>
 			</uni-forms-item>
 		</uni-forms>
-		<uni-forms ref="dynamicFormRef" :model="dynamicFormData" label-position="top" labelWidth="auto">
+		<uni-forms ref="dynamicFormRef" :model="dynamicFormData" label-position="top" label-width="auto" label-align="left">
 			<snowy-dyna-field v-for="(item, index) in dynamicFieldConfigList" :key="index" :index="index" :fieldConfig="item" :formData="dynamicFormData" />
 		</uni-forms>
 		<tui-button margin="50rpx 0" :preventClick="true" :shadow="true" @click="submit">提交</tui-button>

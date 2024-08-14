@@ -51,7 +51,7 @@
 	import more from '@/pages/biz/user/more.vue'
 	import bizOrgApi from '@/api/biz/biz-org-api'
 	import bizUserApi from '@/api/biz/biz-user-api'
-	import { ref } from "vue"
+	import { ref, nextTick } from "vue"
 	import { onLoad, onShow, onReady, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app"
 	// 新增悬浮按钮
 	const add = () => {
@@ -103,14 +103,16 @@
 	}
 	// 展示
 	onShow(() => {
-		uni.$once('formBack', (data) => {
-			dataPagingRef.value.reload()
+		nextTick(() => {
+			uni.$once('formBack', (data) => {
+				dataPagingRef.value.reload()
+			})
 		})
 	})
 </script>
 <style lang="scss" scoped>
 	@import '@/static/scss/index.scss';
-	
+
 	::v-deep .uni-row {
 		@extend .snowy-flex-v-center;
 	}
