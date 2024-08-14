@@ -8,7 +8,7 @@
 				}"></tui-tabs>
 		</view>
 		<view class="snowy-form">
-			<uni-forms ref="formRef" :model="formData" label-position="top" :rules="rules" validate-trigger="blur" labelWidth="auto">
+			<uni-forms ref="formRef" :model="formData" label-position="top" :rules="rules" validate-trigger="blur" label-width="auto" label-align="left">
 				<view v-show="curView === 0">
 					<uni-forms-item label="账号" name="account" required :rules="[{ required: true, errorMessage: '请输入账号' }]">
 						<uni-easyinput v-model="formData.account" placeholder="请输入账号"></uni-easyinput>
@@ -36,7 +36,7 @@
 						</snowy-tree-picker>
 					</uni-forms-item>
 					<uni-forms-item label="选择职位" name="positionId" required :rules="[{ required: true, errorMessage: '请选择职位' }]">
-						<snowy-sel-picker ref="positionIdRef" :autoLoadOptData="isLoadPositionOptData" :optDataRefresherEnabled="isLoadPositionOptData" :map="{key: 'id', label: 'name'}" v-model="formData.positionId" @getOptData="selectorFunction.position.getOptData" placeholder="请选择选择职位" :isPage="true" @getSelData="selectorFunction.position.getSelData"></snowy-sel-picker>
+						<snowy-sel-picker :autoLoadOptData="isLoadPositionOptData" :optDataRefresherEnabled="isLoadPositionOptData" :map="{key: 'id', label: 'name'}" v-model="formData.positionId" @getOptData="selectorFunction.position.getOptData" placeholder="请选择选择职位" :isPage="true" @getSelData="selectorFunction.position.getSelData"></snowy-sel-picker>
 					</uni-forms-item>
 					<uni-forms-item label="选择主管" name="directorId">
 						<snowy-user-picker v-model="formData.directorId" placeholder="请选择主管" :map="{key: 'id', label: 'name'}" @getOptData="selectorFunction.user.getOptData" :isPage="true" @getSelData="selectorFunction.user.getSelData">
@@ -110,7 +110,7 @@
 						<uni-easyinput type="textarea" v-model="formData.emergencyAddress" placeholder="请输入紧急联系人地址">
 						</uni-easyinput>
 					</uni-forms-item>
-					<uni-forms ref="dynamicFormRef" :model="dynamicFormData" label-position="top" labelWidth="auto">
+					<uni-forms ref="dynamicFormRef" :model="dynamicFormData" label-position="top" label-width="auto" label-align="left">
 						<snowy-dyna-field v-for="(item, index) in dynamicFieldConfigList" :key="index" :index="index" :fieldConfig="item" :formData="dynamicFormData" />
 					</uni-forms>
 				</view>
@@ -156,7 +156,6 @@
 	const genderOptions = uni.$snowy.tool.dictList('GENDER')
 	// 职位参数
 	const isLoadPositionOptData = ref(false)
-	const positionIdRef = ref()
 	const positionSearchData = ref({})
 	// 职位
 	const positionJsonRef = ref()
@@ -172,7 +171,6 @@
 				formData.value.positionId = null
 				positionSearchData.value.orgId = curSelDataKey
 				isLoadPositionOptData.value = true
-				positionIdRef.value.reloadOptData()
 			},
 		},
 		// 职位

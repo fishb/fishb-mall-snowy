@@ -154,7 +154,7 @@
 				if (uni.$snowy.tool.isEmpty(curSelDataKey.value)) {
 					return
 				}
-				const findSelData = uni.$xeu.findTree(treeData || [], item => {
+				const findSelData = uni.$xeu.findTree(allClickSelData.value || [], item => {
 					return curSelDataKey.value === item[props.map.key]
 				})
 				if (uni.$snowy.tool.isEmpty(findSelData?.item)) {
@@ -183,7 +183,7 @@
 				}
 				for (let item of curSelDataKey.value) {
 					// 返回数据为空
-					if (uni.$snowy.tool.isEmpty(treeData)) {
+					if (uni.$snowy.tool.isEmpty(allClickSelData.value)) {
 						// 无法找到已选中数据
 						let notFindSelDataItem = {
 							[props.map.key]: item,
@@ -198,7 +198,7 @@
 						curSelData.value.push(notFindSelDataItem)
 						continue;
 					}
-					const findSelDataItem = uni.$xeu.findTree(treeData || [], i => {
+					const findSelDataItem = uni.$xeu.findTree(allClickSelData.value || [], i => {
 						return item == i[props.map.key]
 					})
 					// 返回数据不为空，但找不到数据

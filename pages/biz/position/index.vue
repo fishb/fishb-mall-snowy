@@ -111,8 +111,8 @@
 	}
 	// 展示
 	onShow(() => {
-		uni.$once('formBack', (data) => {
-			nextTick(() => {
+		nextTick(() => {
+			uni.$once('formBack', (data) => {
 				dataPagingRef.value.reload()
 			})
 		})
