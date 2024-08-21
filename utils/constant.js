@@ -8,5 +8,8 @@ const constant = {
 	userMenus: 'userMenus',
 	userMobileMenus: 'userMobileMenus',
 	dictTypeTreeData: 'dictTypeTreeData',
+	refreshKey: 'refreshKey',
+	refreshFlag: 'refreshFlag',
+	refreshParam: 'refreshParam',
 }
 export default constant

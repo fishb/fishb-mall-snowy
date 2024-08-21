@@ -9,5 +9,8 @@ const getters = {
 	userInfo: state => state.global.userInfo,
 	sysBaseConfig: state => state.global.sysBaseConfig,
 	dictTypeTreeData: state => state.global.dictTypeTreeData,
+	refreshKey: state => state.global.refreshKey,
+	refreshFlag: state => state.global.refreshFlag,
+	refreshParam: state => state.global.refreshParam,
 }
 export default getters

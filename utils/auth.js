@@ -22,14 +22,10 @@ export function checkPermission(path) {
 		} else {
 			uni.$snowy.modal.alert("页面【" + path + "】需要进行登录，才能进行访问！")
 			// #ifdef H5
-			uni.reLaunch({
-				url: pathAddRedirectUrl(config.NO_TOKEN_BACK_URL, path)
-			})
+			uni.$snowy.tab.reLaunch(pathAddRedirectUrl(config.NO_TOKEN_BACK_URL, path))
 			// #endif
 			// #ifndef H5
-			uni.reLaunch({
-				url: config.NO_TOKEN_BACK_URL
-			})
+			uni.$snowy.tab.reLaunch(config.NO_TOKEN_BACK_URL)
 			// #endif
 			return false
 		}
@@ -56,11 +52,9 @@ export function checkPermission(path) {
 			if (isVisit) {
 				return true
 			} else {
-				modal.alert("页面【" + path + "】需要进行授权，才能进行访问！")
+				uni.$snowy.modal.alert("页面【" + path + "】需要进行授权，才能进行访问！")
 				// 无权访问
-				uni.reLaunch({
-					url: config.HAS_TOKEN_BACK_URL
-				})
+				uni.$snowy.tab.reLaunch(config.HAS_TOKEN_BACK_URL)
 				return false
 			}
 		}

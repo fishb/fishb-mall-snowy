@@ -47,4 +47,24 @@ tool.isNotEmpty = (value) => {
 tool.isEmpty = (value) => {
 	return !tool.isNotEmpty(value)
 }
+// 设置刷新
+tool.setRefresh = (param = null, key = "page", flag = true) => {
+	store.commit('SET_refreshKey', key)
+	store.commit('SET_refreshFlag', flag)
+	store.commit('SET_refreshParam', param)
+}
+// 刷新回调
+tool.refresh = (callback, key = "page", isReset = true) => {
+	if (store.getters.refreshFlag && callback) {
+		if (key === store.getters.refreshKey) {
+			callback({
+				key: store.getters.refreshKey,
+				param: store.getters.refreshParam
+			})
+			if (isReset) {
+				tool.setRefresh("page", false, null)
+			}
+		}
+	}
+}
 export default tool

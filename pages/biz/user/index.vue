@@ -103,10 +103,8 @@
 	}
 	// 展示
 	onShow(() => {
-		nextTick(() => {
-			uni.$once('formBack', (data) => {
-				dataPagingRef.value.reload()
-			})
+		uni.$snowy.tool.refresh(() => {
+			dataPagingRef.value.reload()
 		})
 	})
 </script>

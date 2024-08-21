@@ -9,7 +9,7 @@
 				<template v-slot:content>
 					<uni-row>
 						<uni-col :span="4">
-							<view v-show="'COMPANY' === item?.category" >
+							<view v-show="'COMPANY' === item?.category">
 								<image style="width: 80rpx; height: 80rpx;" src="/static/svg/org/company.svg" mode="widthFix"></image>
 							</view>
 							<view v-show="'DEPT' === item?.category">
@@ -34,7 +34,7 @@
 </template>
 <script setup>
 	import bizOrgApi from '@/api/biz/biz-org-api'
-	import { reactive, ref, getCurrentInstance, nextTick } from "vue";
+	import { reactive, ref, getCurrentInstance, nextTick, computed } from "vue";
 	import { onLoad, onShow, onReady, onPullDownRefresh } from "@dcloudio/uni-app"
 	// 所有选择的机构
 	const allSelOrg = ref([])
@@ -42,12 +42,6 @@
 	const curSelOrg = ref([])
 	// 加载标识
 	const isLoading = ref(false)
-	// 展示
-	onShow(() => {
-		uni.$once('formBack', (data) => {
-			loadData()
-		})
-	})
 	const loadData = async () => {
 		isLoading.value = true
 		const data = await bizOrgApi.orgTree()
@@ -60,7 +54,13 @@
 		isLoading.value = false
 	}
 	loadData()
-	const clickOrgCru = ({item, index}) => {
+	// 展示
+	onShow(() => {
+		uni.$snowy.tool.refresh(() => {
+			loadData()
+		})
+	})
+	const clickOrgCru = ({ item, index }) => {
 		curSelOrg.value = item.children
 		allSelOrg.value.splice(index + 1, allSelOrg.value.length - (index + 1))
 	}
@@ -119,6 +119,4 @@
 		@extend .snowy-flex-v-center;
 		padding: 15rpx;
 	}
-
-	
 </style>
