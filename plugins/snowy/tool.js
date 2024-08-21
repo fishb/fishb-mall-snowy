@@ -48,13 +48,13 @@ tool.isEmpty = (value) => {
 	return !tool.isNotEmpty(value)
 }
 // 设置刷新
-tool.setRefresh = (param = null, key = "page", flag = true) => {
+tool.setRefresh = ({ key = "page", param = null, flag = true }) => {
 	store.commit('SET_refreshKey', key)
-	store.commit('SET_refreshFlag', flag)
 	store.commit('SET_refreshParam', param)
+	store.commit('SET_refreshFlag', flag)
 }
 // 刷新回调
-tool.refresh = (callback, key = "page", isReset = true) => {
+tool.refresh = (callback, { key = "page", isReset = true }) => {
 	if (store.getters.refreshFlag && callback) {
 		if (key === store.getters.refreshKey) {
 			callback({
