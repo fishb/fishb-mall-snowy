@@ -13,7 +13,7 @@
 			<view class="snowy-shadow snowy-z-paging-item snowy-padding snowy-hover" v-for="(item, index) in curSelOrg" :key="index" @tap="tapOrg(item, index)">
 				<uni-row>
 					<uni-col :span="4">
-						<view v-show="'COMPANY' === item?.category" >
+						<view v-show="'COMPANY' === item?.category">
 							<image style="width: 80rpx; height: 80rpx;" src="/static/svg/org/company.svg" mode="widthFix"></image>
 						</view>
 						<view v-show="'DEPT' === item?.category">
@@ -112,9 +112,11 @@
 	// 展示
 	onShow(() => {
 		uni.$snowy.tool.refresh(() => {
-			nextTick(()=>{
+			nextTick(() => {
 				dataPagingRef.value.reload()
 			})
+		}, {
+			key: "formBack"
 		})
 	})
 	// 新增悬浮按钮

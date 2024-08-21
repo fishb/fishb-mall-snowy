@@ -262,7 +262,9 @@
 			Promise.all(promiseList).then(async () => {
 				formData.value.extJson = JSON.stringify(dynamicFormData.value)
 				const data = await bizUserApi.submitForm(formData.value, !formData.value.id)
-				uni.$snowy.tool.setRefresh()
+				uni.$snowy.tool.setRefresh({
+					key: "formBack"
+				})
 				uni.navigateBack({
 					delta: 1
 				})

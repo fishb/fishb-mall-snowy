@@ -57,7 +57,11 @@
 	// 展示
 	onShow(() => {
 		uni.$snowy.tool.refresh(() => {
-			loadData()
+			nextTick(() => {
+				loadData()
+			})
+		}, {
+			key: "formBack"
 		})
 	})
 	const clickOrgCru = ({ item, index }) => {

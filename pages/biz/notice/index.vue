@@ -76,6 +76,8 @@
 			nextTick(() => {
 				dataPagingRef.value.reload()
 			})
+		}, {
+			key: "formBack"
 		})
 	})
 </script>

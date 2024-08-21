@@ -104,9 +104,11 @@
 	// 展示
 	onShow(() => {
 		uni.$snowy.tool.refresh(() => {
-			nextTick(()=>{
+			nextTick(() => {
 				dataPagingRef.value.reload()
 			})
+		}, {
+			key: "formBack"
 		})
 	})
 </script>
