@@ -54,14 +54,14 @@ tool.setRefresh = ({ key = "page", param = null, flag = true }) => {
 	store.commit('SET_refreshFlag', flag)
 }
 // 刷新回调
-tool.refresh = (callback, { key = "page", isReset = true }) => {
+tool.refresh = (callback, { key = "page", reset = true }) => {
 	if (store.getters.refreshFlag && callback) {
 		if (key === store.getters.refreshKey) {
 			callback({
 				key: store.getters.refreshKey,
 				param: store.getters.refreshParam
 			})
-			if (isReset) {
+			if (reset) {
 				tool.setRefresh("page", false, null)
 			}
 		}

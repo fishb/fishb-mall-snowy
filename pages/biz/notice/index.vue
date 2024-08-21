@@ -73,7 +73,9 @@
 	// 展示
 	onShow(() => {
 		uni.$snowy.tool.refresh(() => {
-			dataPagingRef.value.reload()
+			nextTick(() => {
+				dataPagingRef.value.reload()
+			})
 		})
 	})
 </script>

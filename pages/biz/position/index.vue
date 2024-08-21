@@ -112,7 +112,9 @@
 	// 展示
 	onShow(() => {
 		uni.$snowy.tool.refresh(() => {
-			dataPagingRef.value.reload()
+			nextTick(()=>{
+				dataPagingRef.value.reload()
+			})
 		})
 	})
 	// 新增悬浮按钮
