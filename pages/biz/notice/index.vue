@@ -7,7 +7,7 @@
 				</view>
 				<search ref="searchRef" :searchFormData="searchFormData" @confirm="$refs.dataPagingRef.reload()"></search>
 			</template>
-			<view class="snowy-shadow snowy-z-paging-item snowy-padding snowy-hover" v-for="(item, index) in bizNoticeData" :key="index" @tap="$refs.moreRef.open(item)">
+			<view class="snowy-shadow snowy-z-paging-item snowy-padding snowy-hover" v-for="(item, index) in bizNoticeData" :key="index" @tap="tapNotice(item)">
 				<uni-row>
 					<uni-col :span="7">
 						<image v-if="item.image" style="width: 180rpx; height: 120rpx;" :src="item.image" mode="aspectFill"></image>
@@ -81,6 +81,9 @@
 			key: "formBack"
 		})
 	})
+	const tapNotice = (item) =>{
+		uni.$snowy.tab.navigateTo(`/pages/biz/notice/detail?id=${item.id}`)
+	}
 </script>
 <style lang="scss" scoped>
 	@import '@/static/scss/index.scss';
