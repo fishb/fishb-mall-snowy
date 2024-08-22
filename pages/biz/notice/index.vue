@@ -45,6 +45,7 @@
 	</view>
 </template>
 <script setup>
+	import { onLoad, onShow, onReady, onPullDownRefresh } from "@dcloudio/uni-app"
 	import { reactive, ref, getCurrentInstance } from "vue"
 	import bizNoticeApi from '@/api/biz/biz-notice-api'
 	import search from './search.vue'

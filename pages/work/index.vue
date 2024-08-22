@@ -94,7 +94,7 @@
 			uni.navigateTo({
 				url: item.path,
 				fail(error) {
-					proxy.$modal.alert('请将【' + item.title + '】的移动端路由地址(' + item.path + ')与uniapp的page.json的path路径对应！')
+					uni.$snowy.modal.alert('请将【' + item.title + '】的移动端路由地址(' + item.path + ')与uniapp的page.json的path路径对应！')
 					console.error(error)
 				}
 			})

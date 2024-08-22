@@ -80,6 +80,25 @@
 			}
 		}]
 	}, {
+		"root": "pages/biz/notice",
+		"pages": [{
+			"path": "index",
+			"style": {
+				"navigationBarTitleText": "通知公告",
+				//#ifdef H5
+				"navigationStyle": "custom"
+				//#endif
+			}
+		}, {
+			"path": "detail",
+			"style": {
+				"navigationBarTitleText": "通知公告",
+				//#ifdef H5
+				"navigationStyle": "custom"
+				//#endif
+			}
+		}]
+	},{
 		"root": "pages/biz/org",
 		"pages": [{
 			"path": "index",
