@@ -43,8 +43,9 @@
 	const typeOpts = uni.$snowy.tool.dictList('BIZ_NOTICE_TYPE')
 	const placeOpts = uni.$snowy.tool.dictList('BIZ_NOTICE_PLACE')
 	const reset = () => {
-		props.searchFormData.searchKey = ''
-		props.searchFormData.name = ''
+		props.searchFormData.title = ''
+		props.searchFormData.type = ''
+		props.searchFormData.createTime = []
 		emits('reset', props.searchFormData)
 	}
 	const confirm = () => {
