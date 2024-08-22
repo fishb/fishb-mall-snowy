@@ -70,9 +70,7 @@
 	}
 	const tapMsg = (item) => {
 		item.read = true
-		uni.navigateTo({
-			url: `/pages/msg/detail?id=${item.id}&createTime=${item.createTime}`
-		})
+		uni.$snowy.tab.navigateTo(`/pages/msg/detail?id=${item.id}&createTime=${item.createTime}`)
 	}
 </script>
 <style lang="scss" scoped>

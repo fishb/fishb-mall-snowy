@@ -16,7 +16,7 @@
 			</view>
 		</view>
 		<uni-popup ref="popRef" type="bottom" background-color="transparent" maskBackgroundColor="rgba(0, 0, 0, 0.6)">
-			<view class="snowy-shadow pop-container">
+			<view class="snowy-shadow pop-container" v-if="popShow">
 				<view class="action">
 					<view class="snowy-color-grey snowy-text-bold" @click="cancel"> 取消 </view>
 					<view class="snowy-color-primary snowy-text-bold" @click="confirm"> 确定 </view>
@@ -79,6 +79,11 @@
 	const emits = defineEmits(['update:modelValue', 'noFindKey', 'getSelData', 'getOptData', 'cancel', 'confirm', 'searchConfirm', 'searchClear'])
 	const props = defineProps({
 		modelValue: [String, Array, Number],
+		dataType: {
+			type: String,
+			default: false,
+			default: () => '' // ''(空字符串) "string" "array"（多选以逗号进行分割）
+		},
 		isMultiple: {
 			type: Boolean,
 			default: false,
@@ -142,6 +147,7 @@
 	const panelData = ref([])
 	// 弹出
 	const popRef = ref()
+	const popShow = ref(false)
 	// 当前选中的数据key及数据
 	const curSelDataKey = !props.isMultiple ? ref("") : ref([])
 	const curSelData = !props.isMultiple ? ref({}) : ref([])
@@ -157,7 +163,14 @@
 	const setSelData = () => {
 		// 单选curSelData初始化值赋值
 		if (!props.isMultiple) {
-			curSelDataKey.value = props.modelValue ? uni.$xeu.clone(props.modelValue, true) : ""
+			if (uni.$snowy.tool.isNotEmpty(props.modelValue)) {
+				if ('array' === props.dataType) {
+					curSelDataKey.value = uni.$xeu.clone(props.modelValue[0], true)
+				} else {
+					curSelDataKey.value = uni.$xeu.clone(props.modelValue, true)
+				}
+			}
+			// curSelDataKey.value = props.modelValue ? uni.$xeu.clone(props.modelValue, true) : ""
 			curSelData.value = {}
 			if (uni.$snowy.tool.isEmpty(curSelDataKey.value)) {
 				return
@@ -215,7 +228,14 @@
 		}
 		// 多选curSelData初始化值赋值
 		if (!!props.isMultiple) {
-			curSelDataKey.value = props.modelValue ? uni.$xeu.clone(props.modelValue, true) : []
+			if (uni.$snowy.tool.isNotEmpty(props.modelValue)) {
+				if ('string' === props.dataType) {
+					curSelDataKey.value = uni.$xeu.clone(props.modelValue.split(','), true)
+				} else {
+					curSelDataKey.value = uni.$xeu.clone(props.modelValue, true)
+				}
+			}
+			// curSelDataKey.value = props.modelValue ? uni.$xeu.clone(props.modelValue, true) : []
 			curSelData.value = []
 			if (uni.$snowy.tool.isEmpty(curSelDataKey.value)) {
 				return
@@ -332,6 +352,7 @@
 	// 点击输入框
 	const tapInput = () => {
 		popRef.value.open()
+		popShow.value = true
 	}
 	// 选择或删除数据
 	const selOrDelData = (item, index) => {
@@ -373,16 +394,27 @@
 	const cancel = () => {
 		setSelData()
 		emits('cancel')
+		popShow.value = false
 		popRef.value.close()
 	}
 	const confirm = () => {
+		let curSelDataKeyVal = curSelDataKey.value
+		// 单选
+		if (!props.isMultiple && 'array' === props.dataType) {
+			curSelDataKeyVal = [curSelDataKey.value]
+		}
+		// 多选
+		if (!!props.isMultiple && 'string' === props.dataType) {
+			curSelDataKeyVal = curSelDataKey.value.join(',')
+		}
 		// 更新数据
-		emits('update:modelValue', curSelDataKey.value)
+		emits('update:modelValue', curSelDataKeyVal)
 		// 调用父组件方法
 		emits('confirm', {
-			curSelDataKey: curSelDataKey.value,
+			curSelDataKey: curSelDataKeyVal,
 			curSelData: curSelData.value
 		})
+		popShow.value = false
 		popRef.value.close()
 	}
 	const virtualListChange = (vList) => {
@@ -439,7 +471,7 @@
 		font-size: 28rpx;
 		line-height: 30rpx;
 		padding: 20rpx;
-		border: 1px solid #EDEDED;
+		border: 1rpx solid #EDEDED;
 		border-radius: 5rpx;
 
 		.multiple {

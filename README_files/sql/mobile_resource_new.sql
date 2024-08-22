@@ -2,6 +2,7 @@
 -- Records of MOBILE_RESOURCE
 -- ----------------------------
 INSERT INTO `MOBILE_RESOURCE` VALUES ('1623380023993298945', '-1', NULL, '开源版业务', '217gcp9ifi', 'MODULE', NULL, NULL, NULL, 'container-outlined', '#1890ff', NULL, NULL, 1, NULL, 'NOT_DELETE', NULL, NULL, NULL, NULL);
+INSERT INTO `MOBILE_RESOURCE` VALUES ('1824864329923756034', '-1', '0', '通知公告', NULL, 'MENU', '1623380023993298945', 'MENU', '/pages/biz/notice/index', 'bell-outlined', '#1677FF', 'YES', 'ENABLE', 1, NULL, 'NOT_DELETE', NULL, NULL, NULL, NULL);
 INSERT INTO `MOBILE_RESOURCE` VALUES ('1623380258656219138', '-1', '0', '机构管理', NULL, 'MENU', '1623380023993298945', 'MENU', '/pages/biz/org/index', 'apartment-outlined', '#1890ff', 'YES', 'ENABLE', 0, NULL, 'NOT_DELETE', NULL, NULL, NULL, NULL);
 INSERT INTO `MOBILE_RESOURCE` VALUES ('1623380614295449601', '-1', '0', '岗位管理', NULL, 'MENU', '1623380023993298945', 'MENU', '/pages/biz/position/index', 'robot-outlined', '#9c28b1', 'YES', 'ENABLE', 2, NULL, 'NOT_DELETE', NULL, NULL, NULL, NULL);
 INSERT INTO `MOBILE_RESOURCE` VALUES ('1623380765202313218', '-1', '0', '人员管理', NULL, 'MENU', '1623380023993298945', 'MENU', '/pages/biz/user/index', 'team-outlined', '#fed835', 'YES', 'ENABLE', 4, NULL, 'NOT_DELETE', NULL, NULL, NULL, NULL);

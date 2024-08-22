@@ -28,6 +28,12 @@ export default {
 		sysBaseConfig: storage.get(constant.sysBaseConfig) || config.SYS_BASE_CONFIG,
 		// 字典数据
 		dictTypeTreeData: storage.get(constant.dictTypeTreeData),
+		// 刷新KEY
+		refreshKey: storage.get(constant.refreshKey) || 'page',
+		// 刷新标记
+		refreshFlag: storage.get(constant.refreshFlag) || false,
+		// 刷新参数
+		refreshParam: storage.get(constant.refreshParam) || null
 	},
 	mutations: {
 		SET_envKey: (state, envKey) => {
@@ -66,6 +72,18 @@ export default {
 			state.dictTypeTreeData = dictTypeTreeData
 			storage.set(constant.dictTypeTreeData, dictTypeTreeData)
 		},
+		SET_refreshKey: (state, refreshKey) => {
+			state.refreshKey = refreshKey
+			storage.set(constant.refreshKey, refreshKey)
+		},
+		SET_refreshFlag: (state, refreshFlag) => {
+			state.refreshFlag = refreshFlag
+			storage.set(constant.refreshFlag, refreshFlag)
+		},
+		SET_refreshParam: (state, refreshParam) => {
+			state.refreshParam = refreshParam
+			storage.set(constant.refreshParam, refreshParam)
+		},
 		// 清除缓存
 		CLEAR_cache: (state) => {
 			// 租户域清理
@@ -83,6 +101,15 @@ export default {
 			// 字典信息
 			state.dictTypeTreeData = {}
 			storage.remove(constant.dictTypeTreeData)
+			// 刷新标识
+			state.refreshKey = null
+			storage.remove(constant.refreshKey)
+			// 刷新标识
+			state.refreshFlag = false
+			storage.remove(constant.refreshFlag)
+			// 刷新参数
+			state.refreshParam = null
+			storage.remove(constant.refreshParam)
 			// 配置信息
 			// state.sysBaseConfig = {}
 			// storage.remove(constant.sysBaseConfig)

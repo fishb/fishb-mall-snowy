@@ -42,16 +42,22 @@ export default {
 			code: "swiper",
 			isShow: true,
 		},
-		// 图表
+		// 公告
 		{
-			name: "图表",
-			code: "chart",
+			name: "公告",
+			code: "notice",
 			isShow: true,
 		},
 		// 日程
 		{
 			name: "日程",
 			code: "schedule",
+			isShow: true,
+		},
+		// 图表
+		{
+			name: "图表",
+			code: "chart",
 			isShow: true,
 		},
 	],
