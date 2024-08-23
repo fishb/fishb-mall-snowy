@@ -71,11 +71,13 @@
         dataPagingRef.value.complete(data?.records)
     }
     onShow(() => {
-        uni.$once('formBack', (data) => {
-            nextTick(() => {
-            	dataPagingRef.value.reload()
-            })
-        })
+		uni.$snowy.tool.refresh(() => {
+			nextTick(() => {
+				dataPagingRef.value.reload()
+			})
+		}, {
+			key: "formBack"
+		})
     })
     // 新增
     const add = () => {
