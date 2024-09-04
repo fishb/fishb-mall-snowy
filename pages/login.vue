@@ -51,6 +51,7 @@
 		validCode: '',
 		validCodeReqNo: '',
 	})
+	store.dispatch('GetSysBaseConfig')
 	// 系统配置
 	const sysBaseConfig = computed(() => {
 		return store.getters.sysBaseConfig

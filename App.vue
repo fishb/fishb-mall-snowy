@@ -5,7 +5,7 @@
 	import { checkPermission } from '@/utils/auth'
 	checkPermission(getH5RouteByUrl())
 	//#endif
-	store.dispatch('GetSysBaseConfig')
+	
 </script>
 <style lang="scss">
 	@import '@/static/scss/index.scss';
