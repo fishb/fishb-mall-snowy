@@ -70,14 +70,14 @@
         const data = await ${classNameFirstLower}Api.${classNameFirstLower}Page(parameter)
         dataPagingRef.value.complete(data?.records)
     }
-    onShow(() => {
-		uni.$snowy.tool.refresh(() => {
-			nextTick(() => {
-				dataPagingRef.value.reload()
-			})
-		}, {
-			key: "formBack"
-		})
+	onShow(() => {
+        uni.$snowy.tool.refresh(() => {
+            nextTick(() => {
+                dataPagingRef.value.reload()
+            })
+        }, {
+            key: "formBack"
+        })
     })
     // 新增
     const add = () => {
