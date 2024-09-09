@@ -70,11 +70,13 @@
         const data = await ${classNameFirstLower}Api.${classNameFirstLower}Page(parameter)
         dataPagingRef.value.complete(data?.records)
     }
-    onShow(() => {
-        uni.$once('formBack', (data) => {
+	onShow(() => {
+        uni.$snowy.tool.refresh(() => {
             nextTick(() => {
-            	dataPagingRef.value.reload()
+                dataPagingRef.value.reload()
             })
+        }, {
+            key: "formBack"
         })
     })
     // 新增

@@ -92,8 +92,8 @@
     const submit = () => {
         formRef.value.validate().then(res => {
             ${classNameFirstLower}Api.${classNameFirstLower}SubmitForm(formData.value, !formData.value.id).then(data => {
-                uni.$emit('formBack', {
-                    data: data
+                uni.$snowy.tool.setRefresh({
+                	key: "formBack"
                 })
                 uni.navigateBack({
                     delta: 1
